@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["shared/*"],
+      "@short-url/*": ["apps/i-used-for-short-url/*"],
+      "@anipic/*": ["apps/anipic/*"],
+      "@tools/*": ["apps/tools/*"],
+      "@www/*": ["apps/www-website/*"]
+    }
+  },
+  "include": ["apps/**/*", "shared/**/*"]
+}
