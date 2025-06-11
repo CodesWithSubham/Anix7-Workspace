@@ -1,1 +1,1 @@
-export { default } from "@shared/config/postcss.config.mjs";
+export { default } from "../../shared/config/postcss.config.mjs";
