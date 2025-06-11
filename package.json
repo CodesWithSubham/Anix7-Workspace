@@ -38,5 +38,9 @@
     "postcss": "^8",
     "tailwindcss": "^4.1.8",
     "turbo": "^2.5.4"
+  },
+  "packageManager": "pnpm@10.12.1",
+  "engines": {
+    "node": ">=18"
   }
 }
