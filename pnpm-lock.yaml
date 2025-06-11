@@ -12,11 +12,11 @@ importers:
         specifier: ^0.27.1
         version: 0.27.3
       acorn:
-        specifier: ^8.14.1
-        version: 8.14.1
+        specifier: ^8.15.0
+        version: 8.15.0
       acorn-jsx:
         specifier: ^5.3.2
-        version: 5.3.2(acorn@8.14.1)
+        version: 5.3.2(acorn@8.15.0)
       bcryptjs:
         specifier: ^3.0.2
         version: 3.0.2
@@ -51,14 +51,14 @@ importers:
         specifier: ^11.0.3
         version: 11.0.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       tailwind-merge:
-        specifier: ^3.3.0
-        version: 3.3.0
+        specifier: ^3.3.1
+        version: 3.3.1
       uuid:
         specifier: ^11.0.5
         version: 11.1.0
       zod:
-        specifier: ^3.25.28
-        version: 3.25.55
+        specifier: ^3.25.61
+        version: 3.25.61
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.0.0
@@ -79,8 +79,8 @@ importers:
         specifier: ^4.1.8
         version: 4.1.8
       turbo:
-        specifier: ^1.13.4
-        version: 1.13.4
+        specifier: ^2.5.4
+        version: 2.5.4
 
   apps/anipic:
     dependencies:
@@ -749,8 +749,8 @@ packages:
     peerDependencies:
       acorn: ^6.0.0 || ^7.0.0 || ^8.0.0
 
-  acorn@8.14.1:
-    resolution: {integrity: sha512-OvQ/2pUDKmgfCg++xsTX1wGxfTaszcHVcTctW4UJB4hibJx2HXxxO5UmVgyjMa+ZDsiaf5wWLXYpRWMmBI0QHg==}
+  acorn@8.15.0:
+    resolution: {integrity: sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==}
     engines: {node: '>=0.4.0'}
     hasBin: true
 
@@ -2216,8 +2216,8 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  tailwind-merge@3.3.0:
-    resolution: {integrity: sha512-fyW/pEfcQSiigd5SNn0nApUOxx0zB/dm6UDU/rEwc2c3sX2smWUNbapHv+QRqLGVp9GWX3THIa7MUGPo+YkDzQ==}
+  tailwind-merge@3.3.1:
+    resolution: {integrity: sha512-gBXpgUm/3rp1lMZZrM/w7D8GKqshif0zAymAhbCyIt8KMe+0v9DQ7cdYLR4FHH/cKpdTXb+A/tKKU3eolfsI+g==}
 
   tailwindcss@4.1.8:
     resolution: {integrity: sha512-kjeW8gjdxasbmFKpVGrGd5T4i40mV5J2Rasw48QARfYeQ8YS9x02ON9SFWax3Qf616rt4Cp3nVNIj6Hd1mP3og==}
@@ -2269,38 +2269,38 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  turbo-darwin-64@1.13.4:
-    resolution: {integrity: sha512-A0eKd73R7CGnRinTiS7txkMElg+R5rKFp9HV7baDiEL4xTG1FIg/56Vm7A5RVgg8UNgG2qNnrfatJtb+dRmNdw==}
+  turbo-darwin-64@2.5.4:
+    resolution: {integrity: sha512-ah6YnH2dErojhFooxEzmvsoZQTMImaruZhFPfMKPBq8sb+hALRdvBNLqfc8NWlZq576FkfRZ/MSi4SHvVFT9PQ==}
     cpu: [x64]
     os: [darwin]
 
-  turbo-darwin-arm64@1.13.4:
-    resolution: {integrity: sha512-eG769Q0NF6/Vyjsr3mKCnkG/eW6dKMBZk6dxWOdrHfrg6QgfkBUk0WUUujzdtVPiUIvsh4l46vQrNVd9EOtbyA==}
+  turbo-darwin-arm64@2.5.4:
+    resolution: {integrity: sha512-2+Nx6LAyuXw2MdXb7pxqle3MYignLvS7OwtsP9SgtSBaMlnNlxl9BovzqdYAgkUW3AsYiQMJ/wBRb7d+xemM5A==}
     cpu: [arm64]
     os: [darwin]
 
-  turbo-linux-64@1.13.4:
-    resolution: {integrity: sha512-Bq0JphDeNw3XEi+Xb/e4xoKhs1DHN7OoLVUbTIQz+gazYjigVZvtwCvgrZI7eW9Xo1eOXM2zw2u1DGLLUfmGkQ==}
+  turbo-linux-64@2.5.4:
+    resolution: {integrity: sha512-5May2kjWbc8w4XxswGAl74GZ5eM4Gr6IiroqdLhXeXyfvWEdm2mFYCSWOzz0/z5cAgqyGidF1jt1qzUR8hTmOA==}
     cpu: [x64]
     os: [linux]
 
-  turbo-linux-arm64@1.13.4:
-    resolution: {integrity: sha512-BJcXw1DDiHO/okYbaNdcWN6szjXyHWx9d460v6fCHY65G8CyqGU3y2uUTPK89o8lq/b2C8NK0yZD+Vp0f9VoIg==}
+  turbo-linux-arm64@2.5.4:
+    resolution: {integrity: sha512-/2yqFaS3TbfxV3P5yG2JUI79P7OUQKOUvAnx4MV9Bdz6jqHsHwc9WZPpO4QseQm+NvmgY6ICORnoVPODxGUiJg==}
     cpu: [arm64]
     os: [linux]
 
-  turbo-windows-64@1.13.4:
-    resolution: {integrity: sha512-OFFhXHOFLN7A78vD/dlVuuSSVEB3s9ZBj18Tm1hk3aW1HTWTuAw0ReN6ZNlVObZUHvGy8d57OAGGxf2bT3etQw==}
+  turbo-windows-64@2.5.4:
+    resolution: {integrity: sha512-EQUO4SmaCDhO6zYohxIjJpOKRN3wlfU7jMAj3CgcyTPvQR/UFLEKAYHqJOnJtymbQmiiM/ihX6c6W6Uq0yC7mA==}
     cpu: [x64]
     os: [win32]
 
-  turbo-windows-arm64@1.13.4:
-    resolution: {integrity: sha512-u5A+VOKHswJJmJ8o8rcilBfU5U3Y1TTAfP9wX8bFh8teYF1ghP0EhtMRLjhtp6RPa+XCxHHVA2CiC3gbh5eg5g==}
+  turbo-windows-arm64@2.5.4:
+    resolution: {integrity: sha512-oQ8RrK1VS8lrxkLriotFq+PiF7iiGgkZtfLKF4DDKsmdbPo0O9R2mQxm7jHLuXraRCuIQDWMIw6dpcr7Iykf4A==}
     cpu: [arm64]
     os: [win32]
 
-  turbo@1.13.4:
-    resolution: {integrity: sha512-1q7+9UJABuBAHrcC4Sxp5lOqYS5mvxRrwa33wpIyM18hlOCpRD/fTJNxZ0vhbMcJmz15o9kkVm743mPn7p6jpQ==}
+  turbo@2.5.4:
+    resolution: {integrity: sha512-kc8ZibdRcuWUG1pbYSBFWqmIjynlD8Lp7IB6U3vIzvOv9VG+6Sp8bzyeBWE3Oi8XV5KsQrznyRTBPvrf99E4mA==}
     hasBin: true
 
   type-check@0.4.0:
@@ -2390,8 +2390,8 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  zod@3.25.55:
-    resolution: {integrity: sha512-219huNnkSLQnLsQ3uaRjXsxMrVm5C9W3OOpEVt2k5tvMKuA8nBSu38e0B//a+he9Iq2dvmk2VyYVlHqiHa4YBA==}
+  zod@3.25.61:
+    resolution: {integrity: sha512-fzfJgUw78LTNnHujj9re1Ov/JJQkRZZGDMcYqSx7Hp4rPOkKywaFHq0S6GoHeXs0wGNE/sIOutkXgnwzrVOGCQ==}
 
 snapshots:
 
@@ -2916,11 +2916,11 @@ snapshots:
 
   abstract-logging@2.0.1: {}
 
-  acorn-jsx@5.3.2(acorn@8.14.1):
+  acorn-jsx@5.3.2(acorn@8.15.0):
     dependencies:
-      acorn: 8.14.1
+      acorn: 8.15.0
 
-  acorn@8.14.1: {}
+  acorn@8.15.0: {}
 
   ajv-formats@2.1.1(ajv@8.17.1):
     optionalDependencies:
@@ -3495,8 +3495,8 @@ snapshots:
 
   espree@10.3.0:
     dependencies:
-      acorn: 8.14.1
-      acorn-jsx: 5.3.2(acorn@8.14.1)
+      acorn: 8.15.0
+      acorn-jsx: 5.3.2(acorn@8.15.0)
       eslint-visitor-keys: 4.2.0
 
   esquery@1.6.0:
@@ -4579,7 +4579,7 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  tailwind-merge@3.3.0: {}
+  tailwind-merge@3.3.1: {}
 
   tailwindcss@4.1.8: {}
 
@@ -4630,32 +4630,32 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  turbo-darwin-64@1.13.4:
+  turbo-darwin-64@2.5.4:
     optional: true
 
-  turbo-darwin-arm64@1.13.4:
+  turbo-darwin-arm64@2.5.4:
     optional: true
 
-  turbo-linux-64@1.13.4:
+  turbo-linux-64@2.5.4:
     optional: true
 
-  turbo-linux-arm64@1.13.4:
+  turbo-linux-arm64@2.5.4:
     optional: true
 
-  turbo-windows-64@1.13.4:
+  turbo-windows-64@2.5.4:
     optional: true
 
-  turbo-windows-arm64@1.13.4:
+  turbo-windows-arm64@2.5.4:
     optional: true
 
-  turbo@1.13.4:
+  turbo@2.5.4:
     optionalDependencies:
-      turbo-darwin-64: 1.13.4
-      turbo-darwin-arm64: 1.13.4
-      turbo-linux-64: 1.13.4
-      turbo-linux-arm64: 1.13.4
-      turbo-windows-64: 1.13.4
-      turbo-windows-arm64: 1.13.4
+      turbo-darwin-64: 2.5.4
+      turbo-darwin-arm64: 2.5.4
+      turbo-linux-64: 2.5.4
+      turbo-linux-arm64: 2.5.4
+      turbo-windows-64: 2.5.4
+      turbo-windows-arm64: 2.5.4
 
   type-check@0.4.0:
     dependencies:
@@ -4795,4 +4795,4 @@ snapshots:
 
   yocto-queue@0.1.0: {}
 
-  zod@3.25.55: {}
+  zod@3.25.61: {}
