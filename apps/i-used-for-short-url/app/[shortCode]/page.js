@@ -1,6 +1,7 @@
-import clientPromise from "@/lib/mongodb";
 import { notFound, redirect } from "next/navigation";
 import { EncryptJWT } from "jose";
+import connectToDatabase from "@shared/lib/db";
+import ShortUrl from "@shared/models/ShortUrl";
 
 const secretKey = new TextEncoder().encode(process.env.URL_SHORTENER_TOKEN);
 
@@ -16,16 +17,14 @@ async function encryptAndRedirect(data) {
   // console.log("Encrypted Token:", token);
 
   // Redirect to tools.anix7.in
-  redirect(`https://tools.anix7.in/link/${token}`);
+  redirect(`${process.env.WHERE_TO_REDIRECT_AFTER_PROCESSING}/${token}`);
 }
 
 export default async function Page({ params }) {
   const alias = (await params).shortCode;
-  const client = await clientPromise;
-  const db = client.db(process.env.MONGODB_NAME);
-  const collection = db.collection("shorturls");
 
-  const doc = await collection.findOne({ alias });
+  await connectToDatabase();
+  const doc = await ShortUrl.findOne({ alias }).lean();
 
   if (!doc) {
     return notFound();

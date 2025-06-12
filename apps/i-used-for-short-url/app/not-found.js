@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 export default function NotFound() {
@@ -38,7 +37,7 @@ export default function NotFound() {
                       cx="50"
                       cy="50"
                       r="40"
-                      class="ld ld-swim-px"
+                      className="ld ld-swim-px"
                       // style="stroke-width:6;stroke-miterlimit:10;fill:#fff;stroke:#000"
                       style={{
                         strokeWidth: 6,
@@ -59,7 +58,7 @@ export default function NotFound() {
                   >
                     <path
                       d="M31.866 71.591c2.57-7.556 9.709-13 18.134-13s15.564 5.444 18.134 13"
-                      class="ld ld-swim-px"
+                      className="ld ld-swim-px"
                       // style="stroke-miterlimit:10;stroke-linecap:round;fill:none;stroke-width:5;stroke:#000"
                       style={{
                         strokeMiterlimit: 10,
@@ -71,7 +70,7 @@ export default function NotFound() {
                     />
                   </g>
                   <g
-                    class="ld ld-swim-px"
+                    className="ld ld-swim-px"
                     // style="transform-origin:50px 50px 0;animation-duration:1.3s;animation-delay:-1.05625s;animation-direction:normal"
                     style={{
                       transformOrigin: "50px 50px 0",
@@ -83,13 +82,13 @@ export default function NotFound() {
                     <path
                       stroke="#000"
                       d="m27.5 32.409 12 12"
-                      class="st71"
+                      className="st71"
                       // style="stroke:#000"
                       style={{ stroke: "#000" }}
                     />
                   </g>
                   <g
-                    class="ld ld-swim-px"
+                    className="ld ld-swim-px"
                     // style="transform-origin:50px 50px 0;animation-duration:1.3s;animation-delay:-.975s;animation-direction:normal"
                     style={{
                       transformOrigin: "50px 50px 0",
@@ -101,13 +100,13 @@ export default function NotFound() {
                     <path
                       stroke="#000"
                       d="m27.5 44.409 12-12"
-                      class="st71"
+                      className="st71"
                       // style="stroke:#000"
                       style={{ stroke: "#000" }}
                     />
                   </g>
                   <g
-                    class="ld ld-swim-px"
+                    className="ld ld-swim-px"
                     // style="transform-origin:50px 50px 0;animation-duration:1.3s;animation-delay:-.89375s;animation-direction:normal"
                     style={{
                       transformOrigin: "50px 50px 0",
@@ -119,13 +118,13 @@ export default function NotFound() {
                     <path
                       stroke="#000"
                       d="m60.5 32.409 12 12"
-                      class="st71"
+                      className="st71"
                       // style="stroke:#000"
                       style={{ stroke: "#000" }}
                     />
                   </g>
                   <g
-                    class="ld ld-swim-px"
+                    className="ld ld-swim-px"
                     // style="transform-origin:50px 50px 0;animation-duration:1.3s;animation-delay:-.8125s;animation-direction:normal"
                     style={{
                       transformOrigin: "50px 50px 0",
@@ -137,7 +136,7 @@ export default function NotFound() {
                     <path
                       stroke="#000"
                       d="m60.5 44.409 12-12"
-                      class="st71"
+                      className="st71"
                       // style={"stroke:#000"}
                       style={{ stroke: "#000" }}
                     />
@@ -147,8 +146,11 @@ export default function NotFound() {
             </g>
           </g>
         </svg>
-        <p class="mt-1">The URL you were looking for could not be found</p>
-        <Link href="/" className="font-semibold mt-2 px-3 py-2 rounded-full bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-800">
+        <p className="mt-1">The URL you were looking for could not be found</p>
+        <Link
+          href="/"
+          className="text-white font-semibold mt-2 px-3 py-2 rounded-full bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-800"
+        >
           Go back to Home
         </Link>
       </div>

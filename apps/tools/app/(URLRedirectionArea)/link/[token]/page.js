@@ -16,8 +16,6 @@ export default async function Page({ params }) {
     // Decrypt the token using the secret key
     const { payload } = await jwtDecrypt(decodedToken, secretKey);
 
-    console.log("Decrypted payload:", payload);
-
     // If payload contains a longUrl, redirect to it
     if (payload?.longUrl) {
       return (

@@ -6,17 +6,16 @@ import ImageIndex from "@shared/models/ImageIndex";
 import { del } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
-const isAllowed = (imageUrl) =>
-  (() => {
-    try {
-      const imageHostname = new URL(imageUrl).hostname;
-      const blobBaseHostname = new URL(process.env.BLOB_BASE_URL).hostname;
+const isAllowed = (imageUrl) => {
+  try {
+    const imageHostname = new URL(imageUrl).hostname;
+    const blobBaseHostname = new URL(process.env.BLOB_BASE_URL).hostname;
 
-      return imageHostname === blobBaseHostname;
-    } catch {
-      return false;
-    }
-  })();
+    return imageHostname === blobBaseHostname;
+  } catch {
+    return false;
+  }
+};
 
 export async function POST(req) {
   const { image, name } = await req.json();
@@ -38,10 +37,8 @@ export async function POST(req) {
     }
     const uploadedBy = session.user.userId;
 
-    // https://lxg5shaoybytmwkf.public.blob.vercel-storage.com/Hinata%20Hyuga-HjfRtTW3jjLeet1wCGgRlKVHSLi83G.jpg
     if (!isAllowed(image)) {
       console.log("Invalid Image URL:", image);
-
       return Response.json({ error: "Invalid Image!" }, { status: 401 });
     }
 

@@ -5,6 +5,7 @@ import { DocumentSvg } from "@shared/components/svg/DocumentSvg";
 import { PopUpBox } from "@shared/components/ui/Boxes";
 import { Button } from "@shared/components/ui/Button";
 import { Input } from "@shared/components/ui/Input";
+import copyToClipboard from "@shared/utils/CopyToClipboard";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
