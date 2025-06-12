@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { signIn, signOut } from "./auth";
+import { signIn, signOut } from ".";
 
 export async function doSocialLogin(formData) {
   const action = formData.get("action");

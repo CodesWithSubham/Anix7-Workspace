@@ -44,9 +44,6 @@ importers:
       react-dropzone:
         specifier: ^14.3.8
         version: 14.3.8(react@19.1.0)
-      react-qrcode-logo:
-        specifier: ^3.0.0
-        version: 3.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react-toastify:
         specifier: ^11.0.3
         version: 11.0.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -113,6 +110,18 @@ importers:
         specifier: ^3.1.10
         version: 3.1.10
 
+  apps/auth:
+    dependencies:
+      next:
+        specifier: 15.3.3
+        version: 15.3.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react:
+        specifier: ^19.1.0
+        version: 19.1.0
+      react-dom:
+        specifier: ^19.1.0
+        version: 19.1.0(react@19.1.0)
+
   apps/i-used-for-short-url:
     dependencies:
       next:
@@ -136,6 +145,9 @@ importers:
       react-dom:
         specifier: 19.1.0
         version: 19.1.0(react@19.1.0)
+      react-qrcode-logo:
+        specifier: ^3.0.0
+        version: 3.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
 
   apps/www-website:
     dependencies:

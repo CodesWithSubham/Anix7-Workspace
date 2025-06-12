@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { WorkBox } from "./ui/Boxes";
+import { WorkBox } from "../../../shared/components/ui/Boxes";
 import Image from "next/image";
-import Hr from "./ui/Hr";
+import Hr from "../../../shared/components/ui/Hr";
 
 // Updated importantLinks constant with multiple categories
 const importantLinks = [

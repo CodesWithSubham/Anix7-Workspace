@@ -11,7 +11,7 @@
   "dependencies": {
     "next": "15.3.3",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
-  },
-  "devDependencies": {}
+    "react-dom": "19.1.0",
+    "react-qrcode-logo": "^3.0.0"
+  }
 }

@@ -2,107 +2,17 @@
 "use client";
 
 import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { IconButton } from "../ui/Button";
 import { useEffect, useRef, useState } from "react";
 import Hr from "../ui/Hr";
 import { twJoin, twMerge } from "tailwind-merge";
 import { usePathname } from "next/navigation";
-import { HomeSvg } from "../svg/HomeSvg";
-import { UrlSvg } from "../svg/UrlSvg";
-import { QrSvg } from "../svg/QrSvg";
-import { ImageRoundedSvg } from "../svg/ImageSvg";
-import { ProfileGroupSvg } from "../svg/ProfileSvg";
-import { LetterRoundedSvg } from "../svg/LetterSvg";
-import { DisclaimerSvg } from "../svg/DisclaimerSvg";
-import { DocumentSecureSvg } from "../svg/DocumentSvg";
-import InformationQuestionMarkSvg from "../svg/InformationSvg";
-import { PowerButtonSvg } from "../svg/PowerButtonSvg";
 import { InstagramSvg, TelegramSvg, YouTubeSvg } from "../svg/SocialMediaSvg";
 
-const menuItem = [
-  {
-    label: "Home",
-    icon: <HomeSvg />,
-    url: "/",
-    hr: true,
-  },
-  {
-    label: "Url Shortner",
-    icon: <UrlSvg />,
-    url: "/url-shortner",
-  },
-  {
-    label: "QR Code Generator",
-    icon: <QrSvg />,
-    url: "/qr-code-generator",
-  },
-  {
-    label: "Images Tools",
-    icon: <ImageRoundedSvg />,
-    subMenu: [
-      {
-        label: "Upload Image",
-        url: "/image-uploading",
-      },
-      {
-        label: "My Uploads",
-        url: "/image-uploading/my-uploads",
-      },
-    ],
-    showOnLoggedIn: true,
-    hr: true,
-  },
-  {
-    label: "Images",
-    icon: <ImageRoundedSvg />,
-    url: "/image-uploading",
-    showOnLoggedOut: true,
-    hr: true,
-  },
-  {
-    label: "About Us",
-    icon: <ProfileGroupSvg />,
-    url: "/page/about-us",
-  },
-  {
-    label: "Contact Us",
-    icon: <LetterRoundedSvg />,
-    url: "/page/contact-us",
-    hr: true,
-  },
-  {
-    label: "Disclaimer",
-    icon: <DisclaimerSvg />,
-    url: "/page/disclaimer",
-  },
-  {
-    label: "Terms of Use",
-    icon: <DocumentSecureSvg />,
-    url: "/page/terms",
-  },
-  {
-    label: "FAQs",
-    icon: <InformationQuestionMarkSvg />,
-    url: "/page/faqs",
-    hr: true,
-  },
-  {
-    label: "Logout",
-    icon: <PowerButtonSvg />,
-    onClick: () => signOut(),
-    hr: true,
-    showOnLoggedIn: true,
-  },
-];
 
-const quickURLs = [
-  { url: "/sitemap.xml", label: "Sitemap" },
-  { url: "/page/dmca", label: "DMCA" },
-  { url: "/page/privacy-policy", label: "Privacy Policy" },
-];
 
-export default function SlideBar() {
+export default function SlideBarLayout({ menuItem = [], quickURLs = [] }) {
   const { data: session } = useSession();
   const checkboxRef = useRef(null);
   const filteredMenu = menuItem.filter(

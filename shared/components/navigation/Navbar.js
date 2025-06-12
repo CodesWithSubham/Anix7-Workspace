@@ -6,7 +6,7 @@ import { IfLoggedIn, IfLoggedOut } from "../auth/LoggedInWraper";
 import Profile from "../Profile";
 import LoginSignup from "../auth/LoginSignup";
 
-export default async function Navbar() {
+export default async function Navbar({appName="Anix7", appSubName=""}) {
   return (
     <>
       <header className="w-full z-20 sticky top-0 shadow-xs border-b md:dark:border-b-gray-900/25">
@@ -42,9 +42,9 @@ export default async function Navbar() {
               <h1 className="block text-inherit text-xl font-medium">
                 <bdi>
                   <span className="overflow-hidden whitespace-nowrap text-ellipsis block">
-                    Tools
+                    {appName}
                     <span className="mx-1 text-xs whitespace-nowrap text-ellipsis overflow-hidden max-w-16 opacity-75">
-                      Beta
+                      {appSubName}
                     </span>
                   </span>
                 </bdi>

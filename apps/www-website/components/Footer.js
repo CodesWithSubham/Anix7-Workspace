@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { WorkBox } from "./ui/Boxes";
+import { WorkBox } from "@shared/components/ui/Boxes";
 import Image from "next/image";
-import Hr from "./ui/Hr";
+import Hr from "@shared/components/ui/Hr";
 
 // Updated importantLinks constant with multiple categories
 const importantLinks = [
@@ -60,47 +60,52 @@ const importantLinks = [
 
 export default function Footer() {
   return (
-    <footer className="mb-8 mt-10 mx-3 md:mx-8">
-      <WorkBox className="text-center">
+    <footer className="mb-8 mt-12">
+      <WorkBox className="text-center border border-gray-200/50 dark:border-neutral-600/60">
         {/* <!-- About --> */}
         <div>
           <div className="text-gray-500 dark:text-gray-200">
             Made with ❤️ by
           </div>
           <Image
-            className="w-3/12 min-w-28 max-w-60 aspect-square mt-2 mb-1 mx-auto rounded-2xl"
-            src="/assets/img/logo/anix7-logo-1024.jpg"
+            className="w-1/3 max-w-60 aspect-square mt-2 mb-1 mx-auto rounded-2xl"
+            src="/assets/img/logo/anix7-logo-512.jpg"
             width={120}
             height={120}
-            alt="Anix7"
+            alt="Anix7 Tools"
           />
           <div>
-            <h2 className="text-4xl font-bold my-3">Anix7</h2>
+            <h2>Anix7</h2>
             <p>
-            Anix7 is your all-in-one hub for smart tools, anime updates, 4K wallpapers, mini games and nature photography. Discover, create, and download with ease.
+              Anix7 is your all-in-one hub for smart tools, anime updates, 4K
+              wallpapers, mini games and nature photography. Discover, create,
+              and download with ease.
             </p>
           </div>
         </div>
         <Hr />
         {/* Footer Section - Important Links */}
-        {/* <h3 className="text-2xl font-bold">Important Links</h3>
-        <div className="flex flex-wrap justify-center items-stretch gap-x-2 gap-y-4 mt-1.5 mb-3">
-          {importantLinks.map((group, i) => (
-            <div key={i} className="w-full max-w-40 flex flex-col gap-2">
-              {// Heading for each link group 
-              }
-              <h4 className="text-lg font-semibold">{group.heading}</h4>
-              <ul className="flex flex-col gap-1.5">
-                {group.links.map((link, j) => (
-                  <li key={j}>
-                    <Link href={link.url}>{link.name}</Link>
-                  </li>
-                ))}
-              </ul>
+        {!!importantLinks.length && (
+          <>
+            <h3 className="text-2xl font-bold">Important Links</h3>
+            <div className="flex flex-wrap justify-center items-stretch gap-x-2 gap-y-4 mt-1.5 mb-3">
+              {importantLinks.map((group, i) => (
+                <div key={i} className="w-full max-w-40 flex flex-col gap-2">
+                  {/* Heading for each link group */}
+                  <h4 className="text-lg font-semibold">{group.heading}</h4>
+                  <ul className="flex flex-col gap-1.5">
+                    {group.links.map((link, j) => (
+                      <li key={j}>
+                        <Link href={link.url}>{link.name}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <Hr /> */}
+            <Hr />
+          </>
+        )}
         {/* <!--[ Credit ]--> */}
         <div className="inline-flex items-center">
           <span className="">

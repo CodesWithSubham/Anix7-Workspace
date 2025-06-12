@@ -86,11 +86,12 @@ export default function LoginSignup() {
       const result = await res.json();
 
       if (res.ok) {
-        const formD = new FormData();
-        formD.append("email", formData.email);
-        formD.append("password", formData.password);
+        const credentials = {
+          email: formData.email,
+          password: formData.password,
+        };
 
-        const loginRes = await doCredentialLogin(formD);
+        const res = await doCredentialLogin(credentials);
         toast.success("Sign up successful!");
         window.location.href = goNext || window.location.href;
       } else {

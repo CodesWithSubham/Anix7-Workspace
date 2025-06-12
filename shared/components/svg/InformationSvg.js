@@ -1,4 +1,4 @@
-export default function InformationQuestionMarkSvg({
+export function InformationQuestionMarkSvg({
   className = "",
   ...props
 }) {

@@ -1,4 +1,4 @@
-import { auth } from "@shared/lib/auth/auth";
+import { auth } from "@shared/lib/auth";
 import connectToDatabase from "@shared/lib/db";
 import ImageIndex from "@shared/models/ImageIndex";
 

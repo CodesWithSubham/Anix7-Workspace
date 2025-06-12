@@ -25,9 +25,7 @@ export async function POST(req) {
       lastName,
       email,
       password,
-      isVerified,
       profilePic,
-      balance,
       referredBy,
     } = validatedData;
     await connectToDatabase();
@@ -87,9 +85,7 @@ export async function POST(req) {
       lastName: lastName || null, // Null if not provided
       email,
       password: hashedPassword,
-      isVerified,
       profilePic,
-      balance,
       referredBy: referredBy || null, // Null if no referral
       userId,
     });

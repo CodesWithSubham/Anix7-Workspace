@@ -1,7 +1,7 @@
 // app/(userArea)/url-shortner/action.js
 "use server";
 
-import { auth } from "@shared/lib/auth/auth";
+import { auth } from "@shared/lib/auth";
 import { disallowedDomains } from "./disallowedDomains";
 import connectToDatabase from "@shared/lib/db";
 import ShortUrl from "@shared/models/ShortUrl";

@@ -1,6 +1,6 @@
 // app\api\tools\ImageIndex\upload\route.js
 
-import { auth } from "@shared/lib/auth/auth";
+import { auth } from "@shared/lib/auth";
 import connectToDatabase from "@shared/lib/db";
 import ImageIndex from "@shared/models/ImageIndex";
 import { NextResponse } from "next/server";

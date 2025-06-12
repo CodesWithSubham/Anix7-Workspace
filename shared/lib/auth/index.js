@@ -1,6 +1,6 @@
-// authjs.config.js
-
 // Do not use any script that is not compatible with Edge Runtime in this file
+
+import NextAuth from "next-auth";
 
 import credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
@@ -11,8 +11,8 @@ import { cookies } from "next/headers";
 
 // ✅ Modular ENV usage
 const adminToken = process.env.AUTH_SECRET;
-const BASE_URL = process.env.BASE_URL;
 const OWNER_EMAIL = process.env.OWNER_EMAIL; // ✅ Added for getRole
+const AUTH_BASE_URL = process.env.AUTH_BASE_URL;
 
 const adminList = [
   "subhamduary11@gmail.com",
@@ -32,7 +32,7 @@ function getRole(email) {
 async function getUserFromDb(email) {
   try {
     const response = await fetch(
-      `${BASE_URL}/api/admin/FromAuthjs/getUserByEmail`,
+      `${AUTH_BASE_URL}/api/auth/getUserByEmail`,
       {
         method: "POST",
         headers: {
@@ -60,7 +60,7 @@ async function getUserFromDb(email) {
 async function createUser(userDetails) {
   try {
     const response = await fetch(
-      `${BASE_URL}/api/admin/FromAuthjs/createUser`,
+      `${AUTH_BASE_URL}/api/auth/createUser`,
       {
         method: "POST",
         headers: {
@@ -84,7 +84,15 @@ async function createUser(userDetails) {
   }
 }
 
-export default {
+export const {
+  handlers: { GET, POST },
+  auth,
+  signIn,
+  signOut,
+} = NextAuth({
+  session: {
+    strategy: "jwt",
+  },
   pages: {
     signIn: "/",
   },
@@ -226,4 +234,4 @@ export default {
       return session;
     },
   },
-};
+});

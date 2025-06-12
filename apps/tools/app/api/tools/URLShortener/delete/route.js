@@ -1,5 +1,5 @@
 
-import { auth } from "@shared/lib/auth/auth";
+import { auth } from "@shared/lib/auth";
 import connectToDatabase from "@shared/lib/db";
 import ShortUrl from "@shared/models/ShortUrl";
 import { NextResponse } from "next/server";

@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@source "../../../shared/components/**/*{.js,.ts,.jsx,.tsx}";
+
+@custom-variant dark (&:is(.dark *));
+
+@layer base {
+  @import "../../../shared/styles/base.css";
+}

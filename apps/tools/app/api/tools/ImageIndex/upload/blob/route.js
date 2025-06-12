@@ -1,6 +1,6 @@
 // app\api\tools\ImageIndex\upload\route.js
 
-import { auth } from "@shared/lib/auth/auth";
+import { auth } from "@shared/lib/auth";
 import { handleUpload } from "@vercel/blob/client";
 import { NextResponse } from "next/server";
 

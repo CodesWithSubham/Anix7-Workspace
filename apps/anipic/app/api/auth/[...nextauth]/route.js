@@ -1,2 +1,2 @@
-export { GET, POST } from "@shared/lib/auth/auth";
+export { GET, POST } from "@shared/lib/auth";
 

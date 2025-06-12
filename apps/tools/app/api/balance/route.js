@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 import connectToDatabase from "@shared/lib/db";
 import User from "@shared/models/User";
-import { auth } from "@shared/lib/auth/auth";
+import { auth } from "@shared/lib/auth";
 
 export async function GET(req) {
   try {
