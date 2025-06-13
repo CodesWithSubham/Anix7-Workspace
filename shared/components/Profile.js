@@ -47,12 +47,14 @@ export default function Profile() {
                 <li className="">
                   <Image
                     src={
-                      user?.profilePic ?? "/assets/img/defaultProfilePic.jpg"
+                      user?.profilePic ??
+                      "https://i.ibb.co/1JGDTytY/default-Profile-Pic.webp"
                     }
                     width={30}
                     height={30}
                     className="rounded-full"
                     alt={user?.firstName ?? "Profile Pic"}
+                    unoptimized
                   />
                   <div className="flex flex-col">
                     <span className="font-bold">

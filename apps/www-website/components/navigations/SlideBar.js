@@ -1,15 +1,11 @@
 "use client";
 
 import SlideBarLayout from "@shared/components/navigation/SlideBarLayout";
-import { DisclaimerSvg } from "@shared/components/svg/DisclaimerSvg";
-import { DocumentSecureSvg } from "@shared/components/svg/DocumentSvg";
 import { HomeSvg } from "@shared/components/svg/HomeSvg";
 import { ImageRoundedSvg } from "@shared/components/svg/ImageSvg";
-import { InformationQuestionMarkSvg } from "@shared/components/svg/InformationSvg";
-import { LetterRoundedSvg } from "@shared/components/svg/LetterSvg";
 import { PowerButtonSvg } from "@shared/components/svg/PowerButtonSvg";
-import { ProfileGroupSvg } from "@shared/components/svg/ProfileSvg";
 import { QrSvg } from "@shared/components/svg/QrSvg";
+import { SettingSvg } from "@shared/components/svg/SettingSvg";
 import { UrlSvg } from "@shared/components/svg/UrlSvg";
 import { signOut } from "next-auth/react";
 
@@ -21,65 +17,56 @@ const menuItem = [
     hr: true,
   },
   {
-    label: "Url Shortner",
-    icon: <UrlSvg />,
-    url: "/url-shortner",
-  },
-  {
-    label: "QR Code Generator",
-    icon: <QrSvg />,
-    url: "/qr-code-generator",
-  },
-  {
-    label: "Images Tools",
-    icon: <ImageRoundedSvg />,
+    label: "Anix7 Tools",
+    icon: <SettingSvg />,
     subMenu: [
       {
-        label: "Upload Image",
-        url: "/image-uploading",
+        label: "Url Shortner",
+        icon: <UrlSvg />,
+        url: "https://tools.anix7.in/url-shortner",
       },
       {
-        label: "My Uploads",
-        url: "/image-uploading/my-uploads",
+        label: "QR Code Generator",
+        icon: <QrSvg />,
+        url: "https://tools.anix7.in/qr-code-generator",
+      },
+      {
+        label: "Images",
+        icon: <ImageRoundedSvg />,
+        url: "https://tools.anix7.in/image-uploading",
       },
     ],
-    showOnLoggedIn: true,
     hr: true,
   },
+
   {
-    label: "Images",
+    label: "AniPic",
     icon: <ImageRoundedSvg />,
-    url: "/image-uploading",
-    showOnLoggedOut: true,
+    url: "https://anipic.anix7.in",
     hr: true,
   },
-  {
-    label: "About Us",
-    icon: <ProfileGroupSvg />,
-    url: "/page/about-us",
-  },
-  {
-    label: "Contact Us",
-    icon: <LetterRoundedSvg />,
-    url: "/page/contact-us",
-    hr: true,
-  },
-  {
-    label: "Disclaimer",
-    icon: <DisclaimerSvg />,
-    url: "/page/disclaimer",
-  },
-  {
-    label: "Terms of Use",
-    icon: <DocumentSecureSvg />,
-    url: "/page/terms",
-  },
-  {
-    label: "FAQs",
-    icon: <InformationQuestionMarkSvg />,
-    url: "/page/faqs",
-    hr: true,
-  },
+  // {
+  //   label: "Contact Us",
+  //   icon: <LetterRoundedSvg />,
+  //   url: "/page/contact-us",
+  //   hr: true,
+  // },
+  // {
+  //   label: "Disclaimer",
+  //   icon: <DisclaimerSvg />,
+  //   url: "/page/disclaimer",
+  // },
+  // {
+  //   label: "Terms of Use",
+  //   icon: <DocumentSecureSvg />,
+  //   url: "/page/terms",
+  // },
+  // {
+  //   label: "FAQs",
+  //   icon: <InformationQuestionMarkSvg />,
+  //   url: "/page/faqs",
+  //   hr: true,
+  // },
   {
     label: "Logout",
     icon: <PowerButtonSvg />,

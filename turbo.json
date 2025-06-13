@@ -33,7 +33,8 @@
         "TELEGRAM_STORAGE_CHANNEL",
         "ADMIN_PASSWORD",
         "JWT_SECRET",
-        "TELEGRAM_BOT_TOKEN"
+        "TELEGRAM_BOT_TOKEN",
+        "WHERE_TO_REDIRECT_AFTER_PROCESSING"
       ]
     },
     "start": {

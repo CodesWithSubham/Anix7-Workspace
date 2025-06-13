@@ -13,7 +13,7 @@ async function sendEmail(email, firstName, lastName, otp) {
       userName: firstName + (lastName ? " " + lastName : ""),
       userEmail: email,
       otp: otp,
-      profilePicLink: `${process.env.BASE_URL}/assets/img/defaultProfilePic.jpg`,
+      profilePicLink: "https://i.ibb.co/1JGDTytY/default-Profile-Pic.webp",
     });
 
     const res = await sendNoReplyMail({
