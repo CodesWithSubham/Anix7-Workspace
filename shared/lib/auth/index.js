@@ -31,17 +31,14 @@ function getRole(email) {
 }
 async function getUserFromDb(email) {
   try {
-    const response = await fetch(
-      `${AUTH_BASE_URL}/api/auth/getUserByEmail`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${adminToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }), // Send the user details in the request body
-      }
-    );
+    const response = await fetch(`${AUTH_BASE_URL}/api/auth/getUserByEmail`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${adminToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }), // Send the user details in the request body
+    });
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -59,17 +56,14 @@ async function getUserFromDb(email) {
 
 async function createUser(userDetails) {
   try {
-    const response = await fetch(
-      `${AUTH_BASE_URL}/api/auth/createUser`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${adminToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userDetails }), // Send the user details in the request body
-      }
-    );
+    const response = await fetch(`${AUTH_BASE_URL}/api/auth/createUser`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${adminToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userDetails }), // Send the user details in the request body
+    });
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -81,6 +75,29 @@ async function createUser(userDetails) {
   } catch (error) {
     console.error("Network error in createUser:", error);
     return false;
+  }
+}
+
+function getCookieDomain() {
+  try {
+    const url = new URL(process.env.AUTH_BASE_URL);
+    const hostname = url.hostname;
+
+    if (hostname === "localhost") return undefined; // For local dev
+
+    // Example: tools.anix7.in -> ['tools', 'anix7', 'in']
+    const parts = hostname.split(".");
+
+    if (parts.length >= 2) {
+      // Get last two parts: 'anix7.in'
+      const baseDomain = parts.slice(-2).join(".");
+      return `.${baseDomain}`; // -> '.anix7.in'
+    }
+
+    return undefined;
+  } catch (error) {
+    console.error("Invalid AUTH_BASE_URL in env:", error);
+    return undefined;
   }
 }
 
@@ -232,6 +249,20 @@ export const {
         session.user.role = token.role; // ✅ Expose getRole
       }
       return session;
+    },
+  },
+  cookies: {
+    sessionToken: {
+      name: `${
+        process.env.NODE_ENV === "production" ? "__Secure-" : ""
+      }authjs.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+        domain: getCookieDomain(), // 👈 Dynamic domain
+      },
     },
   },
 });
