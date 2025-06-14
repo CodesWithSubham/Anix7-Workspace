@@ -5,14 +5,13 @@ import {
   MonetagMultiTag01,
   MonetagVignetteBanner01,
 } from "@shared/components/ads";
-import connectToDatabase from "@shared/lib/db";
-import ImageIndex from "@shared/models/ImageIndex";
+import getImageUploadModel from "@shared/lib/db/models/ImageUpload";
 import Image from "next/image";
 
 export default async function ViewImage({ params }) {
   const { alias } = await params;
-  await connectToDatabase();
-  const imageData = await ImageIndex.findOne({ alias }).lean();
+  const ImageUpload = await getImageUploadModel();
+  const imageData = await ImageUpload.findOne({ alias }).lean();
 
   if (!imageData) {
     return (

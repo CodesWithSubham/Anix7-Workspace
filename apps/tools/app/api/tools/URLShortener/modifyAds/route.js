@@ -1,7 +1,6 @@
 
 import { auth } from "@shared/lib/auth";
-import connectToDatabase from "@shared/lib/db";
-import ShortUrl from "@shared/models/ShortUrl";
+import getShortUrlModel from "@shared/lib/db/models/ShortUrl";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
@@ -26,7 +25,7 @@ export async function POST(req) {
 
 
     // Get the URL using the alias
-    await connectToDatabase()
+    const ShortUrl = await getShortUrlModel();
     const url = await ShortUrl.findOne({ alias })
     if (!url) {
       return NextResponse.json({ success: false, message: "Alias not found" }, { status: 404 })

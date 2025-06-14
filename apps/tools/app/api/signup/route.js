@@ -1,17 +1,32 @@
 import { NextResponse } from "next/server";
-import connectToDatabase from "@shared/lib/db";
-import User from "@shared/models/User";
 import { signupSchema } from "@shared/lib/zod";
 import { hash } from "bcryptjs";
-import { generateUniqueUserId } from "@shared/lib/helper";
-import SignUpOtp from "@shared/models/SignUpOtp";
-import { retryInterval } from "../sendOtp/signUpVerification/route";
+import getSignUpOtpModel from "@shared/lib/db/models/SignUpOtp";
+import getUserModel from "@shared/lib/db/models/User";
 
 const MAX_ATTEMPTS = 5;
 const BLOCK_DURATION = 10 * 60 * 1000; // 10 minutes
 
 export async function checkRateLimit(signUpOtpData) {
   return true; // Allow request
+}
+
+async function generateUniqueUserId(digits = 10) {
+  let userId;
+  let exists = true;
+  const min = Math.pow(10, digits - 1); // Smallest number with `digits` length
+  const max = Math.pow(10, digits) - 1; // Largest number with `digits` length
+
+  const User = await getUserModel();
+
+  while (exists) {
+    userId = Math.floor(min + Math.random() * (max - min));
+
+    // Check if the generated userId already exists
+    exists = await User.exists({ userId });
+  }
+
+  return userId;
 }
 
 export async function POST(req) {
@@ -28,7 +43,9 @@ export async function POST(req) {
       profilePic,
       referredBy,
     } = validatedData;
-    await connectToDatabase();
+    
+    const SignUpOtp = await getSignUpOtpModel();
+    const User = await getUserModel();
 
     const signUpOtp = await SignUpOtp.findOne({ email: email });
     // console.log("Body: ", body, "Data: ", validatedData, "SignUpOtp: ", signUpOtp)

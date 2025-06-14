@@ -1,15 +1,14 @@
 import { auth } from "@shared/lib/auth";
-import connectToDatabase from "@shared/lib/db";
-import ImageIndex from "@shared/models/ImageIndex";
+import getImageUploadModel from "@shared/lib/db/models/ImageUpload";
 
 import { NextResponse } from "next/server";
 
 // Function to get URLs by uploadedBy with pagination (start and limit of 10)
 async function getImagesByUploadedBy(uploadedBy, start = 0, limit = 10) {
-  await connectToDatabase();
+  const ImageUpload = await getImageUploadModel();
 
   // Get the URLs for a given uploadedBy with pagination
-  const images = await ImageIndex.find({ uploadedBy })
+  const images = await ImageUpload.find({ uploadedBy })
     .select("alias extension adsLabel createdAt")
     .sort({ createdAt: -1 }) // Sort by creation date (descending)
     .skip(start) // Skip the first 'start' number of documents
@@ -17,7 +16,7 @@ async function getImagesByUploadedBy(uploadedBy, start = 0, limit = 10) {
     .lean();
 
   // Get total count of URLs for a given uploadedBy
-  const totalImagesCount = await ImageIndex.countDocuments({ uploadedBy });
+  const totalImagesCount = await ImageUpload.countDocuments({ uploadedBy });
 
   return {
     images,

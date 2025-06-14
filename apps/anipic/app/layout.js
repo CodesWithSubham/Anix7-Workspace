@@ -4,13 +4,13 @@ import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 import { BalanceProvider } from "@shared/components/context/BalanceContext";
 import Navbar from "@shared/components/navigation/Navbar";
-import SlideBar from "@shared/components/navigation/SlideBarLayout";
 import NoScriptWarning from "@shared/components/errors/NoScriptWarning";
 import Footer from "@/components/Footer";
 import Wave from "@shared/components/Wave";
 import Script from "next/script";
 import ErudaScript from "@shared/components/Eruda";
 import ToastProvider from "@shared/components/context/ToastProvider";
+import SlideBar from "@/components/navigations/SlideBar";
 
 const baseUrl = process.env.BASE_URL;
 
@@ -174,7 +174,7 @@ export default function RootLayout({ children }) {
         <SessionProvider>
           <BalanceProvider>
             <div className="mainWrp">
-              <Navbar />
+              <Navbar appName="AniPic" appSubName="by Anix7" />
               <div className="flex">
                 <SlideBar />
                 <div className="blogCont">

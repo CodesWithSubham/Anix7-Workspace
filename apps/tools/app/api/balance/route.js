@@ -1,8 +1,7 @@
 // /app/api/balance/route.js
 import { NextResponse } from "next/server";
-import connectToDatabase from "@shared/lib/db";
-import User from "@shared/models/User";
 import { auth } from "@shared/lib/auth";
+import getUserModel from "@shared/lib/db/models/User";
 
 export async function GET(req) {
   try {
@@ -15,7 +14,7 @@ export async function GET(req) {
       );
     }
 
-    await connectToDatabase();
+    const User = await getUserModel();
     const { balance } = await User.findOne({ email: session.user.email });
 
     // Return the balance

@@ -1,7 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { EncryptJWT } from "jose";
-import connectToDatabase from "@shared/lib/db";
-import ShortUrl from "@shared/models/ShortUrl";
+import getShortUrlModel from "@shared/lib/db/models/ShortUrl";
 
 const secretKey = new TextEncoder().encode(process.env.URL_SHORTENER_TOKEN);
 
@@ -23,7 +22,7 @@ async function encryptAndRedirect(data) {
 export default async function Page({ params }) {
   const alias = (await params).shortCode;
 
-  await connectToDatabase();
+  const ShortUrl = await getShortUrlModel();
   const doc = await ShortUrl.findOne({ alias }).lean();
 
   if (!doc) {

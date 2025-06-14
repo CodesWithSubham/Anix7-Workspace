@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
-import connectToDatabase from "@shared/lib/db";
-import SignUpOtp from "@shared/models/SignUpOtp";
-import User from "@shared/models/User";
 import { verifyMail } from "@shared/components/ui/mail";
 import { sendNoReplyMail } from "@shared/lib/sendMail";
+import getUserModel from "@shared/lib/db/models/User";
+import getSignUpOtpModel from "@shared/lib/db/models/SignUpOtp";
 
 export const retryInterval = 10 * 60 * 1000; // 30 minutes
 
@@ -38,7 +37,8 @@ export async function POST(req) {
       );
     }
     // Connect to MongoDB
-    await connectToDatabase();
+    const User = await getUserModel();
+    const SignUpOtp = await getSignUpOtpModel();
 
     const now = Date.now();
 

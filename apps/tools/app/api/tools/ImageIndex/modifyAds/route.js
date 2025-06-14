@@ -1,6 +1,5 @@
 import { auth } from "@shared/lib/auth";
-import connectToDatabase from "@shared/lib/db";
-import ImageIndex from "@shared/models/ImageIndex";
+import getImageUploadModel from "@shared/lib/db/models/ImageUpload";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
@@ -34,8 +33,8 @@ export async function POST(req) {
     }
 
     // Get the URL using the alias
-    await connectToDatabase();
-    const url = await ImageIndex.findOne({ alias });
+    const ImageUpload = await getImageUploadModel();
+    const url = await ImageUpload.findOne({ alias });
     if (!url) {
       return NextResponse.json(
         { success: false, message: "Alias not found" },

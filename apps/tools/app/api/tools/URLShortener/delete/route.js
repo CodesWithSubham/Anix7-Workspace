@@ -1,7 +1,6 @@
 
 import { auth } from "@shared/lib/auth";
-import connectToDatabase from "@shared/lib/db";
-import ShortUrl from "@shared/models/ShortUrl";
+import getShortUrlModel from "@shared/lib/db/models/ShortUrl";
 import { NextResponse } from "next/server";
 
 export async function DELETE(req) {
@@ -20,7 +19,7 @@ export async function DELETE(req) {
         { status: 400 }
       );
 
-    await connectToDatabase();
+    const ShortUrl = await getShortUrlModel();
 
     const image = await ShortUrl.findOneAndDelete({
       alias,

@@ -3,8 +3,7 @@
 
 import { auth } from "@shared/lib/auth";
 import { disallowedDomains } from "./disallowedDomains";
-import connectToDatabase from "@shared/lib/db";
-import ShortUrl from "@shared/models/ShortUrl";
+import getShortUrlModel from "@shared/lib/db/models/ShortUrl";
 
 export async function checkAlias({ alias }) {
   try {
@@ -22,7 +21,7 @@ export async function checkAlias({ alias }) {
       };
     }
 
-    await connectToDatabase();
+    const ShortUrl = await getShortUrlModel();
 
     const url = await ShortUrl.findOne({ alias });
 
@@ -69,6 +68,7 @@ async function generateAlias() {
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
   let alias;
+  const ShortUrl = await getShortUrlModel();
   do {
     alias = Array.from(
       { length: 6 },
@@ -89,7 +89,7 @@ export async function createShortUrl({ longUrl, alias }) {
     const uploadedBy = session.user.userId;
 
     // Connect to the database
-    await connectToDatabase();
+    const ShortUrl = await getShortUrlModel();
 
     // Invalid alias if not: 1. alphanumeric and numberic, 2. length other then 6, 3. not already taken
     if (

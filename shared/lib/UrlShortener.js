@@ -1,11 +1,10 @@
 // lib/UrlShortner.js
 
-import connectToDatabase from "@/lib/db";
-import ShortUrl from "@/models/ShortUrl";
+import getShortUrlModel from "./db/models/ShortUrl";
 
 // Function to get URL by alias
 export async function getUrl(alias) {
-  await connectToDatabase();
+  const ShortUrl = await getShortUrlModel();
   const url = await ShortUrl.findOne({ alias });
   return url;
 }
@@ -14,7 +13,7 @@ export async function getUrl(alias) {
 // Function to generate a random alias
 export async function generateAlias() {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  
+  const ShortUrl = await getShortUrlModel();
   let alias;
   do {
     alias = Array.from({ length: 6 }, () => characters[Math.floor(Math.random() * characters.length)]).join('');
@@ -26,7 +25,7 @@ export async function generateAlias() {
 // Function to create a new short URL
 export async function createShortUrl(longUrl, uploadedBy) {
   const alias = await generateAlias();
-  
+  const ShortUrl = await getShortUrlModel();
   const newShortUrl = new ShortUrl({
     longUrl,
     alias,
@@ -43,14 +42,14 @@ export async function createShortUrl(longUrl, uploadedBy) {
 
 // Function to update the URL's details
 export async function updateShortUrl(alias, updates) {
-  await connectToDatabase();
+  const ShortUrl = await getShortUrlModel();
   const shortUrl = await ShortUrl.findOneAndUpdate({ alias }, { $set: updates }, { new: true });
   return shortUrl;
 }
 
 // Function to delete a short URL by alias
 export async function deleteShortUrl(alias) {
-  await connectToDatabase();
+  const ShortUrl = await getShortUrlModel();
   const deletedUrl = await ShortUrl.findOneAndDelete({ alias });
   return deletedUrl;
 }

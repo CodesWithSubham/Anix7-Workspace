@@ -1,6 +1,5 @@
 import { auth } from "@shared/lib/auth";
-import connectToDatabase from "@shared/lib/db";
-import ImageIndex from "@shared/models/ImageIndex";
+import getImageUploadModel from "@shared/lib/db/models/ImageUpload";
 import { NextResponse } from "next/server";
 
 export async function DELETE(req) {
@@ -22,8 +21,9 @@ export async function DELETE(req) {
         { status: 400 }
       );
     }
-    await connectToDatabase();
-    const image = await ImageIndex.findOne({ alias, uploadedBy });
+
+    const ImageUpload = await getImageUploadModel();
+    const image = await ImageUpload.findOne({ alias, uploadedBy });
     if (!image) {
       return NextResponse.json(
         { error: "Nothing to Delete!", success: false },

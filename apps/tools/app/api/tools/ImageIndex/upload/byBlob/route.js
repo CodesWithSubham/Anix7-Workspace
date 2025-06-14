@@ -1,8 +1,7 @@
 // app\api\tools\ImageIndex\upload\route.js
 
 import { auth } from "@shared/lib/auth";
-import connectToDatabase from "@shared/lib/db";
-import ImageIndex from "@shared/models/ImageIndex";
+import getImageUploadModel from "@shared/lib/db/models/ImageUpload";
 import { del } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
@@ -64,10 +63,10 @@ export async function POST(req) {
       throw new Error(data?.data?.error || "Failed to upload image");
     }
 
-    await connectToDatabase();
+    const ImageUpload = await getImageUploadModel();
 
     // Create a new ShortUrl record
-    const img = new ImageIndex({
+    const img = new ImageUpload({
       alias: data.data.id,
       deleteHash: data.data.deletehash,
       extension: ext,

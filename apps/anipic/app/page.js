@@ -46,7 +46,7 @@ const FeatureCard = ({ title, description, image, link, buttonText }) => (
 export default function Home() {
   return (
     <>
-      <section className="relative p-5 text-center mb-14">
+      {/* <section className="relative p-5 text-center mb-14">
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4">
           Welcome to Anix7 Tools
         </h1>
@@ -63,36 +63,8 @@ export default function Home() {
             SignUp Now
           </Button>
         </IfLoggedOut>
-      </section>
+      </section> */}
 
-      <WorkBox className="py-10 text-center -mx-3 md:mx-auto">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-10">
-          Our Key Features
-        </h2>
-        <div className="relative flex justify-center flex-wrap gap-x-14 gap-y-10 my-8">
-          <FeatureCard
-            title="URL Shortener"
-            description="Shorten long URLs from various platforms and share them effortlessly"
-            image="/assets/img/link.png"
-            link="/url-shortner"
-            buttonText="Short URLs"
-          />
-          <FeatureCard
-            title="QR Code Generator"
-            description="Generate fully customized QR Codes with colors, shapes, and logos."
-            image="/assets/img/mobile-qr.png"
-            link="/qr-code-generator"
-            buttonText="Generate QR Code"
-          />
-          <FeatureCard
-            title="Image Uploading"
-            description="Upload images up to 10MB, get a shareable public link, and access your uploads anytime."
-            image="/assets/img/gallery.png"
-            link="/image-uploading"
-            buttonText="Upload Image"
-          />
-        </div>
-      </WorkBox>
 
       {/* <section className="bg-gradient-to-b from-blue-600 via-indigo-600 to-transparent text-white py-20">
         <div className="text-center mb-12">
@@ -126,7 +98,7 @@ export default function Home() {
         </div>
       </section> */}
 
-      <section className="py-16 text-center">
+      {/* <section className="py-16 text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-8">How It Works</h2>
         <div className="flex flex-wrap justify-center gap-4 mt-8">
           {[
@@ -155,7 +127,7 @@ export default function Home() {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* <section className="py-16 bg-gradient-to-b from-gray-100 via-gray-200 to-transparent text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-8">
