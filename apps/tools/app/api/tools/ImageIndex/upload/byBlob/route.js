@@ -51,7 +51,7 @@ export async function POST(req) {
     const response = await fetch("https://api.imgur.com/3/image", {
       method: "POST",
       headers: {
-        Authorization: `Client-ID ${process.env.IMGUR_CLIENT_ID}`,
+        Authorization: `Client-ID ${process.env.IMGUR_CLIENT_ID_1}`,
       },
       body: formData,
       redirect: "follow",

@@ -36,7 +36,7 @@ export async function DELETE(req) {
       {
         method: "DELETE",
         headers: {
-          Authorization: `Client-ID ${process.env.IMGUR_CLIENT_ID}`,
+          Authorization: `Client-ID ${process.env.IMGUR_CLIENT_ID_1}`,
         },
       }
     );
