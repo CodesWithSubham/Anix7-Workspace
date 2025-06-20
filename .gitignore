@@ -13,7 +13,7 @@ node_modules/
 
 # testing
 /coverage
-*/test
+test/
 
 # next.js
 .next/
@@ -68,3 +68,5 @@ Thumbs.db
 .vscode/
 *.sw?
 
+# For IntelliSense
+forIntelliSense.css

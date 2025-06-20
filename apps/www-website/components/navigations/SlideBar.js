@@ -1,7 +1,6 @@
 "use client";
 
 import SlideBarLayout from "@shared/components/navigation/SlideBarLayout";
-import { HomeSvg } from "@shared/components/svg/HomeSvg";
 import { ImageRoundedSvg } from "@shared/components/svg/ImageSvg";
 import { PowerButtonSvg } from "@shared/components/svg/PowerButtonSvg";
 import { QrSvg } from "@shared/components/svg/QrSvg";
@@ -10,12 +9,6 @@ import { UrlSvg } from "@shared/components/svg/UrlSvg";
 import { signOut } from "next-auth/react";
 
 const menuItem = [
-  {
-    label: "Home",
-    icon: <HomeSvg />,
-    url: "/",
-    hr: true,
-  },
   {
     label: "Anix7 Tools",
     icon: <SettingSvg />,

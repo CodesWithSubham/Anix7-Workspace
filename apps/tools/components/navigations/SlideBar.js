@@ -3,7 +3,6 @@
 import SlideBarLayout from "@shared/components/navigation/SlideBarLayout";
 import { DisclaimerSvg } from "@shared/components/svg/DisclaimerSvg";
 import { DocumentSecureSvg } from "@shared/components/svg/DocumentSvg";
-import { HomeSvg } from "@shared/components/svg/HomeSvg";
 import { ImageRoundedSvg } from "@shared/components/svg/ImageSvg";
 import { InformationQuestionMarkSvg } from "@shared/components/svg/InformationSvg";
 import { LetterRoundedSvg } from "@shared/components/svg/LetterSvg";
@@ -14,12 +13,6 @@ import { UrlSvg } from "@shared/components/svg/UrlSvg";
 import { signOut } from "next-auth/react";
 
 const menuItem = [
-  {
-    label: "Home",
-    icon: <HomeSvg />,
-    url: "/",
-    hr: true,
-  },
   {
     label: "Url Shortner",
     icon: <UrlSvg />,

@@ -5,8 +5,9 @@ import { Button, IconButton } from "../ui/Button";
 import { IfLoggedIn, IfLoggedOut } from "../auth/LoggedInWraper";
 import Profile from "../Profile";
 import LoginSignup from "../auth/LoginSignup";
+import Link from "next/link";
 
-export default async function Navbar({appName="Anix7", appSubName=""}) {
+export default async function Navbar({ appName = "Anix7", appSubName = "" }) {
   return (
     <>
       <header className="w-full z-20 sticky top-0 shadow-xs border-b md:dark:border-b-gray-900/25">
@@ -39,7 +40,7 @@ export default async function Navbar({appName="Anix7", appSubName=""}) {
             </div>
 
             <div className="w-11/12 pl-1">
-              <h1 className="block text-inherit text-xl font-medium">
+              <Link href="/" className="block text-inherit text-xl font-medium">
                 <bdi>
                   <span className="overflow-hidden whitespace-nowrap text-ellipsis block">
                     {appName}
@@ -48,7 +49,7 @@ export default async function Navbar({appName="Anix7", appSubName=""}) {
                     </span>
                   </span>
                 </bdi>
-              </h1>
+              </Link>
             </div>
           </div>
           <div className="px-3 transition-all">

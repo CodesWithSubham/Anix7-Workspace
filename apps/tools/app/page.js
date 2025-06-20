@@ -2,39 +2,26 @@
 
 import Image from "next/image";
 import MobileMenu from "@shared/components/navigation/MobileMenu";
-import { WorkBox } from "@shared/components/ui/Boxes";
-import { IfLoggedIn, IfLoggedOut } from "@shared/components/auth/LoggedInWraper";
+import { ShadowBox, WorkBox } from "@shared/components/ui/Boxes";
+import {
+  IfLoggedIn,
+  IfLoggedOut,
+} from "@shared/components/auth/LoggedInWraper";
 import { Button } from "@shared/components/ui/Button";
-import { twJoin } from "tailwind-merge";
+import Link from "next/link";
 
 export const addToSitemap = true; // Add this page to Sitemap
 
 export const metadata = { alternates: { canonical: "/" } };
 
 export default function Home() {
-  // Utility function for random border-radius
-  const randomBorderRadius = [
-    "rounded-[64%_47%_58%_36%_/_42%_66%_38%_50%]",
-    "rounded-[46%_62%_60%_54%_/_64%_37%_69%_46%]",
-    "rounded-[69%_61%_42%_66%_/_45%_68%_36%_39%]",
-    "rounded-[67%_38%_46%_64%_/_48%_54%_63%_51%]",
-    "rounded-[54%_50%_48%_38%_/_36%_66%_42%_51%]",
-    "rounded-[63%_67%_45%_55%_/_41%_47%_69%_49%]",
-    "rounded-[52%_47%_58%_51%_/_38%_52%_66%_45%]",
-    "rounded-[45%_53%_43%_70%_/_68%_58%_36%_64%]",
-    "rounded-[48%_65%_61%_49%_/_44%_63%_38%_55%]",
-    "rounded-[62%_43%_59%_41%_/_54%_49%_62%_47%]",
-    "rounded-[60%_44%_70%_39%_/_55%_60%_45%_48%]",
-    "rounded-[57%_69%_50%_46%_/_62%_43%_58%_49%]",
-  ];
-  const features = [
+  const keyFeatures = [
     {
       title: "URL Shortener",
       description:
         "Shorten long URLs from various platforms and share them effortlessly",
       image: "/assets/img/link.png",
       link: "/url-shortner",
-      buttonText: "Short URLs",
     },
     {
       title: "QR Code Generator",
@@ -42,7 +29,6 @@ export default function Home() {
         "Generate fully customized QR Codes with colors, shapes, and logos.",
       image: "/assets/img/mobile-qr.png",
       link: "/qr-code-generator",
-      buttonText: "Generate QR Code",
     },
     {
       title: "Image Uploading",
@@ -56,15 +42,16 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative p-5 text-center mb-14">
+      <section className="relative p-5 text-center mb-4 md:mb-8">
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4">
           Welcome to Anix7 Tools
         </h1>
         <p className="sm:text-md md:text-lg lg:text-xl mb-6 text-center">
-          Your one-stop platform for all your digital needs. URL Shortener, QR
-          Code Generator, Image Resizing or Uploading, and many more — all in
-          one place.
+          Simplify your digital workflow with a powerful suite of online tools —
+          from URL shorteners and QR code generators to image resizing,
+          uploading, and more. Everything you need, all in one place.
         </p>
+
         <IfLoggedOut>
           <Button
             className="rounded-full py-3 px-[10%]"
@@ -75,47 +62,47 @@ export default function Home() {
         </IfLoggedOut>
       </section>
 
-      <WorkBox className="py-10 text-center -mx-3 md:mx-auto">
+      <section className="py-10 px-4 text-center -mx-3 md:mx-auto">
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-10">
           Our Key Features
         </h2>
-        <div className="relative flex justify-around flex-wrap gap-x-14 gap-y-10 my-8">
-          {features.map(
-            ({ title, description, image, link, buttonText }, i) => (
-              <div
-                key={i}
-                className={twJoin(
-                  "w-full max-w-80 aspect-square flex justify-center items-center shadow-[inset_20px_20px_20px_rgba(0,0,0,.05),_25px_35px_20px_rgba(0,0,0,.05),_25px_30px_30px_rgba(0,0,0,.05),_inset_-20px_-20px_25px_rgba(255,255,255,.9)] dark:shadow-[inset_20px_20px_20px_rgba(255,255,255,.05),_25px_35px_20px_rgba(255,255,255,.05),_25px_30px_30px_rgba(255,255,255,.05),_inset_-20px_-20px_25px_rgba(0,0,0,.9)] hover:rounded-[50%] transition-all duration-700",
-                  randomBorderRadius[i % randomBorderRadius.length] ||
-                    "rounded-[64%_47%_58%_36%_/_42%_66%_38%_50%]"
+        <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(380px,1fr))] gap-8">
+          {keyFeatures.map(({ title, description, image, link }, i) => (
+            <Link
+              href={link}
+              className="hover:scale-102 transition-all duration-500"
+              key={i}
+            >
+              <ShadowBox className="flex h-full flex-row items-center gap-4 p-4 hover:shadow-[0px_3px_10px_rgba(0,0,0,.20),_inset_20px_20px_18px_rgba(0,0,0,.07),_inset_-20px_-20px_18px_rgba(255,255,255,.9)] dark:hover:shadow-[0px_-1px_10px_rgba(255,255,255,.10),inset_20px_20px_18px_rgba(0,0,0,.9),_inset_-20px_-20px_18px_rgba(255,255,255,.07)] ">
+                {image && (
+                  <div className="w-24 h-24 flex-shrink-0 flex items-center justify-center">
+                    <Image
+                      src={image}
+                      alt={title || "Feature Image"}
+                      width={96}
+                      height={96}
+                      className="object-contain w-full h-full"
+                      priority={i === 0 || i === 1} // Only 1st & 2nd item prioritized
+                    />
+                  </div>
                 )}
-              >
-                <div className="flex flex-col items-center text-center p-5">
-                  {image && (
-                    <div className="w-20 aspect-square flex justify-center items-center border-4 rounded-full border-double border-[--linkC]">
-                      <Image
-                        src={image}
-                        alt={title}
-                        width={80}
-                        height={80}
-                        priority
-                        className="w-3/4 hover:scale-105 transition-all duration-700"
-                      />
-                    </div>
+                <div className="text-left">
+                  {title && (
+                    <h3 className="text-xl md:text-2xl font-semibold mb-2">
+                      {title}
+                    </h3>
                   )}
-                  {title && <h2 className="text-2xl">{title}</h2>}
-                  {description && <p>{description}</p>}
-                  {link && (
-                    <Button href={link} className="rounded-full py-2.5">
-                      {buttonText || "Learn More"}
-                    </Button>
+                  {description && (
+                    <p className="text-sm text-gray-600 dark:text-gray-200">
+                      {description}
+                    </p>
                   )}
                 </div>
-              </div>
-            )
-          )}
+              </ShadowBox>
+            </Link>
+          ))}
         </div>
-      </WorkBox>
+      </section>
 
       {/* <section className="bg-gradient-to-b from-blue-600 via-indigo-600 to-transparent text-white py-20">
         <div className="text-center mb-12">

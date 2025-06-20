@@ -9,17 +9,29 @@ import Hr from "../ui/Hr";
 import { twJoin, twMerge } from "tailwind-merge";
 import { usePathname } from "next/navigation";
 import { InstagramSvg, TelegramSvg, YouTubeSvg } from "../svg/SocialMediaSvg";
-
-
+import { HomeSvg } from "../svg/HomeSvg";
 
 export default function SlideBarLayout({ menuItem = [], quickURLs = [] }) {
   const { data: session } = useSession();
   const checkboxRef = useRef(null);
-  const filteredMenu = menuItem.filter(
+  const pathname = usePathname();
+  // Clone menuItem to avoid mutating props
+  const updatedMenu = [...menuItem];
+
+  // Conditionally add "Home" item if not on "/"
+  if (pathname !== "/") {
+    updatedMenu.unshift({
+      label: "Home",
+      icon: <HomeSvg />,
+      url: "/",
+      hr: true,
+    });
+  }
+  // Add menu items based on session state
+  const filteredMenu = updatedMenu.filter(
     (item) =>
       !((!session && item.showOnLoggedIn) || (session && item.showOnLoggedOut))
   );
-  const pathname = usePathname();
   // Auto-close sidebar on route change if on mobile
   useEffect(() => {
     if (window.innerWidth < 768) {
@@ -220,7 +232,7 @@ function SideBarItem({ item, showSideBar }) {
           </label>
           <div
             className={twMerge(
-              "list hidden opacity-0 invisible pl-7",
+              "list hidden opacity-0 invisible pl-7 relative",
               showSideBar
                 ? "md:h-[calc(100%-18.5px)] peer-checked:block peer-checked:relative peer-checked:opacity-100 peer-checked:visible "
                 : "md:m-0 md:overflow-hidden md:block md:absolute md:left-5 md:top-1 p-0.5 pl-4 pt-2 bg-transparent md:opacity-0 md:invisible md:z-10"

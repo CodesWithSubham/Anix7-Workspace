@@ -169,3 +169,17 @@ export function Note({ children, className = "", type, ...props }) {
     </div>
   );
 }
+
+export function ShadowBox({ children, className = "", ...props }) {
+  return (
+    <div
+      className={twMerge(
+        "w-full shadow-[0px_3px_10px_rgba(0,0,0,.20),_inset_20px_20px_18px_rgba(255,255,255,.9),_inset_-20px_-20px_18px_rgba(0,0,0,.07)] dark:shadow-[inset_20px_20px_18px_rgba(255,255,255,.07),_inset_-20px_-20px_18px_rgba(0,0,0,.9)] p-5",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
