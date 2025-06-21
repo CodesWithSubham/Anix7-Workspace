@@ -11,6 +11,7 @@ import Script from "next/script";
 import ErudaScript from "@shared/components/Eruda";
 import ToastProvider from "@shared/components/context/ToastProvider";
 import SlideBar from "@/components/navigations/SlideBar";
+import ScrollToTopButton from "@shared/components/ScrollToTopButton";
 
 const baseUrl = process.env.BASE_URL;
 
@@ -167,28 +168,28 @@ export default function RootLayout({ children }) {
         `}
         </Script>
       </head>
-      <body
-        className="oneGrd MN-2 mobS hdMn bD onIndx onHm"
-        suppressHydrationWarning
-      >
+      <body suppressHydrationWarning>
+        <div className="absolute w-48 h-56 bg-neutral-500/5 dark:bg-black/15 -z-10 top-0 right-0 rounded-bl-full" />
         <SessionProvider>
           <BalanceProvider>
-            <div className="mainWrp">
-              <Navbar appName="AniPic" appSubName="by Anix7" />
-              <div className="flex">
-                <SlideBar />
-                <div className="blogCont">
-                  <div className="px-5 md:px-6 mx-auto max-w-(--breakpoint-xl)">
+            <Navbar appName="Tools" appSubName="Beta" />
+            <div className="flex">
+              <SlideBar />
+              <div className="grow pt-5 md:pt-7 relative transition-all duration-300 md:w-[calc(100%-224px)] border-l border-white/30">
+                <div className="px-5 md:px-6 mx-auto max-w-(--breakpoint-xl)">
+                  <main>
                     <NoScriptWarning />
-                    <main>{children}</main>
-                    <Footer />
-                  </div>
+                    {children}
+                  </main>
+                  <ScrollToTopButton />
+                  <Footer />
                 </div>
-                <Wave />
               </div>
-
-              {process.env.NODE_ENV === "development" && <ErudaScript />}
+              <Wave />
             </div>
+
+            {process.env.NODE_ENV === "development" && <ErudaScript />}
+
             <ToastProvider />
           </BalanceProvider>
         </SessionProvider>
