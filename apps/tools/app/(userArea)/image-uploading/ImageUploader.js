@@ -16,7 +16,6 @@ export default function ImageUploader() {
   const [preview, setPreview] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploadedURL, setUploadedURL] = useState(null);
-  const [deleteHash, setDeleteHash] = useState(null);
   const [error, setError] = useState("");
 
   const handleFileChange = (e) => {
@@ -92,34 +91,6 @@ export default function ImageUploader() {
     } finally {
       setUploading(false);
     }
-  };
-
-  const handleDelete = async () => {
-    if (!deleteHash) {
-      setError("No delete hash available");
-      return;
-    }
-
-    setUploading(true);
-    setError("");
-
-    const res = await fetch("/api/tools/URLShortener/ImageIndex/delete", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ deleteHash }),
-    });
-
-    const data = await res.json();
-    setUploading(false);
-
-    if (!data.success) {
-      setError(data.error || "Delete failed");
-      return;
-    }
-
-    setPreview(null);
-    setImage(null);
-    setDeleteHash(null);
   };
 
   return (
