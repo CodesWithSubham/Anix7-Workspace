@@ -9,6 +9,8 @@ import copyToClipboard from "@shared/utils/CopyToClipboard";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import { deleteShortUrl, editShortUrl, modifyAds } from "./action";
+import { ErrorText } from "@shared/components/ui/Texts";
 
 export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
   const { data: session } = useSession();
@@ -54,16 +56,10 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
     getURLs(page);
   }, [page, setTotal, setUrls]);
 
-  const modifyAds = async (alias, ad) => {
+  const modifyWaiting = async (alias, ad) => {
     setAdsLoading(true);
     try {
-      const response = await fetch("/api/tools/URLShortener/modifyAds", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ alias, ad }),
-      });
-
-      const data = await response.json();
+      const data = await modifyAds({ alias, ad });
       if (data?.success) {
         setUrls((prevUrls) =>
           prevUrls.map((item) =>
@@ -98,16 +94,10 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
 
   const handleDelete = async () => {
     if (!selectedUrl) return;
-    //setDeleteLoading(true);
+    setDeleteLoading(true);
     // return toast.info("Delete Avalable Soon");
     try {
-      const response = await fetch("/api/tools/URLShortener/delete", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ alias: selectedUrl.alias }),
-      });
-
-      const res = await response.json();
+      const res = await deleteShortUrl({ alias: selectedUrl.alias });
 
       if (res?.success) {
         toast.success(res.message);
@@ -128,7 +118,9 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
   };
 
   const [showEditPopup, setShowEditPopup] = useState(false);
+  const [editedUrl, setEditedUrl] = useState("");
   const [editLoading, setEditLoading] = useState(false);
+  const [editUrlError, setEditUrlError] = useState("");
 
   const openEditPopup = (url) => {
     setSelectedUrl(url);
@@ -140,34 +132,49 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
     setSelectedUrl(null);
   };
 
+  const isValidUrl = (e) => {
+    const url = e.target.value.trim();
+    setEditUrlError("");
+    setEditedUrl("");
+
+    if (url.startsWith("http://")) {
+      setEditUrlError("Only HTTPS URLs are allowed.");
+      return;
+    }
+
+    const urlPattern =
+      /^(https:\/\/)((?!localhost)[\w.-]+)\.([a-z]{2,})(:\d{1,5})?(\/.*)?$/i;
+    if (!urlPattern.test(url)) {
+      setEditUrlError("Invalid URL");
+      return;
+    }
+    setEditedUrl(url);
+  };
+
   const handleEdit = async () => {
-    if (!selectedUrl) return;
-    // setEditLoading(true);
-    return toast.info("Edit Avalable Soon");
+    if (!selectedUrl || !editedUrl) return;
+    setEditLoading(true);
+
     try {
-      const response = await fetch("/api/tools/URLShortener/delete", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ alias: selectedUrl.alias }),
-      });
-
-      const res = await response.json();
-
+      const res = await editShortUrl({ alias: selectedUrl.alias, editedUrl });
       if (res?.success) {
         toast.success(res.message);
         setUrls((prev) =>
-          prev.filter((url) => url.alias !== selectedUrl.alias)
-        ); // Remove from state
-        setTotal((p) => --p);
+          prev.map((url) =>
+            url.alias === selectedUrl.alias
+              ? { ...url, longUrl: editedUrl }
+              : url
+          )
+        );
       } else {
-        toast.warn(res.message || "Failed to delete URL.");
+        toast.warn(res.message || "Failed to update URL.");
       }
     } catch (error) {
-      toast.error("Error deleting URL.");
+      toast.error("Error while updating URL.");
       console.error(error);
     } finally {
-      setDeleteLoading(false);
-      closeDeletePopup();
+      setEditLoading(false);
+      closeEditPopup();
     }
   };
   return (
@@ -248,7 +255,7 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
                         <button
                           key={i}
                           disabled={adsLoading}
-                          onClick={() => modifyAds(url.alias, i)}
+                          onClick={() => modifyWaiting(url.alias, i)}
                           className="cursor-pointer"
                         >
                           <span
@@ -312,9 +319,10 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
             <Button
               className="bg-red-600 hover:scale-105"
               onClick={handleDelete}
-              disabled={deleteLoading}
+              loading={deleteLoading}
+              loadingText="Deleting..."
             >
-              {deleteLoading ? "Deleting..." : "Delete"}
+              Delete
             </Button>
             <Button
               className="bg-(--linkC) hover:scale-105 mx-3"
@@ -355,12 +363,15 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
             <Input
               type="url"
               id="editOrgUrl"
+              onChange={isValidUrl}
               defaultValue={selectedUrl.longUrl}
             />
+            <ErrorText>{editUrlError}</ErrorText>
           </div>
           <div className="flex justify-end items-center text-white font-bold mb-px mr-1">
             <Button
               onClick={handleEdit}
+              disabled={!editedUrl || editedUrl === selectedUrl.longUrl}
               loading={editLoading}
               loadingText="Saving..."
             >
