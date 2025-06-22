@@ -1,65 +1,32 @@
 // /app/(userArea)/image-uploading/page.js
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { upload } from "@vercel/blob/client";
 import { Button } from "@shared/components/ui/Button";
 import { CopyInput } from "@shared/components/ui/Input";
-import { ImageSvg } from "@shared/components/svg/ImageSvg";
 import { UploadSvg } from "@shared/components/svg/UploadSvg";
 import { DocumentSvg } from "@shared/components/svg/DocumentSvg";
+import DropZone from "@shared/components/ui/DropZone";
+import Hr from "@shared/components/ui/Hr";
 
 export default function ImageUploader() {
   const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploadedURL, setUploadedURL] = useState(null);
-  const [error, setError] = useState("");
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
+  const handleFileChange = (files) => {
+    setImage(null);
+    setUploadedURL(null);
+    const file = files[0];
     if (!file) return;
 
-    setUploadedURL(null);
-
-    const allowedTypes = [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "image/gif",
-      "image/apng",
-      "image/tiff",
-    ];
-
-    if (!allowedTypes.includes(file.type)) {
-      setError("Only JPG, JPEG, PNG, GIF, APNG, TIFF allowed");
-      setImage(null);
-      setPreview(null);
-      return;
-    }
-
-    if (file.size > 10 * 1024 * 1024) {
-      setError("File size must be less than 10MB");
-      setImage(null);
-      setPreview(null);
-      return;
-    }
-
-    setError("");
     setImage(file);
-    setPreview(URL.createObjectURL(file));
   };
 
   const handleUpload = async () => {
-    if (!image) {
-      setError("No image selected");
-      return;
-    }
-
     setUploading(true);
-    setError("");
 
     try {
       const id = window.crypto.randomUUID();
@@ -97,49 +64,28 @@ export default function ImageUploader() {
     <div className="flex flex-col items-center justify-center p-6">
       <h1 className="text-2xl font-bold mb-4">Image Uploader</h1>
 
-      {/* {!uploading && ( */}
-      {/* <> */}
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-        className="hidden"
-        id="image"
-        disabled={uploading}
+      <DropZone
+        accept={{
+          "image/*": [".png", ".jpg", ".jpeg", ".gif", ".apng", ".tiff"],
+        }}
+        onFilesChange={handleFileChange}
+        maxSize={10 * 1024 * 1024} // 10 MB
       />
-      <Button
-        htmlFor="image"
-        as="label"
-        disabled={uploading}
-        svg={<ImageSvg />}
-      >
-        {uploadedURL ? "Upload Another" : image ? "Change" : "Choose"} Image
-      </Button>
-      {/* </> */}
-      {/* )} */}
 
-      {error && <p className="text-red-500">{error}</p>}
-
-      {preview && (
-        <div className="mt-4">
-          <Image
-            src={preview}
-            width={320}
-            height={320}
-            alt="Uploaded"
-            className="w-11/12 max-w-lg mx-auto rounded-sm shadow-sm"
-          />
-          {uploadedURL && (
-            <CopyInput value={uploadedURL} className="w-5/6 max-w-lg mx-auto" />
-          )}
+      {uploadedURL && (
+        <div className="w-5/6 max-w-xs mt-4">
+          <p className="text-xs text-(--linkC) ml-2 -mb-1">
+            Uploaded Image URL
+          </p>
+          <CopyInput value={uploadedURL} />
         </div>
       )}
 
-      {!uploadedURL && image && !error && (
+      {!uploadedURL && image && (
         <Button
           onClick={handleUpload}
           className="flex flex-col justify-center items-center gap-2 mt-4 "
-          disabled={uploading}
+          disabled={uploading || !image}
           loading={uploading}
           loadingText="Uploading..."
           svg={<UploadSvg />}
@@ -148,19 +94,11 @@ export default function ImageUploader() {
         </Button>
       )}
 
-      <div className="w-full h-px bg-gray-300 dark:bg-gray-700 my-5 " />
+      <Hr />
       <Button href="/image-uploading/my-uploads" svg={<DocumentSvg />}>
         My Uploads
       </Button>
+      <Hr />
     </div>
   );
 }
-
-const fileToBase64 = (file) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result.split(",")[1]); // Remove "data:image/png;base64,"
-    reader.onerror = (error) => reject(error);
-  });
-};
