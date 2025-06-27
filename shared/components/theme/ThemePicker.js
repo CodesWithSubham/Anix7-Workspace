@@ -1,6 +1,5 @@
 "use client";
 
-import { set } from "mongoose";
 import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -19,12 +18,30 @@ const colors = [
 ];
 
 export default function ThemePicker({ className = "" }) {
-
   const [showSystemButton, setShowSystemButton] = useState(false);
+  const [isLocalhost, setIsLocalhost] = useState(false);
+
+  const getCookie = (name) => {
+    const match = document.cookie.match(
+      new RegExp("(^| )" + name + "=([^;]+)")
+    );
+    return match ? decodeURIComponent(match[2]) : null;
+  };
+
+  const setCookie = (name, value) => {
+    const domain = isLocalhost
+      ? ""
+      : "; domain=" + window.location.hostname.split(".").slice(-2).join(".");
+    document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${
+      60 * 60 * 24 * 365 * 2
+    }${domain}`;
+  };
+
   useEffect(() => {
-    if (window?.matchMedia) {
-      setShowSystemButton(true);
-    }
+    if (window?.matchMedia) setShowSystemButton(true);
+    setIsLocalhost(
+      typeof window !== "undefined" && window.location.hostname === "localhost"
+    );
   }, []);
 
   // useEffect(() => {
@@ -59,7 +76,9 @@ export default function ThemePicker({ className = "" }) {
   const setMode = (m) => {
     let mode = m;
     let isSystem = mode === "system";
+
     localStorage.setItem("themeMode", mode);
+    setCookie("themeMode", mode);
 
     // If no preference saved, use system preference
     if (isSystem) {
@@ -83,6 +102,7 @@ export default function ThemePicker({ className = "" }) {
     document.body.classList.add(colorClass); // Apply the new theme to body
 
     localStorage.setItem("themeColor", colorClass);
+    setCookie("themeColor", colorClass);
 
     setMetaThemeColor("light");
   };

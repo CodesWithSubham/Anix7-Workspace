@@ -6,22 +6,61 @@ export default function ThemeHead() {
       {`
         (function () {
           try {
-            var mode = localStorage.getItem("themeMode");
-            var isSystem = mode === "system";
+            // Get cookie helper
+            function getCookie(name) {
+              const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+              return match ? decodeURIComponent(match[2]) : null;
+            }
+
+            // Set cookie helper (2 years)
+            function setCookie(name, value) {
+              const isLocalhost = location.hostname === "localhost";
+              const baseCookie = name + '=' + encodeURIComponent(value) +
+                '; path=/' +
+                '; max-age=' + 60 * 60 * 24 * 365 * 2;
+              const domain = location.hostname.split('.').slice(-2).join('.');
+
+              document.cookie = baseCookie + (isLocalhost ? "" : '; domain=' + domain);
+            }
+
+            let mode = getCookie("themeMode");
+            let colorClass = getCookie("themeColor");
+
+            let isSystem = mode === "system";
+
+            // If cookie not found, try localStorage
             if (!mode) {
-              var systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+              mode = localStorage.getItem("themeMode");
+              colorClass = localStorage.getItem("themeColor");
+              isSystem = mode === "system";
+
+              // If found in localStorage, update cookies
+              if (mode) setCookie("themeMode", mode);
+              if (colorClass) setCookie("themeColor", colorClass);
+            } else {
+              // If found in cookie, sync to localStorage
+              localStorage.setItem("themeMode", mode);
+              if (colorClass) localStorage.setItem("themeColor", colorClass);
+            }
+
+            // Default to system if still not found
+            if (!mode) {
+              const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
               mode = systemPrefersDark ? "dark" : "light";
               isSystem = true;
               localStorage.setItem("themeMode", "system");
-            } else if (isSystem) {
-              var systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+              setCookie("themeMode", "system");
+            }
+
+            // If system mode, recalculate dark/light
+            if (isSystem) {
+              const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
               mode = systemPrefersDark ? "dark" : "light";
             }
 
             document.body.classList.toggle("dark", mode === "dark");
             document.body.classList.toggle("system", isSystem);
 
-            var colorClass = localStorage.getItem("themeColor");
             if (colorClass) {
               document.body.classList.remove(
                 ...(document.body.className.match(/theme\\d+/g) || [])
@@ -29,8 +68,7 @@ export default function ThemeHead() {
               document.body.classList.add(colorClass);
             }
 
-            // set theme color meta tag
-
+            // Theme color meta
             const themeColorMap = [
               "#482dff",
               "#D32F2F",
@@ -45,17 +83,22 @@ export default function ThemeHead() {
               "#283593",
             ];
 
-            const themeColor = mode === "dark" ? "#1d1d1d" : colorClass ? themeColorMap[colorClass.split("theme")[1]] : "#fffdfc";
+            const themeColor =
+              mode === "dark"
+                ? "#1d1d1d"
+                : colorClass
+                ? themeColorMap[colorClass.split("theme")[1]]
+                : "#fffdfc";
 
-              if (themeColor) {
-                let themeMeta = document.querySelector("meta[name='theme-color']");
-                if (!themeMeta) {
-                  themeMeta = document.createElement("meta");
-                  themeMeta.name = "theme-color";
-                  document.head.appendChild(themeMeta);
-                }
-                themeMeta.setAttribute("content", themeColor);
+            if (themeColor) {
+              let meta = document.querySelector("meta[name='theme-color']");
+              if (!meta) {
+                meta = document.createElement("meta");
+                meta.name = "theme-color";
+                document.head.appendChild(meta);
               }
+              meta.setAttribute("content", themeColor);
+            }
 
           } catch (e) {
             console.error("Theme load failed:", e);

@@ -14,7 +14,7 @@ try {
   console.error("Acorn module not available", err);
 }
 
-export default async function sitemap() {
+export default function sitemap() {
   if (!acornParser) {
     console.error("Acorn parser is not available. Ensure it is installed.");
     return [];
@@ -99,17 +99,19 @@ export default async function sitemap() {
 
   // Map pages into sitemap entries
   const sitemapEntries = pages
-  .map(({ route, filePath }) => ({
-    url: `${normalizedBaseUrl}${(route === "/" ? "" : route.replace(/\(.*?\)/g, "")).replace(/^\/+/, "/")}`,
+    .map(({ route, filePath }) => ({
+      url: `${normalizedBaseUrl}${(route === "/"
+        ? ""
+        : route.replace(/\(.*?\)/g, "")
+      ).replace(/^\/+/, "/")}`,
 
-    lastModified: getLastModified(filePath),
-    changeFrequency: route === "/" ? "monthly" : "weekly",
-    priority: route === "/" ? 1.0 : 0.8,
-  }))
-  .sort((a, b) =>
-    a.url === normalizedBaseUrl ? -1 : b.url === normalizedBaseUrl ? 1 : 0
-  );
-
+      lastModified: getLastModified(filePath),
+      // changeFrequency: route === "/" ? "monthly" : "weekly",
+      // priority: route === "/" ? 1.0 : 0.8,
+    }))
+    .sort((a, b) =>
+      a.url === normalizedBaseUrl ? -1 : b.url === normalizedBaseUrl ? 1 : 0
+    );
 
   // console.log(sitemapEntries);
   return sitemapEntries;

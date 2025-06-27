@@ -1,3 +1,8 @@
+// To add support for generating a sitemap in a Next.js application, we can use the `acorn` parser to analyze the JavaScript files in the `app/` directory. This will allow us to identify which pages should be included in the sitemap based on a specific export condition.
+
+// add bellow code to the page which you want to add in sitemap
+//  export const addToSitemap = true;
+
 import { execSync } from "child_process";
 import path from "path";
 import fs from "fs";
