@@ -1,15 +1,15 @@
 // /components/Eruda.js
-'use client';
+"use client";
 
-import Script from 'next/script';
+import Script from "next/script";
 
 export default function ErudaScript() {
   const handleErudaLoad = () => {
     // Initialize Eruda only after the script has loaded
-    if (typeof eruda !== 'undefined') {
+    if (typeof eruda !== "undefined") {
       eruda.init();
     } else {
-      console.error('Eruda is not defined');
+      console.error("Eruda is not defined");
     }
   };
 

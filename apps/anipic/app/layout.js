@@ -1,17 +1,14 @@
 // /app/layout.js
 
-import { SessionProvider } from "next-auth/react";
 import "./globals.css";
-import { BalanceProvider } from "@shared/components/context/BalanceContext";
 import Navbar from "@shared/components/navigation/Navbar";
 import NoScriptWarning from "@shared/components/errors/NoScriptWarning";
 import Footer from "@/components/Footer";
 import Wave from "@shared/components/Wave";
-import Script from "next/script";
-import ErudaScript from "@shared/components/Eruda";
-import ToastProvider from "@shared/components/context/ToastProvider";
 import SlideBar from "@/components/navigations/SlideBar";
 import ScrollToTopButton from "@shared/components/ScrollToTopButton";
+import DefaultHead from "@shared/head";
+import Providers from "@shared/providers";
 
 const baseUrl = process.env.BASE_URL;
 
@@ -70,129 +67,27 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {process.env.NODE_ENV == "production" && (
-          <>
-            {/* <!-- Google tag (gtag.js) --> */}
-            <Script
-              async
-              src="https://www.googletagmanager.com/gtag/js?id=G-RFXNWC90EH"
-            ></Script>
-            <Script id="googletagmanager-G-RFXNWC90EH">
-              {`window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            
-            gtag('config', 'G-RFXNWC90EH');`}
-            </Script>
-          </>
-        )}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              name: "Anix7 Tools",
-              url: baseUrl,
-              publisher: {
-                "@type": "Organization",
-                name: "Anix7 Tools",
-                logo: {
-                  "@type": "ImageObject",
-                  url: `${baseUrl}/assets/img/logo.png`,
-                },
-              },
-            }),
-          }}
-        />
-
-        <Script id="theme-loader" strategy="beforeInteractive">
-          {`
-          (function () {
-            try {
-              var mode = localStorage.getItem("themeMode");
-              var isSystem = mode === "system";
-              if (!mode) {
-                var systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                mode = systemPrefersDark ? "dark" : "light";
-                isSystem = true;
-                localStorage.setItem("themeMode", "system");
-              } else if (isSystem) {
-                var systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                mode = systemPrefersDark ? "dark" : "light";
-              }
-
-              document.body.classList.toggle("dark", mode === "dark");
-              document.body.classList.toggle("system", isSystem);
-
-              var colorClass = localStorage.getItem("themeColor");
-              if (colorClass) {
-                document.body.classList.remove(
-                  ...(document.body.className.match(/theme\\d+/g) || [])
-                );
-                document.body.classList.add(colorClass);
-              }
-
-              // set theme color meta tag
-
-              const themeColorMap = [
-                "#482dff",
-                "#D32F2F",
-                "#00796B",
-                "#1565C0",
-                "#FFC107",
-                "#C2185B",
-                "#E64A19",
-                "#455A64",
-                "#5D4037",
-                "#7B1FA2",
-                "#283593",
-              ];
-              
-              const themeColor = mode === "dark" ? "#1d1d1d" : colorClass ? themeColorMap[colorClass.split("theme")[1]] : "#fffdfc";
-
-                if (themeColor) {
-                  let themeMeta = document.querySelector("meta[name='theme-color']");
-                  if (!themeMeta) {
-                    themeMeta = document.createElement("meta");
-                    themeMeta.name = "theme-color";
-                    document.head.appendChild(themeMeta);
-                  }
-                  themeMeta.setAttribute("content", themeColor);
-                }
-             
-            } catch (e) {
-              console.error("Theme load failed:", e);
-            }
-          })();
-        `}
-        </Script>
+        <DefaultHead />
       </head>
       <body suppressHydrationWarning>
         <div className="absolute w-48 h-56 bg-neutral-500/5 dark:bg-black/15 -z-10 top-0 right-0 rounded-bl-full" />
-        <SessionProvider>
-          <BalanceProvider>
-            <Navbar appName="Tools" appSubName="Beta" />
-            <div className="flex">
-              <SlideBar />
-              <div className="grow pt-5 md:pt-7 relative transition-all duration-300 md:w-[calc(100%-224px)] border-l border-white/30">
-                <div className="px-5 md:px-6 mx-auto max-w-(--breakpoint-xl)">
-                  <main>
-                    <NoScriptWarning />
-                    {children}
-                  </main>
-                  <ScrollToTopButton />
-                  <Footer />
-                </div>
+        <Providers>
+          <Navbar appName="Tools" appSubName="Beta" />
+          <div className="flex">
+            <SlideBar />
+            <div className="grow pt-5 md:pt-7 relative transition-all duration-300 md:w-[calc(100%-224px)] border-l border-white/30">
+              <div className="px-5 md:px-6 mx-auto max-w-(--breakpoint-xl)">
+                <main>
+                  <NoScriptWarning />
+                  {children}
+                </main>
+                <ScrollToTopButton />
+                <Footer />
               </div>
-              <Wave />
             </div>
-
-            {process.env.NODE_ENV === "development" && <ErudaScript />}
-
-            <ToastProvider />
-          </BalanceProvider>
-        </SessionProvider>
+            <Wave />
+          </div>
+        </Providers>
       </body>
     </html>
   );
