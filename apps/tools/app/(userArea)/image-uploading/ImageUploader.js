@@ -60,16 +60,20 @@ export default function ImageUploader() {
     }
   };
 
+  const acceptedTypes = Object.fromEntries(
+    ["png", "jpeg", "gif", "apng", "tiff"].map((ext) => [`image/${ext}`, []])
+  );
+
   return (
     <div className="flex flex-col items-center justify-center p-6">
       <h1 className="text-2xl font-bold mb-4">Image Uploader</h1>
 
       <DropZone
-        accept={{
-          "image/*": [".png", ".jpg", ".jpeg", ".gif", ".apng", ".tiff"],
-        }}
+        className="max-w-lg"
+        accept={acceptedTypes}
         onFilesChange={handleFileChange}
         maxSize={10 * 1024 * 1024} // 10 MB
+        label="Drag & drop your image here, or click to select"
       />
 
       {uploadedURL && (

@@ -6,6 +6,7 @@ import { twMerge } from "tailwind-merge";
 import { Button } from "./Button";
 import { XSvg } from "../svg/XSvg";
 import Link from "next/link";
+import { DeleteSvg } from "../svg/DeleteSvg";
 
 export default function DropZone({
   accept = {
@@ -33,25 +34,42 @@ export default function DropZone({
   const allowedExts = Object.values(accept)
     .flat()
     .map((e) => e.toLowerCase());
-  const acceptedTypesStr = Object.keys(accept)
-    .map((type) => {
-      if (type === "image/*") return "images";
-      if (type === "video/*") return "videos";
-      if (type === "audio/*") return "audio files";
-      if (type === "application/pdf") return "PDFs";
-      if (type.includes("/")) return type.split("/")[1] + " files";
-      return type;
-    })
-    .join(", ");
+
+  const acceptedTypesStr = useMemo(() => {
+    const categoryMap = {};
+
+    Object.keys(accept).forEach((type) => {
+      const [main, sub] = type.split("/");
+      if (!main || !sub) return;
+
+      let label;
+      if (main === "image") label = "images";
+      else if (main === "video") label = "videos";
+      else if (main === "audio") label = "audio files";
+      else if (type === "application/pdf") label = "PDFs";
+      else label = main + " files";
+
+      if (!categoryMap[label]) categoryMap[label] = new Set();
+      if (sub !== "*") categoryMap[label].add(sub);
+    });
+
+    // Convert category map to string
+    return Object.entries(categoryMap)
+      .map(([category, subtypes]) => {
+        const list = Array.from(subtypes).join(", ");
+        return list ? `${category} (${list})` : category;
+      })
+      .join(", ");
+  }, [accept]);
 
   const errorMap = useMemo(
     () => ({
       "file-invalid-type": `Only ${acceptedTypesStr} are allowed.`,
       "file-too-large": `File size should not exceed ${mb} MB.`,
       "too-many-files": `You can upload a maximum of ${maxItem} files.`,
-      "wrong-extension": `Only these extensions are allowed: ${allowedExts.join(
-        ", "
-      )}`,
+      // "wrong-extension": `Only these extensions are allowed: ${allowedExts.join(
+      //   ", "
+      // )}`,
     }),
     [acceptedTypesStr, mb, maxItem, allowedExts]
   );
@@ -86,7 +104,7 @@ export default function DropZone({
       const errors = [];
       const ext = file.name?.split(".").pop()?.toLowerCase();
       if (file.size > maxSize) errors.push("file-too-large");
-      if (!allowedExts.includes(`.${ext}`)) errors.push("wrong-extension");
+      // if (!allowedExts.includes(`.${ext}`)) errors.push("wrong-extension");
       const mimeAccepted = Object.keys(accept).some((mime) => {
         if (mime.endsWith("/*"))
           return file.type.startsWith(mime.split("/")[0]);
@@ -171,12 +189,12 @@ export default function DropZone({
         >
           <input {...getInputProps()} />
           {isDragActive ? (
-            <div className="fixed inset-0 bg-blue-500 bg-opacity-60 z-50 flex justify-center items-center text-white text-xl font-semibold">
+            <div className="fixed bottom-1/6 inset-0 bg-(--linkC) z-50 flex justify-center items-center text-white text-xl font-semibold">
               Drop your files here...
             </div>
           ) : (
             <div className="flex flex-col justify-center items-center gap-2 text-center">
-              <svg viewBox="0 0 24 24" className="w-10 h-10 text-gray-500">
+              <svg viewBox="0 0 24 24" className="w-16 h-16 text-gray-500">
                 <path fill="none" d="M0 0h24v24H0z" />
                 <path
                   d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"
@@ -187,6 +205,12 @@ export default function DropZone({
             </div>
           )}
         </div>
+        {isDragActive && (
+          <div className="fixed top-5/6 inset-0 bg-red-700 dark:bg-red-800 z-50 flex justify-center items-center text-white text-xl font-semibold">
+            <DeleteSvg className="w-6 h-6 mr-2" />
+            Cancle Drop
+          </div>
+        )}
 
         {customErrors.length > 0 && (
           <ul className="text-red-500 text-sm mt-2 list-disc pl-5 space-y-1">
