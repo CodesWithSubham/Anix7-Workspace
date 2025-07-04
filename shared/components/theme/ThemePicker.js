@@ -21,13 +21,6 @@ export default function ThemePicker({ className = "" }) {
   const [showSystemButton, setShowSystemButton] = useState(false);
   const [isLocalhost, setIsLocalhost] = useState(false);
 
-  const getCookie = (name) => {
-    const match = document.cookie.match(
-      new RegExp("(^| )" + name + "=([^;]+)")
-    );
-    return match ? decodeURIComponent(match[2]) : null;
-  };
-
   const setCookie = (name, value) => {
     const domain = isLocalhost
       ? ""

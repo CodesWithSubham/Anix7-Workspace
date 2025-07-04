@@ -1,9 +1,7 @@
-import { IfLoggedIn, IfLoggedOut } from "@shared/components/auth/LoggedInWraper";
-import QRCodeGenerator from "./genarator";
+import QRCodeGenerator, { LaunchQRCodeGenerator } from "./genarator";
 import Image from "next/image";
 import { Button } from "@shared/components/ui/Button";
 import { ColorPaletteSvg } from "@shared/components/svg/ColorPaletteSvg";
-
 
 export const metadata = {
   title: "Fully customized QR Code Generator with colors, shapes, and logos",
@@ -119,11 +117,11 @@ export const addToSitemap = true; // Add this page to Sitemap
 export default async function QrCode() {
   return (
     <>
-      <IfLoggedIn>
-        {/* <Suspense> */}
-        <QRCodeGenerator />
-        {/* </Suspense> */}
-      </IfLoggedIn>
+      {/* <IfLoggedIn> */}
+      {/* <Suspense> */}
+      <QRCodeGenerator />
+      {/* </Suspense> */}
+      {/* </IfLoggedIn> */}
       <div className="w-full text-center">
         <div className="flex flex-wrap justify-center gap-6 text-center my-10 *:max-w-xs">
           {/* Section 1: Custom Landing Pages */}
@@ -181,7 +179,6 @@ export default async function QrCode() {
             </p>
           </div>
         </div>
-        <GenerateNow />
       </div>
       <section className="my-16 px-4 text-center">
         <h2 className="text-2xl font-bold mb-4">
@@ -359,8 +356,8 @@ export default async function QrCode() {
         <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-8">
           QR Codes stand for <strong>Quick Response</strong>. Originally
           developed in 1994 by Denso Wave to track vehicles during
-          manufacturing, they’ve since evolved into powerful tools for modern
-          interaction. Today, anyone can scan a QR Code with just a phone
+          manufacturing, they&apos;ve since evolved into powerful tools for
+          modern interaction. Today, anyone can scan a QR Code with just a phone
           camera.
         </p>
 
@@ -450,9 +447,9 @@ export default async function QrCode() {
               />
               <h3 className="font-semibold text-lg">{type.label}</h3>
               <p className="text-sm mb-4">{type.desc}</p>
-              <IfLoggedIn>
-                <Button href={`?content=${type.label}`}>Choose</Button>
-              </IfLoggedIn>
+              {/* <IfLoggedIn> */}
+              <Button href={`?content=${type.label}`}>Choose</Button>
+              {/* </IfLoggedIn> */}
             </div>
           ))}
         </div>
@@ -474,16 +471,8 @@ export default async function QrCode() {
           {/* — and keep track of how many people scan your QR Codes, from where, and on what date */}
           .
         </p>
-        <GenerateNow />
+        <LaunchQRCodeGenerator />
       </section>
     </>
   );
 }
-
-const GenerateNow = () => (
-  <IfLoggedOut>
-    <Button className="rounded-full py-3 px-[10%]" htmlFor="loginSignupCheckId">
-      Generate Now
-    </Button>
-  </IfLoggedOut>
-);

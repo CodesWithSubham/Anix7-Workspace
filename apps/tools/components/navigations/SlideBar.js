@@ -9,6 +9,7 @@ import { LetterRoundedSvg } from "@shared/components/svg/LetterSvg";
 import { PowerButtonSvg } from "@shared/components/svg/PowerButtonSvg";
 import { ProfileGroupSvg } from "@shared/components/svg/ProfileSvg";
 import { QrSvg } from "@shared/components/svg/QrSvg";
+import { ResizeSvg } from "@shared/components/svg/ResizeSvg";
 import { UrlSvg } from "@shared/components/svg/UrlSvg";
 import { signOut } from "next-auth/react";
 
@@ -22,6 +23,11 @@ const menuItem = [
     label: "QR Code Generator",
     icon: <QrSvg />,
     url: "/qr-code-generator",
+  },
+  {
+    label: "Bulk Image Resizer",
+    icon: <ResizeSvg />,
+    url: "/bulk-image-resizer",
   },
   {
     label: "Images Tools",

@@ -18,6 +18,7 @@ export default function DropZone({
   maxSize = 10 * 1024 * 1024, // 10 MB
   onFilesChange = () => {},
   label = "Drag & drop some files here, or click to select files",
+  disabled = false,
   className = "",
 }) {
   const [files, setFiles] = useState([]);
@@ -25,9 +26,6 @@ export default function DropZone({
   const [customErrors, setCustomErrors] = useState([]);
   useEffect(() => {
     onFilesChange(files);
-    return () => {
-      files.forEach((f) => f.preview && URL.revokeObjectURL(f.preview));
-    };
   }, [files]);
 
   const mb = (maxSize / 1024 / 1024).toFixed(1);
@@ -78,12 +76,22 @@ export default function DropZone({
     (accepted) => {
       const withPreview = accepted.map((f) => {
         const copy = Object.assign(f, {});
-        if (f.type.startsWith("image/") || f.type === "application/pdf") {
-          copy.preview = URL.createObjectURL(f);
-        }
+        copy.url = URL.createObjectURL(f);
+        copy.uid = crypto.randomUUID();
         return copy;
       });
+
       let newFiles = multiple ? [...files, ...withPreview] : withPreview;
+
+      // Remove duplicates (by name, size, and type)
+      const seen = new Set();
+      newFiles = newFiles.filter((file) => {
+        const key = `${file.name}-${file.size}-${file.type}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+
       if (multiple && newFiles.length > maxItem) {
         newFiles = newFiles.slice(0, maxItem);
         setCustomErrors([errorMap["too-many-files"]]);
@@ -95,11 +103,22 @@ export default function DropZone({
     [files, maxItem, multiple, errorMap]
   );
 
+  // Remove url on unmount
+  useEffect(() => {
+    // Store previous file references
+    const previousFiles = [...files];
+
+    return () => {
+      previousFiles.forEach((f) => f.url && URL.revokeObjectURL(f.url));
+    };
+  }, []);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept,
     multiple,
     maxSize,
     onDropAccepted,
+    disabled,
     validator: (file) => {
       const errors = [];
       const ext = file.name?.split(".").pop()?.toLowerCase();
@@ -134,7 +153,7 @@ export default function DropZone({
     if (isImage) {
       thumb = (
         <img
-          src={file.preview}
+          src={file.url}
           alt={file.name}
           className="w-20 h-20 object-cover rounded-md"
         />
@@ -169,8 +188,13 @@ export default function DropZone({
           className="absolute z-10 bg-red-400 text-white w-5 h-5 min-h-5 p-3 rounded-full -top-4 -right-2"
           onClick={(e) => {
             e.stopPropagation();
+            const fileToRemove = files[i];
+            if (fileToRemove.url) {
+              URL.revokeObjectURL(fileToRemove.url);
+            }
             setFiles((prev) => prev.filter((_, idx) => idx !== i));
           }}
+          disabled={disabled}
         >
           <XSvg className="w-3" />
         </Button>
@@ -239,19 +263,19 @@ export default function DropZone({
                 {/* Blurred full-background layer */}
                 <div
                   className="absolute inset-0 bg-center bg-no-repeat bg-cover filter blur-lg scale-110 brightness-80"
-                  style={{ backgroundImage: `url(${previewFile.preview})` }}
+                  style={{ backgroundImage: `url(${previewFile.url})` }}
                 />
 
                 {/* Foreground image layer */}
                 <div
                   className="relative bg-center bg-no-repeat bg-contain w-full h-full"
-                  style={{ backgroundImage: `url(${previewFile.preview})` }}
+                  style={{ backgroundImage: `url(${previewFile.url})` }}
                 />
               </div>
             )}
             {/* {previewFile.type === "application/pdf" && (
               <object
-                data={previewFile.preview}
+                data={previewFile.url}
                 target="_blank"
                 type="application/pdf"
                 className="w-full h-full"

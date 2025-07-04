@@ -309,11 +309,13 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
       {/* Delete Confirmation DeletePopup */}
       {showDeletePopup && selectedUrl && (
         <PopUpBox header="Are you sure you want to delete?" svg={<DeleteSvg />}>
-          <p>
-            <span>Original URL:</span> {selectedUrl.longUrl}
+          <p className="my-2">
+            <span className="text-(--linkC)">Original URL:</span>{" "}
+            {selectedUrl.longUrl}
           </p>
           <p>
-            <span>Shortened URL:</span> {baseUrl + "/" + selectedUrl.alias}
+            <span className="text-(--linkC)">Shortened URL:</span>{" "}
+            {baseUrl + "/" + selectedUrl.alias}
           </p>
           <div className="flex justify-end items-center text-white font-bold mt-5">
             <Button

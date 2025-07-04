@@ -440,7 +440,6 @@ svg .svgL {
   border-color: rgba(255, 255, 255, 0.15);
 }
 
-
 .dark svg.line {
   fill: none;
   stroke: var(--darkT);
@@ -595,44 +594,55 @@ svg {
   --tw-ring-offset-color: #ffffff !important;
 }
 
-
 /* Scrollbar */
 @media screen and (min-width: 768px) {
-*::-webkit-scrollbar {
-  -webkit-appearance: none;
-  width: 8px;
-  height: 5px;
-}
+  *::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 8px;
+    height: 5px;
+  }
 
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
-*::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
-}
+  *::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+  }
 
-*::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.35);
-}
+  *::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.35);
+  }
 
-*::-webkit-scrollbar-thumb:active {
-  background: rgba(0, 0, 0, 0.35);
-}
+  *::-webkit-scrollbar-thumb:active {
+    background: rgba(0, 0, 0, 0.35);
+  }
 }
 
 /* Hide Scroll */
 .hide-scrollbar::-webkit-scrollbar {
-width: 0;
-height: 0;
+  width: 0;
+  height: 0;
 }
 
 .hide-scrollbar::-webkit-scrollbar-track {
-background: transparent;
+  background: transparent;
 }
 
 .hide-scrollbar::-webkit-scrollbar-thumb {
-background: transparent;
-border: none;
+  background: transparent;
+  border: none;
+}
+
+/* Hide number input spinners */
+.no-spinner::-webkit-inner-spin-button,
+.no-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-spinner {
+  appearance: textfield;
+  -moz-appearance: textfield;
 }

@@ -1096,3 +1096,16 @@ function Frame({ frame, children }) {
 
   return <div className="p-2">{children}</div>;
 }
+
+export function LaunchQRCodeGenerator() {
+  return (
+    <div className="text-center mt-8">
+      <Button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className="rounded-lg"
+      >
+        Launch QR Code Generator Tool
+      </Button>
+    </div>
+  );
+}

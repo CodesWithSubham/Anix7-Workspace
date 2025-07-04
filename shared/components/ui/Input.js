@@ -13,6 +13,8 @@ export function Input({
   className = "",
   maxLength = 256,
   onChange = (e) => {},
+  label = "",
+  labelClassName = "",
   ...props
 }) {
   const ref = useRef();
@@ -29,18 +31,30 @@ export function Input({
   };
 
   return (
-    <input
-      type={type}
-      name={name}
-      placeholder={placeholder}
-      className={twMerge(
-        "w-full h-9 p-2 my-1.5 outline-hidden border bg-transparent border-(--linkC) focus:shadow-[0px_0px_5px_0px_var(--linkC)] select-none rounded-lg disabled:cursor-not-allowed disabled:bg-gray-200 disabled:border-gray-300 disabled:text-gray-500",
-        className
+    <div className={twMerge("w-full flex flex-col relative", label && "mt-3")}>
+      {label && (
+        <label
+          className={twMerge(
+            "text-xs text-(--linkC) absolute -top-2 left-1.5",
+            labelClassName
+          )}
+        >
+          {label}
+        </label>
       )}
-      maxLength={maxLength}
-      onChange={handleChange}
-      {...props}
-    />
+      <input
+        type={type}
+        name={name}
+        placeholder={placeholder}
+        className={twMerge(
+          "w-full h-9 p-2 my-1.5 outline-hidden border bg-transparent border-(--linkC) focus:shadow-[0px_0px_5px_0px_var(--linkC)] select-none rounded-lg disabled:cursor-not-allowed disabled:bg-gray-200 disabled:border-gray-300 disabled:text-gray-500",
+          className
+        )}
+        maxLength={maxLength}
+        onChange={handleChange}
+        {...props}
+      />
+    </div>
   );
 }
 
@@ -170,36 +184,45 @@ export function SliderWithTooltip({
   min = 1,
   max = 50,
   value = 25,
+  step = 1,
+  name = "range",
   onChange = () => {}, // Function to update parent state
+  ...props
 }) {
   const [v, setV] = useState(value);
 
   const handleChange = (e) => {
     const newValue = Number(e.target.value);
     setV(newValue);
-    onChange(newValue); // Call parent function
+    onChange(e); // Call parent function
   };
 
   return (
-    <div className="relative w-full max-w-md mx-auto text-center">
+    <div className="w-full max-w-md mx-auto text-center group">
       {/* Tooltip */}
-      <div
-        className="absolute -top-10 px-3 py-1 text-white bg-green-600 rounded-md shadow-md transition-transform duration-150"
-        style={{
-          left: `calc(${((v - min) / (max - min)) * 100}% - 1rem)`,
-        }}
-      >
-        {v}
+      <div className="relative mr-3 ml-1">
+        <div
+          className="absolute -top-12 flex justify-center items-center w-10 h-10 shrink-0 text-white bg-(--linkC) rounded-md shadow-md transition-all duration-300 invisible group-hover:visible opacity-0 group-hover:opacity-100 z-20"
+          style={{
+            left: `calc(${((v - min) / (max - min)) * 100}% - 1rem)`,
+          }}
+        >
+          {v}
+          <div className="absolute -bottom-1 rotate-45 w-3 h-3 bg-(--linkC) z-10" />
+        </div>
       </div>
 
       {/* Slider */}
       <input
         type="range"
+        name={name}
         min={min}
         max={max}
+        step={step}
         value={v}
         onChange={handleChange}
-        className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-green-600"
+        className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-(--linkC)"
+        {...props}
       />
     </div>
   );
@@ -245,8 +268,9 @@ export function TextArea({
 }
 
 export function Select({
-  label,
-  name,
+  label = "",
+  labelClassName = "",
+  name = "select",
   value,
   onChange = () => {}, // Function to update parent state
   className = "",
@@ -254,8 +278,17 @@ export function Select({
   ...props
 }) {
   return (
-    <div className="flex flex-col gap-1">
-      {label && <label className="text-sm font-medium">{label}</label>}
+    <div className={twMerge("w-full flex flex-col relative", label && "mt-3")}>
+      {label && (
+        <label
+          className={twMerge(
+            "text-xs text-(--linkC) absolute -top-2 left-1.5",
+            labelClassName
+          )}
+        >
+          {label}
+        </label>
+      )}
       <select
         name={name}
         value={value}
@@ -280,7 +313,7 @@ export function Select({
 }
 
 export function Checkbox({
-  label,
+  label = "",
   checked = false,
   name = "checkbox",
   className = "",
@@ -294,9 +327,12 @@ export function Checkbox({
     onChange(e);
   };
   return (
-    <>
+    <div>
       <label
-        className={`flex items-center gap-2 cursor-pointer select-none ${className}`}
+        className={twMerge(
+          "inline-flex items-center gap-2 cursor-pointer select-none",
+          className
+        )}
       >
         <input
           type="checkbox"
@@ -308,7 +344,7 @@ export function Checkbox({
         />
         {label && <span className="text-sm font-medium">{label}</span>}
       </label>
-    </>
+    </div>
   );
 }
 

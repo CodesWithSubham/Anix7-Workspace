@@ -31,12 +31,18 @@ export default function Home() {
       link: "/qr-code-generator",
     },
     {
+      title: "Bulk Image Resizer",
+      description:
+        "Free online image resizer — resize PNG, JPG, WebP, and more formats in bulk, quickly and securely.",
+      image: "/assets/img/image-resize-logo.png",
+      link: "/bulk-image-resizer",
+    },
+    {
       title: "Image Uploading",
       description:
         "Upload images up to 10MB, get a shareable public link, and access your uploads anytime.",
       image: "/assets/img/gallery.png",
       link: "/image-uploading",
-      buttonText: "Upload Image",
     },
   ];
 
