@@ -54,7 +54,7 @@ export default function Faqs() {
       </h3>
       <p className="my-1 ml-1">
         Just paste your long URL into the URL shortener tool on our homepage and
-        click "Shorten". Your new short link will be instantly ready to copy and
+        click &ldquo;Shorten&rdquo;. Your new short link will be instantly ready to copy and
         use.
       </p>
 
@@ -86,7 +86,7 @@ export default function Faqs() {
         6. <strong>Can I delete a link or uploaded image?</strong>
       </h3>
       <p className="my-1 ml-1">
-        Yes. You'll be given a delete option or token after uploading. Use that
+        Yes. You&apos;ll be given a delete option or token after uploading. Use that
         to remove your content anytime.
       </p>
 

@@ -120,7 +120,7 @@ export default function Faqs() {
         10. <strong>What is the Anix7 Telegram App Market?</strong>
       </h2>
       <p className="my-1 ml-1">
-        It's a curated platform where you can discover useful Telegram bots,
+        It&apos;s a curated platform where you can discover useful Telegram bots,
         channels, and apps—all organized by category and regularly updated.
       </p>
 
