@@ -31,8 +31,8 @@ export default function Faqs() {
         questions about our services. If you have any additional questions, feel
         free to contact us at{" "}
         <strong>
-          <a rel="noopener" href="mailto:contact.tools@anix7.in">
-            contact.tools@anix7.in
+          <a rel="noopener" href="mailto:contact@anix7.in">
+            contact@anix7.in
           </a>
         </strong>
         .
@@ -144,7 +144,7 @@ export default function Faqs() {
       <p className="my-1 ml-1">
         We do not store any unnecessary user data. All processing is done in the
         browser whenever possible. See our{" "}
-        <Link href="/page/privacy-policy">Privacy Policy</Link> for details.
+        <Link href="https://www.anix7.in/page/privacy-policy">Privacy Policy</Link> for details.
       </p>
 
       <h3>
@@ -193,8 +193,8 @@ export default function Faqs() {
       <p className="my-1 ml-1">
         Absolutely! We love user feedback. Email us at{" "}
         <strong>
-          <a rel="noopener" href="mailto:contact.tools@anix7.in">
-            contact.tools@anix7.in
+          <a rel="noopener" href="mailto:contact@anix7.in">
+            contact@anix7.in
           </a>
         </strong>{" "}
         with your ideas.
@@ -206,8 +206,8 @@ export default function Faqs() {
       <p className="my-1 ml-1">
         If you notice any bugs, errors, or broken links, please let us know at{" "}
         <strong>
-          <a rel="noopener" href="mailto:contact.tools@anix7.in">
-            contact.tools@anix7.in
+          <a rel="noopener" href="mailto:contact@anix7.in">
+            contact@anix7.in
           </a>
         </strong>
         .

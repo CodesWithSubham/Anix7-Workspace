@@ -5,57 +5,57 @@ import Hr from "@shared/components/ui/Hr";
 
 // Updated importantLinks constant with multiple categories
 const importantLinks = [
-  // {
-  //   heading: "Company",
-  //   links: [
-  //     {
-  //       name: "About Us",
-  //       url: "/page/about-us",
-  //     },
-  //     // {
-  //     //   name: "Careers",
-  //     //   url: "/page/careers",
-  //     // },
-  //     {
-  //       name: "Contact Us",
-  //       url: "/page/contact-us",
-  //     },
-  //   ],
-  // },
-  // {
-  //   heading: "Legal",
-  //   links: [
-  //     {
-  //       name: "Privacy Policy",
-  //       url: "/page/privacy-policy",
-  //     },
-  //     {
-  //       name: "Terms of Use",
-  //       url: "/page/terms",
-  //     },
-  //     // {
-  //     //   name: "Cookie Policy",
-  //     //   url: "/page/cookie-policy",
-  //     // },
-  //   ],
-  // },
-  // {
-  //   heading: "Resources",
-  //   links: [
-  //     // {
-  //     //   name: "Blog",
-  //     //   url: "/page/blog",
-  //     // },
-  //     {
-  //       name: "FAQs",
-  //       url: "/page/faqs",
-  //     },
-  //     {
-  //       name: "Help Center",
-  //       url: "/page/contact-us",
-  //     },
-  //   ],
-  // },
+  {
+    heading: "Company",
+    links: [
+      {
+        name: "About Us",
+        url: "/page/about-us",
+      },
+      // {
+      //   name: "Careers",
+      //   url: "/page/careers",
+      // },
+      {
+        name: "Contact Us",
+        url: "/page/contact-us",
+      },
+    ],
+  },
+  {
+    heading: "Legal",
+    links: [
+      {
+        name: "Privacy Policy",
+        url: "/page/privacy-policy",
+      },
+      {
+        name: "Terms of Use",
+        url: "/page/terms",
+      },
+      // {
+      //   name: "Cookie Policy",
+      //   url: "/page/cookie-policy",
+      // },
+    ],
+  },
+  {
+    heading: "Resources",
+    links: [
+      // {
+      //   name: "Blog",
+      //   url: "/page/blog",
+      // },
+      {
+        name: "FAQs",
+        url: "/page/faqs",
+      },
+      {
+        name: "Help Center",
+        url: "/page/contact-us",
+      },
+    ],
+  },
 ];
 
 export default function Footer() {

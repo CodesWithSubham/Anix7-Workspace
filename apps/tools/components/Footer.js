@@ -10,7 +10,7 @@ const importantLinks = [
     links: [
       {
         name: "About Us",
-        url: "/page/about-us",
+        url: "https://www.anix7.in/page/about-us",
       },
       // {
       //   name: "Careers",
@@ -18,7 +18,7 @@ const importantLinks = [
       // },
       {
         name: "Contact Us",
-        url: "/page/contact-us",
+        url: "https://www.anix7.in/page/contact-us",
       },
     ],
   },
@@ -27,11 +27,11 @@ const importantLinks = [
     links: [
       {
         name: "Privacy Policy",
-        url: "/page/privacy-policy",
+        url: "https://www.anix7.in/page/privacy-policy",
       },
       {
         name: "Terms of Use",
-        url: "/page/terms",
+        url: "https://www.anix7.in/page/terms",
       },
       // {
       //   name: "Cookie Policy",
@@ -52,7 +52,7 @@ const importantLinks = [
       },
       {
         name: "Help Center",
-        url: "/page/contact-us",
+        url: "https://www.anix7.in/page/contact-us",
       },
     ],
   },
