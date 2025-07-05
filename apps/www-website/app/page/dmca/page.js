@@ -1,35 +1,56 @@
+import Hr from "@shared/components/ui/Hr";
+import Link from "next/link";
+
 export const metadata = {
-  title: "DMCA Policy",
+  title: "DMCA",
   description:
-    "Learn about Anix7 Tools' DMCA policy and how to submit copyright infringement claims.",
+    "Review Anix7's DMCA Policy for handling copyright infringement claims. Learn how to submit a DMCA takedown request and our response procedures.",
+  keywords: [
+    "Anix7 DMCA",
+    "DMCA Policy",
+    "Copyright infringement",
+    "DMCA takedown",
+    "Submit DMCA request",
+    "Intellectual property",
+    "Copyright removal",
+    "Anix7 legal policy",
+  ],
+  alternates: { canonical: "/page/dmca" },
 };
 
 export const addToSitemap = true; // Add this page to Sitemap
 
 export default function DMCA() {
-  const baseUrl = new URL(process.env.BASE_URL).hostname;
   return (
     <>
-      <h1>DMCA Policy for {baseUrl}</h1>
-      <p className=" my-1 ml-1">
-        <strong>Effective Date:</strong> [Insert Date]
+      <h1>
+        <strong>DMCA Notice and Takedown Policy</strong>
+      </h1>
+      <p className="my-1 ml-1">
+        <strong>Effective Date:</strong> Jun 6, 2025
       </p>
-
-      <p className=" my-1 ml-1">
-        {baseUrl} respects the intellectual property rights of others and
-        complies with the Digital Millennium Copyright Act (&quot;DMCA&quot;).
-        This DMCA policy outlines our process for handling copyright
-        infringement claims.
+      <p className="my-1 ml-1">
+        At <strong>Anix7</strong>, we respect the intellectual property rights
+        of others and expect our users to do the same. This DMCA Policy outlines
+        the procedures we follow to respond to claims of copyright infringement
+        under the <strong>Digital Millennium Copyright Act</strong> (DMCA), 17
+        U.S.C. § 512.
       </p>
-      <p className=" my-1 ml-1">
-        If you believe that content on our site infringes your copyright, please
-        follow the procedures outlined below to notify us, so we can address the
-        matter promptly.
+      <Hr />
+      <h2>
+        📩 <strong>Submitting a DMCA Takedown Notice</strong>
+      </h2>
+      <p className="my-1 ml-1">
+        If you believe that content available on{" "}
+        <strong>
+          <Link href="/">www.anix7.in</Link>
+        </strong>{" "}
+        or any of its subdomains (such as tools.anix7.in, anime.anix7.in,
+        pic.anix7.in, etc.) infringes your copyright, you may submit a takedown
+        request to us.
       </p>
-      <h2>1. Filing a DMCA Notice</h2>
-      <p className=" my-1 ml-1">
-        If you believe that material on {baseUrl} infringes your copyright,
-        please send us a written DMCA Notice with the following information:
+      <p className="my-1 ml-1">
+        To be effective, your written DMCA notice <strong>must include</strong>:
       </p>
       <ol className="list-decimal ml-5 pl-5 *:my-4">
         <li>
@@ -81,8 +102,8 @@ export default function DMCA() {
       </p>
       <p className=" my-1 ml-1">
         <strong>Email:</strong>{" "}
-        <a rel="noopener" href="mailto:contact.tools@anix7.in">
-          contact.tools@anix7.in
+        <a rel="noopener" href="mailto:dmca@anix7.in">
+          dmca@anix7.in
         </a>
         <br />
         <strong>Subject Line:</strong> DMCA Takedown Request
@@ -93,14 +114,16 @@ export default function DMCA() {
         and, if appropriate, take action, which may include removing or
         disabling access to the infringing material.
       </p>
-
-      <h2>2. Counter-Notification Process</h2>
-      <p className=" my-1 ml-1">
-        If your content has been removed due to a DMCA Notice and you believe it
-        was taken down in error, you may file a counter-notification. Your
-        counter-notification must include:
+      <Hr />
+      <h2>
+        🔄 <strong>Counter-Notification</strong>
+      </h2>
+      <p className="my-1 ml-1">
+        If content you posted has been removed due to a DMCA takedown notice,
+        and you believe it was removed in error or is lawful (e.g., fair use),
+        you may submit a counter-notification. Your counter-notification must
+        include:
       </p>
-
       <ol className="list-decimal ml-5 pl-5 *:my-4">
         <li>
           <p className=" my-1 ml-1">
@@ -135,8 +158,8 @@ export default function DMCA() {
       </p>
       <p className=" my-1 ml-1">
         <strong>Email:</strong>{" "}
-        <a rel="noopener" href="mailto:contact.tools@anix7.in">
-          contact.tools@anix7.in
+        <a rel="noopener" href="mailto:dmca@anix7.in">
+          dmca@anix7.in
         </a>
         <br />
         <strong>Subject Line:</strong> DMCA Counter-Notification
@@ -147,31 +170,37 @@ export default function DMCA() {
         claimant files a lawsuit seeking a court order to prevent the user from
         engaging in infringing activity.
       </p>
-
-      <h2>3. Repeat Infringers</h2>
-      <p className=" my-1 ml-1">
-        In accordance with the DMCA and other applicable laws, we maintain a
-        policy that provides for the termination of user accounts or access for
-        repeat infringers in appropriate circumstances.
+      <Hr />
+      <h2>
+        ⚖️ <strong>Repeat Infringer Policy</strong>
+      </h2>
+      <p className="my-1 ml-1">
+        Users who are found to repeatedly post infringing material may have
+        their access terminated permanently, at our discretion.
       </p>
-
-      <h2>4. Misrepresentations</h2>
-      <p className=" my-1 ml-1">
-        Please note that the DMCA allows claims of copyright infringement to be
-        made under penalty of perjury. Any misrepresentations in a DMCA Notice
-        or Counter-Notification could result in legal action, including costs
-        and damages.
+      <Hr />
+      <h2>
+        📝 <strong>Good Faith</strong>
+      </h2>
+      <p className="my-1 ml-1">
+        Please be aware that submitting false or misleading information in a
+        DMCA notice or counter-notice may result in legal liability. Always
+        ensure that your claim is accurate and submitted in good faith.
       </p>
-
-      <h2>5. Contact</h2>
-      <p className=" my-1 ml-1">
-        If you have any questions about our DMCA policy, please contact us at:
+      <Hr />
+      <h2>
+        📬 <strong>Contact Us</strong>
+      </h2>
+      <p className="my-1 ml-1">
+        For questions or concerns related to this DMCA Policy:
       </p>
-      <p className=" my-1 ml-1">
-        <strong>Email:</strong>{" "}
-        <a rel="noopener" href="mailto:contact.tools@anix7.in">
-          contact.tools@anix7.in
-        </a>
+      <p className="my-1 ml-1">
+        📧 <strong>Email:</strong>{" "}
+        <a href="mailto:dmca@anix7.in">dmca@anix7.in</a>{" "}
+      </p>
+      <p className="my-1 ml-1">
+        🌐 <strong>Website:</strong>{" "}
+        <a href="https://www.anix7.in">www.anix7.in</a>
       </p>
     </>
   );

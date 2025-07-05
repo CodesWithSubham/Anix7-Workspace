@@ -1,10 +1,22 @@
-
 import Link from "next/link";
 
 export const metadata = {
-  title: "FAQs",
+  title: "Frequently Asked Questions (FAQs)",
   description:
-    "Find answers to frequently asked questions about using Anix7 Tools and our various services.",
+    "Get quick answers to the most common questions about Anix7 Tools. Learn more about features, support, usage policies, and user tools.",
+  keywords: [
+    "Anix7 Tools FAQ",
+    "Anix7 Tools questions",
+    "Help center",
+    "Anix7 Tools support",
+    "Common issues",
+    "Tools Tools usage",
+    "User guide",
+    "Account support",
+    "Anix7 Tools help",
+    "Frequently asked questions",
+  ],
+  alternates: { canonical: "/page/faqs" },
 };
 
 export const addToSitemap = true; // Add this page to Sitemap
@@ -12,9 +24,9 @@ export const addToSitemap = true; // Add this page to Sitemap
 export default function Faqs() {
   const baseUrl = new URL(process.env.BASE_URL).hostname;
   return (
-    <main>
+    <>
       <h1>Frequently Asked Questions (FAQs)</h1>
-      <p className=" my-1 ml-1">
+      <p className="my-1 ml-1">
         Welcome to the FAQ page for {baseUrl}! Below are answers to some common
         questions about our services. If you have any additional questions, feel
         free to contact us at{" "}
@@ -31,98 +43,175 @@ export default function Faqs() {
       <h3>
         1. <strong>What is {baseUrl}?</strong>
       </h3>
-      <p className=" my-1 ml-1">
-        {baseUrl} is an online platform that offers you various tools and
-        services. Our mission is to provide you with the best possible tools and
-        services in one place, making it easy for you to access and use them.
+      <p className="my-1 ml-1">
+        {baseUrl} is an all-in-one platform offering a wide range of free online
+        tools including URL shorteners, image resizers, QR code generators, file
+        uploaders, and more.
       </p>
 
       <h3>
-        2. <strong>How do I shorten a URL on {baseUrl}?</strong>
+        2. <strong>How do I shorten a URL?</strong>
       </h3>
-      <p className=" my-1 ml-1">
-        To shorten a URL, simply paste your long URL into the URL shortener tool
-        on our homepage, click &quot;Shorten,&quot; and your new, shortened link
-        will be ready to use and share.
+      <p className="my-1 ml-1">
+        Just paste your long URL into the URL shortener tool on our homepage and
+        click "Shorten". Your new short link will be instantly ready to copy and
+        use.
       </p>
 
       <h3>
-        3.{" "}
-        <strong>Is there a limit on the number of URLs I can shorten?</strong>
+        3. <strong>Is there a limit on how many URLs I can shorten?</strong>
       </h3>
-      <p className=" my-1 ml-1">
-        Currently, there is no limit on the number of links you can shorten.
-        However, we may introduce limits for ragular(non-pro) users to ensure
-        fair usage.
+      <p className="my-1 ml-1">
+        There is no strict limit for now. However, for optimal performance and
+        fair use, rate limits may apply in the future for free users.
       </p>
 
       <h3>
-        4. <strong>How does the image upload work?</strong>
+        4. <strong>Can I customize my shortened URL?</strong>
       </h3>
-      <p className=" my-1 ml-1">
-        When you upload images directly to to our website. This makes it easy to
-        store and share image url without needing to manage files locally.
+      <p className="my-1 ml-1">
+        Currently, we offer auto-generated URLs. Soon, we plan to introduce
+        custom aliases for Pro users.
       </p>
 
       <h3>
-        5. <strong>Can I delete a link or image after uploading?</strong>
+        5. <strong>How does the image upload tool work?</strong>
       </h3>
-      <p className=" my-1 ml-1">
-        Yes, you can delete any link or image that you’ve uploaded.
+      <p className="my-1 ml-1">
+        Upload an image using the tool and get an instant shareable image URL
+        without creating an account.
       </p>
 
       <h3>
-        6. <strong>What types of images can I upload?</strong>
+        6. <strong>Can I delete a link or uploaded image?</strong>
       </h3>
-      <p className=" my-1 ml-1">
-        Currently, our platform supports standard image formats like JPG, JPEG,
-        PNG, GIF, APNG, TIFF. Ensure that the images meet size and file type
-        requirements to upload them successfully.
+      <p className="my-1 ml-1">
+        Yes. You'll be given a delete option or token after uploading. Use that
+        to remove your content anytime.
       </p>
 
       <h3>
-        7. <strong>How do I contact support if I have an issue?</strong>
+        7. <strong>What types of images can I upload?</strong>
       </h3>
-      <p className=" my-1 ml-1">
-        For any questions or technical issues, please email us at{" "}
+      <p className="my-1 ml-1">
+        We support JPG, PNG, WEBP, GIF, SVG, BMP, HEIC, ICO, and more. The max
+        file size is typically 10 MB.
+      </p>
+
+      <h3>
+        8. <strong>How does the bulk image resizer work?</strong>
+      </h3>
+      <p className="my-1 ml-1">
+        Upload multiple images, choose the dimensions or percentage, and resize
+        all at once. Download resized images individually or as a zip.
+      </p>
+
+      <h3>
+        9. <strong>Can I compress images too?</strong>
+      </h3>
+      <p className="my-1 ml-1">
+        Yes, our image tools offer an optional compression toggle to reduce file
+        size while maintaining quality.
+      </p>
+
+      <h3>
+        10. <strong>Do you support transparent PNGs and SVGs?</strong>
+      </h3>
+      <p className="my-1 ml-1">
+        Absolutely. We retain transparency for formats that support it,
+        including PNG and SVG files.
+      </p>
+
+      <h3>
+        11. <strong>Is {baseUrl} free to use?</strong>
+      </h3>
+      <p className="my-1 ml-1">
+        Yes, all our basic features are completely free. We also offer a Pro
+        version to unlock additional benefits and remove ads.
+      </p>
+
+      <h3>
+        12. <strong>Do I need to sign up or log in?</strong>
+      </h3>
+      <p className="my-1 ml-1">
+        No login is required for most tools. Some advanced features may
+        optionally require login in the future.
+      </p>
+
+      <h3>
+        13. <strong>How secure is my data?</strong>
+      </h3>
+      <p className="my-1 ml-1">
+        We do not store any unnecessary user data. All processing is done in the
+        browser whenever possible. See our{" "}
+        <Link href="/page/privacy-policy">Privacy Policy</Link> for details.
+      </p>
+
+      <h3>
+        14. <strong>Do you have a QR code generator?</strong>
+      </h3>
+      <p className="my-1 ml-1">
+        Yes, we offer a fully customizable QR code generator with support for
+        logos, colors, and shapes.
+      </p>
+
+      <h3>
+        15. <strong>Can I download all resized images at once?</strong>
+      </h3>
+      <p className="my-1 ml-1">
+        Yes, after processing, you’ll see an option to download all images as a
+        .zip file.
+      </p>
+
+      <h3>
+        16. <strong>How do I rename images before downloading?</strong>
+      </h3>
+      <p className="my-1 ml-1">
+        Use the rename input fields next to each image after resizing to set
+        custom file names.
+      </p>
+
+      <h3>
+        17. <strong>What is the Anix7 Pro plan?</strong>
+      </h3>
+      <p className="my-1 ml-1">
+        The Pro plan unlocks premium features like ad-free experience, larger
+        uploads, faster performance, and early access to new tools.
+      </p>
+
+      <h3>
+        18. <strong>Do you support dark mode?</strong>
+      </h3>
+      <p className="my-1 ml-1">
+        Yes, our interface supports both light and dark themes based on your
+        system preference.
+      </p>
+
+      <h3>
+        19. <strong>Can I suggest a feature or tool?</strong>
+      </h3>
+      <p className="my-1 ml-1">
+        Absolutely! We love user feedback. Email us at{" "}
+        <strong>
+          <a rel="noopener" href="mailto:contact.tools@anix7.in">
+            contact.tools@anix7.in
+          </a>
+        </strong>{" "}
+        with your ideas.
+      </p>
+
+      <h3>
+        20. <strong>How do I report bugs or errors?</strong>
+      </h3>
+      <p className="my-1 ml-1">
+        If you notice any bugs, errors, or broken links, please let us know at{" "}
         <strong>
           <a rel="noopener" href="mailto:contact.tools@anix7.in">
             contact.tools@anix7.in
           </a>
         </strong>
-        . We strive to respond within 24-48 hours.
+        .
       </p>
-
-      <h3>
-        8. <strong>Is {baseUrl} free to use?</strong>
-      </h3>
-      <p className=" my-1 ml-1">
-        Yes, our basic services are free to use. In the future, we may introduce
-        premium features that come with additional benefits.
-      </p>
-
-      <h3>
-        9. <strong>How do you handle my data?</strong>
-      </h3>
-      <p className=" my-1 ml-1">
-        We take your privacy seriously. Please refer to our{" "}
-        <Link href="/page/privacy-policy">Privacy Policy</Link> for details on
-        how we collect, use, and protect your information.
-      </p>
-
-      <h3>
-        10. <strong>Can I suggest a new feature for {baseUrl}?</strong>
-      </h3>
-      <p className=" my-1 ml-1">
-        Absolutely! We value user feedback. If you have a suggestion for a new
-        feature, please send it to{" "}
-        <strong>
-          <a rel="noopener" href="mailto:contact.tools@anix7.in">
-            contact.tools@anix7.in
-          </a>
-        </strong>
-        . We are always looking for ways to improve our services.
-      </p>
-    </main>
+    </>
   );
 }
