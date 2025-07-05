@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { IconButton } from "../ui/Button";
 import { useEffect, useRef, useState } from "react";
 import Hr from "../ui/Hr";
@@ -10,13 +10,57 @@ import { twJoin, twMerge } from "tailwind-merge";
 import { usePathname } from "next/navigation";
 import { InstagramSvg, TelegramSvg, YouTubeSvg } from "../svg/SocialMediaSvg";
 import { HomeSvg } from "../svg/HomeSvg";
+import { ProfileGroupSvg } from "../svg/ProfileSvg";
+import { LetterRoundedSvg } from "../svg/LetterSvg";
+import { DisclaimerSvg } from "../svg/DisclaimerSvg";
+import { DocumentSecureSvg } from "../svg/DocumentSvg";
+import { PowerButtonSvg } from "../svg/PowerButtonSvg";
+
+const commonMenu = [
+  {
+    label: "About Us",
+    icon: <ProfileGroupSvg />,
+    url: "https://www.anix7.in/page/about-us",
+  },
+  {
+    label: "Contact Us",
+    icon: <LetterRoundedSvg />,
+    url: "https://www.anix7.in/page/contact-us",
+    hr: true,
+  },
+  {
+    label: "Disclaimer",
+    icon: <DisclaimerSvg />,
+    url: "https://www.anix7.in/page/disclaimer",
+  },
+  {
+    label: "Terms of Use",
+    icon: <DocumentSecureSvg />,
+    url: "https://www.anix7.in/page/terms",
+    hr: true,
+  },
+
+  {
+    label: "Logout",
+    icon: <PowerButtonSvg />,
+    onClick: () => signOut(),
+    hr: true,
+    showOnLoggedIn: true,
+  },
+];
+const commonQuickURLs = [
+  { url: "/sitemap.xml", label: "Sitemap" },
+  { url: "https://www.anix7.in/page/dmca", label: "DMCA" },
+  { url: "https://www.anix7.in/page/privacy-policy", label: "Privacy Policy" },
+];
 
 export default function SlideBarLayout({ menuItem = [], quickURLs = [] }) {
   const { data: session } = useSession();
   const checkboxRef = useRef(null);
   const pathname = usePathname();
+  const finalQuickURLs = [...quickURLs, ...commonQuickURLs].slice(0, 3); // maximum 3 items
   // Clone menuItem to avoid mutating props
-  const updatedMenu = [...menuItem];
+  const updatedMenu = [...menuItem, ...commonMenu];
 
   // Conditionally add "Home" item if not on "/"
   if (pathname !== "/") {
@@ -87,7 +131,7 @@ export default function SlideBarLayout({ menuItem = [], quickURLs = [] }) {
                 }
               >
                 <ul className="space-x-2 *:inline">
-                  {quickURLs.map((val, i) => (
+                  {finalQuickURLs.map((val, i) => (
                     <li key={i}>
                       <Link
                         href={val.url}

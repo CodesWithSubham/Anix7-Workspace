@@ -242,17 +242,25 @@ export default function LoginSignup() {
             <p className="text-xs pl-2  text-red-600">{signInError.password}</p>
           )}
           <div className="flex gap-5 mt-5 justify-between items-center">
-            <div className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 mt-2">
               By continuing, you agree to Our&apos;s{" "}
-              <Link href="/page/terms" target="_blank">
+              <Link href="https://www.anix7.in/page/terms" target="_blank">
                 Terms of Use
-              </Link>{" "}
-              and{" "}
-              <Link href="/page/privacy-policy" target="_blank">
+              </Link>
+              ,{" "}
+              <Link
+                href="https://www.anix7.in/page/privacy-policy"
+                target="_blank"
+              >
                 Privacy Policy
               </Link>
+              , and{" "}
+              <Link href="https://www.anix7.in/page/disclaimer" target="_blank">
+                Disclaimer
+              </Link>
               .
-            </div>
+            </p>
+
             <Button
               type="submit"
               className="min-w-26"

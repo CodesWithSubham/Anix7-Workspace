@@ -1,18 +1,24 @@
 "use client";
 
 import SlideBarLayout from "@shared/components/navigation/SlideBarLayout";
+import { HomeSvg } from "@shared/components/svg/HomeSvg";
 import { ImageRoundedSvg } from "@shared/components/svg/ImageSvg";
-import { PowerButtonSvg } from "@shared/components/svg/PowerButtonSvg";
+import { InformationQuestionMarkSvg } from "@shared/components/svg/InformationSvg";
 import { QrSvg } from "@shared/components/svg/QrSvg";
+import { ResizeSvg } from "@shared/components/svg/ResizeSvg";
 import { SettingSvg } from "@shared/components/svg/SettingSvg";
 import { UrlSvg } from "@shared/components/svg/UrlSvg";
-import { signOut } from "next-auth/react";
 
 const menuItem = [
   {
     label: "Anix7 Tools",
     icon: <SettingSvg />,
     subMenu: [
+      {
+        label: "Tools Home",
+        icon: <HomeSvg />,
+        url: "https://tools.anix7.in",
+      },
       {
         label: "Url Shortner",
         icon: <UrlSvg />,
@@ -24,57 +30,30 @@ const menuItem = [
         url: "https://tools.anix7.in/qr-code-generator",
       },
       {
-        label: "Images",
+        label: "Bulk Image Resizer",
+        icon: <ResizeSvg />,
+        url: "https://tools.anix7.in/bulk-image-resizer",
+      },
+      {
+        label: "Image Upload Tools",
         icon: <ImageRoundedSvg />,
         url: "https://tools.anix7.in/image-uploading",
       },
     ],
-    hr: true,
   },
-
   {
     label: "AniPic",
     icon: <ImageRoundedSvg />,
     url: "https://anipic.anix7.in",
     hr: true,
   },
-  // {
-  //   label: "Contact Us",
-  //   icon: <LetterRoundedSvg />,
-  //   url: "/page/contact-us",
-  //   hr: true,
-  // },
-  // {
-  //   label: "Disclaimer",
-  //   icon: <DisclaimerSvg />,
-  //   url: "/page/disclaimer",
-  // },
-  // {
-  //   label: "Terms of Use",
-  //   icon: <DocumentSecureSvg />,
-  //   url: "/page/terms",
-  // },
-  // {
-  //   label: "FAQs",
-  //   icon: <InformationQuestionMarkSvg />,
-  //   url: "/page/faqs",
-  //   hr: true,
-  // },
   {
-    label: "Logout",
-    icon: <PowerButtonSvg />,
-    onClick: () => signOut(),
-    hr: true,
-    showOnLoggedIn: true,
+    label: "FAQs",
+    icon: <InformationQuestionMarkSvg />,
+    url: "/page/faqs",
   },
 ];
 
-const quickURLs = [
-  { url: "/sitemap.xml", label: "Sitemap" },
-  { url: "/page/dmca", label: "DMCA" },
-  { url: "/page/privacy-policy", label: "Privacy Policy" },
-];
-
 export default function SlideBar() {
-  return <SlideBarLayout menuItem={menuItem} quickURLs={quickURLs} />;
+  return <SlideBarLayout menuItem={menuItem} />;
 }
