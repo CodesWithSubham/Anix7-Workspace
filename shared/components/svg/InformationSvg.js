@@ -1,10 +1,10 @@
-export function InformationQuestionMarkSvg({
-  className = "",
-  ...props
-}) {
+export function InformationQuestionMarkSvg({ className = "", ...props }) {
   return (
     <svg
       viewBox="0 0 33.8 33.7"
+      fill="currentColor"
+      stroke="currentColor"
+      strokeWidth="0"
       className={className}
       xmlns="http://www.w3.org/2000/svg"
       {...props}

@@ -58,7 +58,7 @@ export default function Click() {
 
   return (
     <>
-      <WorkBox className="">
+      <WorkBox>
         <div className="select-none space-y-4">
 
         <h1 className="text-xl font-bold">Click Task #{id}</h1>

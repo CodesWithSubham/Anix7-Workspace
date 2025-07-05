@@ -108,7 +108,7 @@ export default function Footer() {
         )}
         {/* <!--[ Credit ]--> */}
         <div className="inline-flex items-center">
-          <span className="">
+          <span>
             <span className="font-sans">&copy;</span>
             <span>{new Date().getFullYear()}</span> &nbsp;&middot;&nbsp;&nbsp;
             <bdi>

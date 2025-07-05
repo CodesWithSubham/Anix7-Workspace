@@ -189,7 +189,7 @@ function SideBarItem({ item, showSideBar }) {
   const Comp = item.url ? Link : "button";
   return (
     <li
-      className={`relative ${
+      className={`relative  [&_svg]:shrink-0 ${
         showSideBar
           ? "ml-1 overflow-visible w-full"
           : "md:hover:[&>.list]:opacity-100 md:hover:[&>.list]:visible md:hover:[&_.n]:opacity-100 md:hover:[&_.n]:visible"
@@ -288,9 +288,10 @@ function SideBarItem({ item, showSideBar }) {
         <Comp
           href={item.url}
           aria-label={item.label}
-          className={`flex items-center gap-2 relative w-full rounded-lg cursor-pointer py-2.5 px-1 hover:bg-black/10 transition-all duration-300 text-inherit ${
+          className={twJoin(
+            "flex items-center gap-2 relative w-full rounded-lg cursor-pointer py-2.5 px-1 hover:bg-black/10 transition-all duration-300 text-inherit",
             showSideBar ? "hover:text-(--linkC)" : "md:max-w-10 md:rounded-full"
-          }`}
+          )}
           onClick={item.onClick}
         >
           {item.icon}

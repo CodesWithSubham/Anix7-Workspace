@@ -32,7 +32,7 @@ export default function Profile() {
   return (
     <>
       {user && (
-        <li className="">
+        <li>
           <IconButton
             onClick={() => setProfilePop(!profilePop)}
             aria-label="Profile"
@@ -44,7 +44,7 @@ export default function Profile() {
               style={{ position: "fixed" }}
             >
               <ul className="flex flex-col gap-2 *:flex  *:items-center *:gap-2">
-                <li className="">
+                <li>
                   <Image
                     src={
                       user?.profilePic ??

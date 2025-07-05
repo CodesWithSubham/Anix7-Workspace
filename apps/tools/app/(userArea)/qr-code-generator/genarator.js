@@ -480,7 +480,7 @@ export default function QRCodeGenerator() {
               <h1 className="text-lg font-semibold text-(--linkC) mb-2">
                 Preview QR Code
               </h1>
-              {/* <div className=""> */}
+              {/* <div> */}
               <div
                 ref={downloadRef}
                 className="flex items-center justify-center p-1 bg-transparent"
@@ -1089,7 +1089,7 @@ function Frame({ frame, children }) {
             <div className="h-2 w-10 bg-white rounded-full" />
           </div>
         </div>
-        <QR className="" />
+        <QR />
         <div className="w-full h-14 flex items-center">{textBox}</div>
       </div>
     );

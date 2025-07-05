@@ -293,10 +293,10 @@ svg {
 svg.line,
 svg .line {
   fill: none !important;
-  stroke: var(--iconC);
+  stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 1;
+  stroke-width: 2;
 }
 
 .clear {
@@ -418,14 +418,6 @@ body {
 
 /* --- Your Custom CSS goes here --- */
 
-svg .svgL {
-  fill: none !important;
-  stroke: var(--linkC);
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1;
-}
-
 .dark input::placeholder,
 .dark .cpL input {
   color: rgba(255, 255, 255, 0.25);
@@ -442,7 +434,7 @@ svg .svgL {
 
 .dark svg.line {
   fill: none;
-  stroke: var(--darkT);
+  stroke: currentColor;
 }
 
 .dark svg.c-2 {
