@@ -35,7 +35,7 @@ export function Input({
       {label && (
         <label
           className={twMerge(
-            "text-xs text-(--linkC) absolute -top-2 left-1.5",
+            "text-xs text-(--linkC) font-semibold absolute -top-2.5 left-1.5",
             labelClassName
           )}
         >

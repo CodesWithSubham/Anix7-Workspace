@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { PopUpBox } from "../ui/Boxes";
 import { Button } from "../ui/Button";
 import { Input, OTPInput, PasswordInput } from "../ui/Input";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { signInSchema, signupSchema } from "@shared/lib/zod";
 import { doCredentialLogin, doSocialLogin } from "@shared/lib/auth/action";
 
@@ -164,7 +164,10 @@ export default function LoginSignup() {
         password: password.value,
       });
 
-      const res = await doCredentialLogin(credentials);
+      credentials.redirect = false;
+
+      const res = await signIn("credentials", credentials);
+
       if (res?.error) throw new Error(res.error);
 
       toast.success("Sign Success!");
@@ -173,7 +176,12 @@ export default function LoginSignup() {
       const errors = err.errors?.reduce((acc, { path, message }) => {
         acc[path[0]] = message;
         return acc;
-      }, {}) || { password: err.message || "Something went wrong?" };
+      }, {}) || {
+        password:
+          err.message == "CredentialsSignin"
+            ? "Invalid credentials"
+            : "Something went wrong?",
+      };
 
       setSignInError(errors);
     } finally {
@@ -392,7 +400,6 @@ export default function LoginSignup() {
               type="submit"
               className="min-w-26"
               disabled={Object.keys(errors).length > 0}
-              onClick={() => console.log(Object.keys(errors).length)}
               loading={isLoading}
               loadingText="Loading"
             >

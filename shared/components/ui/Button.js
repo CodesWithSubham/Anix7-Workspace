@@ -19,7 +19,7 @@ export const Button = ({
   return (
     <Component
       className={twMerge(
-        `inline-flex justify-center items-center m-2 py-2.5 px-4 text-white font-bold outline-0 border-0 rounded-md overflow-hidden max-w-xs cursor-pointer transition-all duration-500 bg-(--linkC) min-h-8`,
+        `inline-flex justify-center items-center m-2 py-2.5 px-4 text-white font-bold outline-0 border-0 rounded-md overflow-hidden max-w-xs cursor-pointer transition-all duration-500 bg-(--linkC) select-none min-h-8`,
         loading || disabled
           ? "cursor-not-allowed opacity-75"
           : "hover:shadow-[inset_3px_3px_10px_#00000045,inset_-3px_-3px_10px_#00000045] hover:scale-102 hover:*:scale-95",

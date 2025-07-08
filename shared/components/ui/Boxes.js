@@ -2,6 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
+import { XSvg } from "../svg/XSvg";
+import { Button } from "./Button";
+import { DocumentSvg } from "../svg/DocumentSvg";
 
 export function WorkBox({ children, className = "", ...props }) {
   return (
@@ -31,7 +34,12 @@ export function PopUpBox({
 }) {
   const [isScrollable, setIsScrollable] = useState(false);
   const [isAtBottom, setIsAtBottom] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const scrollRef = useRef(null);
+
+  useEffect(() => {
+    setIsVisible(visible);
+  }, [visible]);
 
   const handleScroll = useCallback(() => {
     const el = scrollRef.current;
@@ -58,14 +66,21 @@ export function PopUpBox({
     checkScrollable();
   }, [children, checkScrollable]);
 
-  const [isVisible, setIsVisible] = useState(visible);
-  useEffect(() => {
-    if (!isVisible) {
-      setTimeout(() => {
-        onClose();
-      }, 300);
-    }
-  }, [isVisible, onClose]);
+  // useEffect(() => {
+  //   if (!isVisible) {
+  //     setTimeout(() => {
+  //       onClose();
+  //     }, 300);
+  //   }
+  // }, [isVisible, onClose]);
+
+  const handleClose = useCallback(() => {
+    setIsVisible(false);
+    setTimeout(() => {
+      onClose();
+    }, 500);
+  }, [onClose]);
+
   return (
     <>
       <input
@@ -77,29 +92,29 @@ export function PopUpBox({
       />
 
       <div
-        className={`fixed -top-1/2 -bottom-1/2 -left-1/2 -right-1/2 z-98 bg-black/40 transition-all duration-700 ${
-          isVisible ? "visible opacity-100" : " invisible opacity-0"
+        className={`fixed inset-0 z-98 bg-black/40 transition-opacity duration-500 ${
+          isVisible ? "visible opacity-100" : "opacity-0 invisible"
         }`}
       >
-        <div className="fixed top-0 bottom-0 left-0 right-0 z-99 p-5 flex flex-col justify-center items-center backdrop-blur-xs">
+        <div className="fixed inset-0 z-99 p-5 flex flex-col justify-center items-center">
           <div className="relative bg-slate-50 dark:bg-neutral-900 w-full max-w-xl pt-4 px-5 pb-6 rounded-3xl">
             {closeable && (
-              <div
-                className="absolute text-2xl text-white bg-(--linkC) -top-4 right-4 rounded-full w-7 h-7 flex justify-center items-center transition-all duration-300 cursor-pointer hover:scale-105 select-none"
-                onClick={() => setIsVisible(false)}
+              <Button
+                className="absolute -top-4 right-4 rounded-full w-7 h-7 m-0"
+                onClick={handleClose}
               >
-                &times;
-              </div>
+                <XSvg />
+              </Button>
             )}
 
-            <div className="mx-auto mb-1 w-6">{svg || <DefaultSVG />}</div>
+            <div className="mx-auto mb-1 w-6">{svg || <DocumentSvg />}</div>
 
             <div className="text-lg md:text-xl font-bold mb-2 text-center">
               {header}
             </div>
 
             <div
-              className="max-h-[50vh] overflow-x-hidden overflow-y-auto"
+              className="max-h-[55vh] overflow-x-hidden overflow-y-auto"
               ref={scrollRef}
               onScroll={handleScroll}
             >
@@ -120,32 +135,6 @@ export function PopUpBox({
         </div>
       </div>
     </>
-  );
-}
-
-// Optional: Move SVGs out
-function DefaultSVG() {
-  return (
-    <svg
-      fill="currentColor"
-      stroke="currentColor"
-      strokeWidth="0"
-      viewBox="0 0 512 512"
-    >
-      <path
-        fill="none"
-        strokeLinejoin="round"
-        strokeWidth="32"
-        d="M416 221v195a48 48 0 0 1-48 48H144a48 48 0 0 1-48-48V96a48 48 0 0 1 48-48h99a32 32 0 0 1 22 9l142 142a32 32 0 0 1 9 22z"
-      />
-      <path
-        fill="none"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="32"
-        d="M256 56v120a32 32 0 0 0 32 32h120m-232 80h160m-160 80h160"
-      />
-    </svg>
   );
 }
 
