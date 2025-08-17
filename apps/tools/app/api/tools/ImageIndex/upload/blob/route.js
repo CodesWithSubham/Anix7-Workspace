@@ -13,11 +13,11 @@ export async function POST(request) {
     const jsonResponse = await handleUpload({
       body,
       request,
-      onBeforeGenerateToken: async (pathname /*, clientPayload*/ ) => {
+      onBeforeGenerateToken: async (/*pathname*/ /*, clientPayload*/ ) => {
         // Generate a client token for the browser to upload the file
         // ⚠️ Authenticate and authorize users before generating the token.
         // Otherwise, you're allowing anonymous uploads.
-
+        
         if (!session) {
           throw new Error("Unauthorized");
         }

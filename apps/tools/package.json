@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@repo/shared": "workspace:*",
     "jszip": "^3.10.1",
     "next": "^15.3.4",
     "react": "^19.1.0",

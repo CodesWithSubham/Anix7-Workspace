@@ -6,8 +6,6 @@ import { IfLoggedIn, IfLoggedOut } from "@shared/components/auth/LoggedInWraper"
 import { WorkBox } from "@shared/components/ui/Boxes";
 import { Button } from "@shared/components/ui/Button";
 
-export const addToSitemap = true; // Add this page to Sitemap
-
 export const metadata = {
   title: "Simple, fast, and secure URL Shortener",
   description:
@@ -96,6 +94,7 @@ export const metadata = {
   },
   twitter: { card: "summary_large_image" },
   alternates: { canonical: "/url-shortner" },
+  addToSitemap: true,
 };
 
 export default async function ImageUploading() {
@@ -143,12 +142,10 @@ export default async function ImageUploading() {
       </IfLoggedIn>
 
       <div className="my-5">
-        <h2 className="font-bold text-center mb-4">
-          Fast & Secure URL Shortener
-        </h2>
+        <h2 className="font-bold text-center mb-4">Fast & Secure URL Shortener</h2>
         <p className="text-center mb-6">
-          Shorten long URLs from various platforms, share them effortlessly, and
-          track performance with ease.
+          Shorten long URLs from various platforms, share them effortlessly, and track performance
+          with ease.
         </p>
       </div>
       <div className="relative flex justify-center items-stretch flex-wrap gap-x-14 gap-y-16 mt-10">
@@ -175,9 +172,7 @@ export default async function ImageUploading() {
       <IfLoggedOut>
         <WorkBox className="mt-14 text-center">
           <h2>Make Your Links Short & Shareable!</h2>
-          <p>
-            Sign up now to shorten URLs and track their performance with ease.
-          </p>
+          <p>Sign up now to shorten URLs and track their performance with ease.</p>
           <Button htmlFor="loginSignupCheckId">Signup Now</Button>
         </WorkBox>
       </IfLoggedOut>

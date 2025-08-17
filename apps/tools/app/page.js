@@ -3,30 +3,23 @@
 import Image from "next/image";
 import MobileMenu from "@shared/components/navigation/MobileMenu";
 import { ShadowBox, WorkBox } from "@shared/components/ui/Boxes";
-import {
-  IfLoggedIn,
-  IfLoggedOut,
-} from "@shared/components/auth/LoggedInWraper";
+import { IfLoggedIn, IfLoggedOut } from "@shared/components/auth/LoggedInWraper";
 import { Button } from "@shared/components/ui/Button";
 import Link from "next/link";
 
-export const addToSitemap = true; // Add this page to Sitemap
-
-export const metadata = { alternates: { canonical: "/" } };
+export const metadata = { alternates: { canonical: "/" }, addToSitemap: true };
 
 export default function Home() {
   const keyFeatures = [
     {
       title: "URL Shortener",
-      description:
-        "Shorten long URLs from various platforms and share them effortlessly",
+      description: "Shorten long URLs from various platforms and share them effortlessly",
       image: "/assets/img/link.png",
       link: "/url-shortner",
     },
     {
       title: "QR Code Generator",
-      description:
-        "Generate fully customized QR Codes with colors, shapes, and logos.",
+      description: "Generate fully customized QR Codes with colors, shapes, and logos.",
       image: "/assets/img/mobile-qr.png",
       link: "/qr-code-generator",
     },
@@ -53,32 +46,23 @@ export default function Home() {
           Welcome to Anix7 Tools
         </h1>
         <p className="sm:text-md md:text-lg lg:text-xl mb-6 text-center">
-          Simplify your digital workflow with a powerful suite of online tools —
-          from URL shorteners and QR code generators to image resizing,
-          uploading, and more. Everything you need, all in one place.
+          Simplify your digital workflow with a powerful suite of online tools — from URL shorteners
+          and QR code generators to image resizing, uploading, and more. Everything you need, all in
+          one place.
         </p>
 
         <IfLoggedOut>
-          <Button
-            className="rounded-full py-3 px-[10%]"
-            htmlFor="loginSignupCheckId"
-          >
+          <Button className="rounded-full py-3 px-[10%]" htmlFor="loginSignupCheckId">
             SignUp Now
           </Button>
         </IfLoggedOut>
       </section>
 
       <section className="py-10 px-4 text-center -mx-3 md:mx-auto">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-10">
-          Our Key Features
-        </h2>
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-10">Our Key Features</h2>
         <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(380px,1fr))] gap-8">
           {keyFeatures.map(({ title, description, image, link }, i) => (
-            <Link
-              href={link}
-              className="hover:scale-102 transition-all duration-500"
-              key={i}
-            >
+            <Link href={link} className="hover:scale-102 transition-all duration-500" key={i}>
               <ShadowBox className="flex h-full flex-row items-center gap-4 p-4 hover:shadow-[0px_3px_10px_rgba(0,0,0,.20),_inset_20px_20px_18px_rgba(0,0,0,.07),_inset_-20px_-20px_18px_rgba(255,255,255,.9)] dark:hover:shadow-[0px_-1px_10px_rgba(255,255,255,.10),inset_20px_20px_18px_rgba(0,0,0,.9),_inset_-20px_-20px_18px_rgba(255,255,255,.07)] ">
                 {image && (
                   <div className="w-24 h-24 flex-shrink-0 flex items-center justify-center">
@@ -93,15 +77,9 @@ export default function Home() {
                   </div>
                 )}
                 <div className="text-left">
-                  {title && (
-                    <h3 className="text-xl md:text-2xl font-semibold mb-2">
-                      {title}
-                    </h3>
-                  )}
+                  {title && <h3 className="text-xl md:text-2xl font-semibold mb-2">{title}</h3>}
                   {description && (
-                    <p className="text-sm text-gray-600 dark:text-gray-200">
-                      {description}
-                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-200">{description}</p>
                   )}
                 </div>
               </ShadowBox>
@@ -206,10 +184,7 @@ export default function Home() {
             Sign up today and unlock the full potential of Anix7 Tools!
           </p>
 
-          <Button
-            className="rounded-full py-3 px-[10%]"
-            htmlFor="loginSignupCheckId"
-          >
+          <Button className="rounded-full py-3 px-[10%]" htmlFor="loginSignupCheckId">
             SignUp Now
           </Button>
         </WorkBox>

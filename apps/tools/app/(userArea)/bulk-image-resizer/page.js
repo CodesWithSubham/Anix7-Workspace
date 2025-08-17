@@ -71,10 +71,9 @@ export const metadata = {
     type: "website",
   },
   twitter: { card: "summary_large_image" },
-  alternates: { canonical: "/bulk-image-resizer" },
+  alternates: { canonical: "/bulk-image-resizer" },addToSitemap: true 
 };
 
-export const addToSitemap = true; // Add this page to Sitemap
 
 export default function BulkImageResizer() {
   return (

@@ -199,10 +199,7 @@ const eyes = {
     {
       svg: (
         <svg viewBox="0 0 6 6">
-          <path
-            fill="#000000"
-            d="M3 6a3 3 0 0 1-3-3V0h3a3 3 0 0 1 3 3 3 3 0 0 1-3 3z"
-          />
+          <path fill="#000000" d="M3 6a3 3 0 0 1-3-3V0h3a3 3 0 0 1 3 3 3 3 0 0 1-3 3z" />
         </svg>
       ),
       style: [
@@ -325,7 +322,8 @@ export default function QRCodeGenerator() {
   }, [content]);
 
   const [qrData, setQrData] = useState({});
-  const [logo, setLogo] = useState(defaultLogos);
+  // const [logo, setLogo] = useState(defaultLogos);
+  const [logo] = useState(defaultLogos);
   const [qrSetting, setQrSetting] = useState({
     frame: {
       type: 0,
@@ -398,8 +396,7 @@ export default function QRCodeGenerator() {
 
     const canvasWidth = 1024;
     const canvasHeight =
-      (downloadRef.current.offsetHeight / downloadRef.current.offsetWidth) *
-      1024;
+      (downloadRef.current.offsetHeight / downloadRef.current.offsetWidth) * 1024;
 
     toPng(downloadRef.current, {
       cacheBust: true,
@@ -433,11 +430,9 @@ export default function QRCodeGenerator() {
       return;
     }
     if (content === "Wifi" && qrData?.Wifi?.name) {
-      val = `WIFI:S:${qrData?.Wifi?.name};T:${
-        qrData?.Wifi?.encryption ?? ""
-      };P:${qrData?.Wifi?.password ?? ""};H:${
-        qrData?.Wifi?.hidden ? "true" : "false"
-      };;`;
+      val = `WIFI:S:${qrData?.Wifi?.name};T:${qrData?.Wifi?.encryption ?? ""};P:${
+        qrData?.Wifi?.password ?? ""
+      };H:${qrData?.Wifi?.hidden ? "true" : "false"};;`;
 
       setQrSetting((prev) => ({ ...prev, qr: { ...prev.qr, value: val } }));
       return;
@@ -469,17 +464,13 @@ export default function QRCodeGenerator() {
   return (
     <>
       <WorkBox className="border p-4">
-        <h1 className="text-2xl md:text-3xl font-bold mb-5 text-center">
-          QR Code Generator
-        </h1>
+        <h1 className="text-2xl md:text-3xl font-bold mb-5 text-center">QR Code Generator</h1>
 
         <div className="flex-1 flex flex-col md:flex-row-reverse gap-2">
           {/* Sidebar with dynamic positioning */}
           <div className="flex-1">
             <div className="w-full md:sticky md:top-20 bg-(--waveB) py-4 px-6 rounded-lg flex flex-col items-center scale-75 -my-12 md:scale-100 md:my-0">
-              <h1 className="text-lg font-semibold text-(--linkC) mb-2">
-                Preview QR Code
-              </h1>
+              <h1 className="text-lg font-semibold text-(--linkC) mb-2">Preview QR Code</h1>
               {/* <div> */}
               <div
                 ref={downloadRef}
@@ -524,19 +515,15 @@ export default function QRCodeGenerator() {
             <div className="flex justify-around gap-1 p-0.5 border rounded-md md:hidden">
               <div
                 className={`w-full py-1.5 font-bold text-center rounded-l-[4px] transition-all duration-300 ${
-                  tab
-                    ? "bg-transparent cursor-pointer"
-                    : "bg-(--linkC) text-white"
+                  tab ? "bg-transparent cursor-pointer" : "bg-(--linkC) text-white"
                 }`}
-                onClick={() => setTab((t) => false)}
+                onClick={() => setTab(() => false)}
               >
                 Content
               </div>
               <div
                 className={`w-full py-1.5 font-bold text-center rounded-r-[4px] transition-all duration-300 ${
-                  tab
-                    ? "bg-(--linkC) text-white"
-                    : "bg-transparent cursor-pointer"
+                  tab ? "bg-(--linkC) text-white" : "bg-transparent cursor-pointer"
                 }`}
                 onClick={() => setTab(() => true)}
               >
@@ -551,9 +538,7 @@ export default function QRCodeGenerator() {
                   <Button
                     key={`con-${index}`}
                     className={`flex-1 min-w-14 font-semibold mx-0 border ${
-                      content == item
-                        ? "bg-(--linkC) text-white"
-                        : "bg-transparent text-inherit"
+                      content == item ? "bg-(--linkC) text-white" : "bg-transparent text-inherit"
                     }`}
                     onClick={() => setContent(item)}
                   >
@@ -566,12 +551,7 @@ export default function QRCodeGenerator() {
                 {content === "URL" && (
                   <>
                     <p>Enter the URL:</p>
-                    <Input
-                      name="url"
-                      type="url"
-                      placeholder="https://"
-                      onChange={handleChange}
-                    />
+                    <Input name="url" type="url" placeholder="https://" onChange={handleChange} />
                   </>
                 )}
                 {content === "Text" && (
@@ -583,12 +563,7 @@ export default function QRCodeGenerator() {
                 {content === "Wifi" && (
                   <>
                     <p>Enter the Wifi Network Name:</p>
-                    <Input
-                      type="text"
-                      name="name"
-                      onChange={handleChange}
-                      placeholder="SSID"
-                    />
+                    <Input type="text" name="name" onChange={handleChange} placeholder="SSID" />
                     <p>Enter the Wifi Password:</p>
                     <PasswordInput name="password" onChange={handleChange} />
                     <Select
@@ -629,11 +604,7 @@ export default function QRCodeGenerator() {
                       onChange={handleChange}
                       placeholder="Subject of Email"
                     />
-                    <TextArea
-                      name="body"
-                      onChange={handleChange}
-                      maxLength={512}
-                    />
+                    <TextArea name="body" onChange={handleChange} maxLength={512} />
                   </>
                 )}
 
@@ -651,9 +622,7 @@ export default function QRCodeGenerator() {
                   <Button
                     key={`con-${index}`}
                     className={`w-full px-0.5 py-2 m-0 font-semibold rounded-t-md rounded-b-none hover:scale-100 ${
-                      designTab == item
-                        ? "bg-(--linkC) text-white"
-                        : "bg-transparent text-inherit"
+                      designTab == item ? "bg-(--linkC) text-white" : "bg-transparent text-inherit"
                     }`}
                     onClick={() => setDesignTab(item)}
                   >
@@ -767,9 +736,7 @@ export default function QRCodeGenerator() {
                           <button
                             key={`con-${i}`}
                             className={`flex-1 p-1.5 min-w-14 h-14 md:min-w-16 md:h-16 flex justify-center items-center border-[3px] font-semibold rounded-md cursor-pointer ${
-                              qrSetting.qr?.qrStyle == type
-                                ? "border-(--linkC)"
-                                : ""
+                              qrSetting.qr?.qrStyle == type ? "border-(--linkC)" : ""
                             } `}
                             onClick={() =>
                               setQrSetting((prev) => ({
@@ -811,13 +778,10 @@ export default function QRCodeGenerator() {
                                 ...prev,
                                 qr: {
                                   ...prev.qr,
-                                  eyeRadius: prev.qr.eyeRadius.map(
-                                    (item, index) => ({
-                                      ...item,
-                                      inner: style[index] ??
-                                        item.inner ?? [0, 0, 0, 0], // Update inner, keep default if missing
-                                    })
-                                  ),
+                                  eyeRadius: prev.qr.eyeRadius.map((item, index) => ({
+                                    ...item,
+                                    inner: style[index] ?? item.inner ?? [0, 0, 0, 0], // Update inner, keep default if missing
+                                  })),
                                 },
                               }));
                             }}
@@ -861,12 +825,10 @@ export default function QRCodeGenerator() {
                                 ...prev,
                                 qr: {
                                   ...prev.qr,
-                                  eyeRadius: prev.qr.eyeRadius.map(
-                                    (item, index) => ({
-                                      ...item,
-                                      outer: style[index] ?? [0, 0, 0, 0], // Update inner, keep default if missing
-                                    })
-                                  ),
+                                  eyeRadius: prev.qr.eyeRadius.map((item, index) => ({
+                                    ...item,
+                                    outer: style[index] ?? [0, 0, 0, 0], // Update inner, keep default if missing
+                                  })),
                                 },
                               }));
                             }}
@@ -903,9 +865,7 @@ export default function QRCodeGenerator() {
                         <button
                           key={`con-${i}`}
                           className={`flex-1 p-1.5 min-w-16 h-16 md:min-w-20 md:h-20 flex justify-center items-center border-[3px] font-semibold rounded-md cursor-pointer ${
-                            qrSetting.qr.logoImage == item
-                              ? "border-(--linkC)"
-                              : ""
+                            qrSetting.qr.logoImage == item ? "border-(--linkC)" : ""
                           } `}
                           onClick={() =>
                             setQrSetting((prev) => ({
@@ -924,11 +884,7 @@ export default function QRCodeGenerator() {
                             />
                           ) : (
                             <span className="h-full dark:bg-white dark:p-0.5 rounded-xs [&>svg]:h-full [&>svg]:w-full">
-                              <svg
-                                strokeWidth="0"
-                                viewBox="0 0 16 16"
-                                className="p-2"
-                              >
+                              <svg strokeWidth="0" viewBox="0 0 16 16" className="p-2">
                                 <path
                                   stroke="none"
                                   d="M15.9 12.9 11 8l4.9-4.9v-.7L13.6.1a.5.5 0 0 0-.7 0L8 5 3.1.1h-.7L.1 2.4a.5.5 0 0 0 0 .7L5 8 .1 12.9v.7l2.3 2.3a.5.5 0 0 0 .7 0L8 11l4.9 4.9h.7l2.3-2.3a.5.5 0 0 0 0-.7z"
@@ -959,9 +915,7 @@ export default function QRCodeGenerator() {
                     />
                   </>
                 )}
-                {designTab === "Advance" && (
-                  <div className="text-center">Coming Soon</div>
-                )}
+                {designTab === "Advance" && <div className="text-center">Coming Soon</div>}
               </div>
             </div>
           </div>
@@ -1034,10 +988,7 @@ function Frame({ frame, children }) {
 
   if (frame.type === 1)
     return (
-      <div
-        className="rounded-lg overflow-hidden"
-        style={{ backgroundColor: frame.bg }}
-      >
+      <div className="rounded-lg overflow-hidden" style={{ backgroundColor: frame.bg }}>
         <QR className="pb-0" />
         {textBox}
       </div>
@@ -1045,10 +996,7 @@ function Frame({ frame, children }) {
 
   if (frame.type === 2)
     return (
-      <div
-        className="rounded-lg overflow-hidden"
-        style={{ backgroundColor: frame.bg }}
-      >
+      <div className="rounded-lg overflow-hidden" style={{ backgroundColor: frame.bg }}>
         {textBox}
         <QR className="pt-0" />
       </div>

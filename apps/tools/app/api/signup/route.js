@@ -5,11 +5,11 @@ import getSignUpOtpModel from "@shared/lib/db/models/SignUpOtp";
 import getUserModel from "@shared/lib/db/models/User";
 
 const MAX_ATTEMPTS = 5;
-const BLOCK_DURATION = 10 * 60 * 1000; // 10 minutes
+// const BLOCK_DURATION = 10 * 60 * 1000; // 10 minutes
 
-export async function checkRateLimit(signUpOtpData) {
-  return true; // Allow request
-}
+// async function checkRateLimit(signUpOtpData) {
+//   return true; // Allow request
+// }
 
 async function generateUniqueUserId(digits = 10) {
   let userId;
@@ -35,15 +35,8 @@ export async function POST(req) {
 
     // Validate and sanitize input using Zod
     const validatedData = await signupSchema.parseAsync(body);
-    const {
-      firstName,
-      lastName,
-      email,
-      password,
-      profilePic,
-      referredBy,
-    } = validatedData;
-    
+    const { firstName, lastName, email, password, profilePic, referredBy } = validatedData;
+
     const SignUpOtp = await getSignUpOtpModel();
     const User = await getUserModel();
 
@@ -73,10 +66,7 @@ export async function POST(req) {
 
     if (signUpOtp.otp !== body.otp) {
       await signUpOtp.save();
-      return NextResponse.json(
-        { error: "Invalid OTP", errorPath: "otp" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid OTP", errorPath: "otp" }, { status: 400 });
     }
 
     // return NextResponse.json({ message: "OTP Match" }, { status: 200 });
@@ -112,10 +102,7 @@ export async function POST(req) {
     // Delete the OTP record
     await signUpOtp.deleteOne();
 
-    return NextResponse.json(
-      { message: "User registered successfully!" },
-      { status: 201 }
-    );
+    return NextResponse.json({ message: "User registered successfully!" }, { status: 201 });
   } catch (error) {
     console.error(error);
     if (error.name === "ZodError") {
@@ -126,9 +113,6 @@ export async function POST(req) {
       );
     }
     // Handle other errors
-    return NextResponse.json(
-      { error: "Something went wrong." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Something went wrong." }, { status: 500 });
   }
 }

@@ -60,44 +60,43 @@ export default function Click() {
     <>
       <WorkBox>
         <div className="select-none space-y-4">
-
-        <h1 className="text-xl font-bold">Click Task #{id}</h1>
-        {isActive && (
-          <div className="my-1">
-            <AdsterraBannerStrip />
-          </div>
-        )}
-        {completed >= totalPage && timer <= 0 ? (
-          <Firework />
-        ) : (
-          <p>
-            Click on <strong>Complete task</strong>
-            {isActive && " after the timer ends"}.
-          </p>
-        )}
-        {timer > 0 ? (
-          <div className="text-lg font-mono">⏳ {timer}s</div>
-        ) : (
-          <>
-            {completed >= totalPage ? (
-              <>
-                <p className="bg-green-600 text-white my-2 inline-block px-6 py-2 rounded-sm">
-                  Task Completed
-                </p>
-                <p>{new Date().toLocaleDateString("en-GB")}</p>
-              </>
-            ) : (
-              <Button onClick={handleClick}>
-                Complete Task ({completed}/{totalPage})
-              </Button>
-            )}
-          </>
-        )}
-        {isActive && (
-          <p className="text-xs text-yellow-600 font-medium">
-            ⚠️ Beware of ads. If redirected, close and retry.
-          </p>
-        )}
+          <h1 className="text-xl font-bold">Click Task #{id}</h1>
+          {isActive && (
+            <div className="my-1">
+              <AdsterraBannerStrip />
+            </div>
+          )}
+          {completed >= totalPage && timer <= 0 ? (
+            <Firework />
+          ) : (
+            <p>
+              Click on <strong>Complete task</strong>
+              {isActive && " after the timer ends"}.
+            </p>
+          )}
+          {timer > 0 ? (
+            <div className="text-lg font-mono">⏳ {timer}s</div>
+          ) : (
+            <>
+              {completed >= totalPage ? (
+                <>
+                  <p className="bg-green-600 text-white my-2 inline-block px-6 py-2 rounded-sm">
+                    Task Completed
+                  </p>
+                  <p>{new Date().toLocaleDateString("en-GB")}</p>
+                </>
+              ) : (
+                <Button onClick={handleClick}>
+                  Complete Task ({completed}/{totalPage})
+                </Button>
+              )}
+            </>
+          )}
+          {isActive && (
+            <p className="text-xs text-yellow-600 font-medium">
+              ⚠️ Beware of ads. If redirected, close and retry.
+            </p>
+          )}
         </div>
       </WorkBox>
       {isActive && <AdsterraNativeBanner />}
@@ -106,7 +105,7 @@ export default function Click() {
   );
 }
 
-export function Firework() {
+function Firework() {
   const particles = 50;
   const width = 500;
   const height = 500;

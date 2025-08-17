@@ -1,8 +1,14 @@
 {
-  "name": "shared",
+  "name": "@repo/shared",
   "version": "1.0.0",
   "type": "module",
   "main": "index.js",
+  "exports": {
+    "./*": "./*"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
   "dependencies": {
     "next": "^15.3.4",
     "react": "^19.1.0",

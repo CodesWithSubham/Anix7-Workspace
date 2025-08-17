@@ -3,12 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata = {
-  alternates: {
-    canonical: "/",
-  },
+  alternates: { canonical: "/" },
+  addToSitemap: true,
 };
-
-export const addToSitemap = true;
 
 export default async function Home() {
   const Drops = [
@@ -32,18 +29,15 @@ export default async function Home() {
         </p>
       </div> */}
       <div className="relative flex justify-center items-stretch flex-wrap gap-x-14 gap-y-16 my-10">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold">
-          Welcome to Anix7
-        </h1>
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold">Welcome to Anix7</h1>
         <p className="mb-6 sm:w-5/6">
-          Welcome to Anix7 — your ultimate digital playground where creativity
-          meets curiosity. Whether you&apos;re looking to shorten URLs, generate QR
-          codes, discover breathtaking anime wallpapers in 4K, read the latest
-          anime reviews, or just pass the time with fun little games, we&apos;ve got
-          something for everyone. Dive into a world of smart tools, artistic
-          visuals, AI-generated photos, and nature&apos;s finest moments — all in one
-          place. Explore, create, download, and enjoy — because at Anix7,
-          there&apos;s always something new waiting for you.
+          Welcome to Anix7 — your ultimate digital playground where creativity meets curiosity.
+          Whether you&apos;re looking to shorten URLs, generate QR codes, discover breathtaking
+          anime wallpapers in 4K, read the latest anime reviews, or just pass the time with fun
+          little games, we&apos;ve got something for everyone. Dive into a world of smart tools,
+          artistic visuals, AI-generated photos, and nature&apos;s finest moments — all in one
+          place. Explore, create, download, and enjoy — because at Anix7, there&apos;s always
+          something new waiting for you.
         </p>
 
         {Drops.map((drop, index) => (

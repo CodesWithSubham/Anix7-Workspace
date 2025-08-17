@@ -3,17 +3,16 @@ export const metadata = {
   description:
     "Need help, support, or have suggestions? Reach out to the Anix7 team via email or social media. We're here to assist you!",
   alternates: { canonical: "/page/contact-us" },
+  addToSitemap: true,
 };
-
-export const addToSitemap = true; // Add this page to Sitemap
 
 export default function ContactUs() {
   return (
     <>
       <h1>Contact Us</h1>
       <p className="my-1 ml-1">
-        If you have any questions, suggestions, or need support, feel free to
-        get in touch with us. We typically respond within 7 - 14 days.
+        If you have any questions, suggestions, or need support, feel free to get in touch with us.
+        We typically respond within 7 - 14 days.
       </p>
 
       <hr className="my-4" />

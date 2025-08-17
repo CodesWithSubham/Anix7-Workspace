@@ -17,11 +17,8 @@ export const metadata = {
     "digital hub",
   ],
   alternates: { canonical: "/page/about-us" },
-
+  addToSitemap: true,
 };
-
-
-export const addToSitemap = true; // Add this page to Sitemap
 
 export default function AboutUs() {
   return (
@@ -30,20 +27,18 @@ export default function AboutUs() {
         <strong>About Anix7</strong>
       </h1>
       <p className="my-1 ml-1">
-        <strong>Anix7</strong> is a growing digital ecosystem designed to make
-        your online experience faster, smarter, and more productive. From
-        everyday tools to creative apps, from gaming to anime, and from
-        AI-powered utilities to open-source software, Anix7 brings everything
-        together under one seamless platform.
+        <strong>Anix7</strong> is a growing digital ecosystem designed to make your online
+        experience faster, smarter, and more productive. From everyday tools to creative apps, from
+        gaming to anime, and from AI-powered utilities to open-source software, Anix7 brings
+        everything together under one seamless platform.
       </p>
       <Hr />
       <h2>
         🌐 <strong>Our Vision</strong>
       </h2>
       <p className="my-1 ml-1">
-        To create a unified platform that empowers users with useful, fun, and
-        intelligent digital solutions — all in one place, and accessible to
-        everyone for free or at affordable pricing.
+        To create a unified platform that empowers users with useful, fun, and intelligent digital
+        solutions — all in one place, and accessible to everyone for free or at affordable pricing.
       </p>
       <Hr />
       <h2>
@@ -61,16 +56,15 @@ export default function AboutUs() {
         <li>URL Shortener</li>
         <li>Image Converters &amp; Editors</li>
         <li>
-          PDF Tools (coming soon) All browser-based, fast, and ad-supported or
-          Pro subscription-based for enhanced features.
+          PDF Tools (coming soon) All browser-based, fast, and ad-supported or Pro
+          subscription-based for enhanced features.
         </li>
       </ul>
       <h4>
         🕹️ <strong>Anix7 Games (Coming soon)</strong>
       </h4>
       <p className="my-1 ml-1">
-        Fun, lightweight, browser-based games for instant entertainment — no
-        install needed.
+        Fun, lightweight, browser-based games for instant entertainment — no install needed.
       </p>
       {/* <h4>
         🤖 <strong>Anix7 AI</strong>
@@ -83,23 +77,20 @@ export default function AboutUs() {
         🖼️ <strong>AniPic by Anix7</strong>
       </h4>
       <p className="my-1 ml-1">
-        A curated gallery of{" "}
-        <strong>high-resolution anime images and wallpapers</strong>, including
+        A curated gallery of <strong>high-resolution anime images and wallpapers</strong>, including
         4K, for free download and inspiration.
       </p>
       <h4>
         📱 <strong>Anix7 Telegram App Market (Coming soon)</strong>
       </h4>
       <p className="my-1 ml-1">
-        A collection of <strong>curated Telegram apps and bots</strong>, ready
-        to explore and use.
+        A collection of <strong>curated Telegram apps and bots</strong>, ready to explore and use.
       </p>
       <h4>
         🌸 <strong>Anix7 Anime</strong>
       </h4>
       <p className="my-1 ml-1">
-        Your source for anime reviews, news, seasonal updates, character info,
-        and more.
+        Your source for anime reviews, news, seasonal updates, character info, and more.
       </p>
       <Hr />
       <h2>
@@ -107,20 +98,19 @@ export default function AboutUs() {
       </h2>
       <ul className="list-disc ml-5 pl-5 space-y-2">
         <li>
-          <strong>Privacy-First</strong>: Most tools work directly in your
-          browser — no server-side processing unless necessary.
+          <strong>Privacy-First</strong>: Most tools work directly in your browser — no server-side
+          processing unless necessary.
         </li>
         <li>
-          <strong>Accessibility</strong>: Free to use with optional Pro features
-          — minimal barriers to entry.
+          <strong>Accessibility</strong>: Free to use with optional Pro features — minimal barriers
+          to entry.
         </li>
         <li>
-          <strong>Open Innovation</strong>: Always expanding. Always
-          experimenting.
+          <strong>Open Innovation</strong>: Always expanding. Always experimenting.
         </li>
         <li>
-          <strong>Community Driven</strong>: Built with love for creators,
-          developers, anime fans, gamers, and tech enthusiasts.
+          <strong>Community Driven</strong>: Built with love for creators, developers, anime fans,
+          gamers, and tech enthusiasts.
         </li>
       </ul>
       <Hr />
@@ -142,8 +132,7 @@ export default function AboutUs() {
         Got suggestions, bugs, or collab ideas? We’d love to hear from you.
       </p>
       <p className="my-1 ml-1">
-        📩 <strong>Email</strong>:{" "}
-        <a href="mailto:contact@anix7.in">contact@anix7.in</a>
+        📩 <strong>Email</strong>: <a href="mailto:contact@anix7.in">contact@anix7.in</a>
       </p>
       <p className="my-1 ml-1">
         🌐 <strong>Website</strong>: <Link href="/">www.anix7.in</Link>

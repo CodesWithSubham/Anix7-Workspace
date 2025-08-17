@@ -110,9 +110,8 @@ export const metadata = {
   },
   twitter: { card: "summary_large_image" },
   alternates: { canonical: "/qr-code-generator" },
+  addToSitemap: true,
 };
-
-export const addToSitemap = true; // Add this page to Sitemap
 
 export default async function QrCode() {
   return (
@@ -153,12 +152,9 @@ export default async function QrCode() {
           {/* Section 3: QR Styling */}
           <div className="flex flex-col items-center gap-2">
             <ColorPaletteSvg className="w-20 h-20" />
-            <h2 className="text-base font-semibold">
-              Customized Colors & Shapes
-            </h2>
+            <h2 className="text-base font-semibold">Customized Colors & Shapes</h2>
             <p className="text-sm text-muted-foreground">
-              Personalize your QR codes with unique color schemes, eye styles,
-              and frames.
+              Personalize your QR codes with unique color schemes, eye styles, and frames.
             </p>
           </div>
 
@@ -174,23 +170,21 @@ export default async function QrCode() {
             />
             <h2 className="text-base font-semibold">Add Logos to QR Codes</h2>
             <p className="text-sm text-muted-foreground">
-              Boost recognition by embedding your brand logo directly into the
-              QR code.
+              Boost recognition by embedding your brand logo directly into the QR code.
             </p>
           </div>
         </div>
       </div>
       <section className="my-16 px-4 text-center">
         <h2 className="text-2xl font-bold mb-4">
-          Benefits from{" "}
-          <span className="text-(--linkC)">QR by Anix7 Tools</span>
+          Benefits from <span className="text-(--linkC)">QR by Anix7 Tools</span>
         </h2>
         <p className="text-muted-foreground max-w-xl mx-auto">
           {/* With QR by Anix7 Tools, you can track how many people scan your QR
           Codes — along with the time, location, and more. No coding skills
           needed to build beautiful, fully customized landing pages. */}
-          With QR Code Generator by Anix7 Tools, you can generate fully
-          customized QR Codes with colors, shapes, and logos.
+          With QR Code Generator by Anix7 Tools, you can generate fully customized QR Codes with
+          colors, shapes, and logos.
         </p>
 
         <div className="flex flex-wrap justify-center gap-4 mt-8">
@@ -283,8 +277,8 @@ export default async function QrCode() {
         <h2 className="text-2xl font-bold text-center mb-6">How to Use</h2>
         <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-10">
           Creating QR Codes with{" "}
-          <span className="text-(--linkC) font-medium">QR by Anix7 Tools</span>{" "}
-          is simple and efficient. Just follow these steps:
+          <span className="text-(--linkC) font-medium">QR by Anix7 Tools</span> is simple and
+          efficient. Just follow these steps:
         </p>
 
         <div className="flex flex-wrap justify-center gap-6 *:max-w-xs">
@@ -303,8 +297,8 @@ export default async function QrCode() {
             </div>
             <h3 className="text-lg font-semibold mb-1">Choose QR Code Type</h3>
             <p className="text-sm text-muted-foreground">
-              First, choose the type of QR Code. This defines what your QR Code
-              will do — link, text, WiFi, email, and more.
+              First, choose the type of QR Code. This defines what your QR Code will do — link,
+              text, WiFi, email, and more.
             </p>
           </div>
 
@@ -323,8 +317,8 @@ export default async function QrCode() {
             </div>
             <h3 className="text-lg font-semibold mb-1">Fill Required Fields</h3>
             <p className="text-sm text-muted-foreground">
-              Enter the necessary details based on the selected type. For
-              example, a link-type QR will ask for a website URL.
+              Enter the necessary details based on the selected type. For example, a link-type QR
+              will ask for a website URL.
             </p>
           </div>
 
@@ -343,22 +337,18 @@ export default async function QrCode() {
             </div>
             <h3 className="text-lg font-semibold mb-1">Download & Share</h3>
             <p className="text-sm text-muted-foreground">
-              Once generated, download and share your QR Code directly from your
-              dashboard — edit anytime if needed.
+              Once generated, download and share your QR Code directly from your dashboard — edit
+              anytime if needed.
             </p>
           </div>
         </div>
       </section>
       <section className="my-16 px-4">
-        <h2 className="text-3xl font-bold text-center mb-4">
-          What are QR Codes?
-        </h2>
+        <h2 className="text-3xl font-bold text-center mb-4">What are QR Codes?</h2>
         <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-8">
-          QR Codes stand for <strong>Quick Response</strong>. Originally
-          developed in 1994 by Denso Wave to track vehicles during
-          manufacturing, they&apos;ve since evolved into powerful tools for
-          modern interaction. Today, anyone can scan a QR Code with just a phone
-          camera.
+          QR Codes stand for <strong>Quick Response</strong>. Originally developed in 1994 by Denso
+          Wave to track vehicles during manufacturing, they&apos;ve since evolved into powerful
+          tools for modern interaction. Today, anyone can scan a QR Code with just a phone camera.
         </p>
 
         <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
@@ -366,19 +356,17 @@ export default async function QrCode() {
           <div className="p-5 border rounded-xl shadow-xs bg-background">
             <h3 className="text-lg font-semibold mb-1">📋 Gather Feedback</h3>
             <p className="text-sm text-muted-foreground">
-              Easily collect user feedback when they scan your QR Code — ideal
-              for improving products or services.
+              Easily collect user feedback when they scan your QR Code — ideal for improving
+              products or services.
             </p>
           </div>
 
           {/* Business Instructions */}
           <div className="p-5 border rounded-xl shadow-xs bg-background">
-            <h3 className="text-lg font-semibold mb-1">
-              🏢 Describe your Business
-            </h3>
+            <h3 className="text-lg font-semibold mb-1">🏢 Describe your Business</h3>
             <p className="text-sm text-muted-foreground">
-              Redirect users to an instructional or informational page about
-              your business for quick insights.
+              Redirect users to an instructional or informational page about your business for quick
+              insights.
             </p>
           </div>
 
@@ -386,19 +374,16 @@ export default async function QrCode() {
           <div className="p-5 border rounded-xl shadow-xs bg-background">
             <h3 className="text-lg font-semibold mb-1">💼 Profile Cards</h3>
             <p className="text-sm text-muted-foreground">
-              Ditch physical cards — share digital profile cards instantly with
-              a single scan.
+              Ditch physical cards — share digital profile cards instantly with a single scan.
             </p>
           </div>
 
           {/* Events & Discounts */}
           <div className="p-5 border rounded-xl shadow-xs bg-background">
-            <h3 className="text-lg font-semibold mb-1">
-              🎉 Promote Events & Discounts
-            </h3>
+            <h3 className="text-lg font-semibold mb-1">🎉 Promote Events & Discounts</h3>
             <p className="text-sm text-muted-foreground">
-              Share special offers or event invites by embedding them in QR
-              Codes — perfect for campaigns and promotions.
+              Share special offers or event invites by embedding them in QR Codes — perfect for
+              campaigns and promotions.
             </p>
           </div>
         </div>
@@ -463,9 +448,7 @@ export default async function QrCode() {
           width={160}
           height={160}
         />
-        <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-          QR by Anix7 Tools
-        </h2>
+        <h2 className="text-3xl sm:text-4xl font-bold mb-4">QR by Anix7 Tools</h2>
         <p className="text-muted-foreground text-lg sm:text-xl max-w-2xl mx-auto">
           Generate fully customized QR Codes with colors, shapes, and logos
           {/* — and keep track of how many people scan your QR Codes, from where, and on what date */}

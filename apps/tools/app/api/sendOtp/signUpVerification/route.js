@@ -4,7 +4,7 @@ import { sendNoReplyMail } from "@shared/lib/sendMail";
 import getUserModel from "@shared/lib/db/models/User";
 import getSignUpOtpModel from "@shared/lib/db/models/SignUpOtp";
 
-export const retryInterval = 10 * 60 * 1000; // 30 minutes
+const retryInterval = 10 * 60 * 1000; // 30 minutes
 
 async function sendEmail(email, firstName, lastName, otp) {
   try {
@@ -23,6 +23,8 @@ async function sendEmail(email, firstName, lastName, otp) {
     });
     if (!res.success) throw new Error("Error sending email");
   } catch (error) {
+    console.error("Error sending verification email:", error);
+
     throw new Error("Error sending email");
   }
 }
@@ -31,10 +33,7 @@ export async function POST(req) {
   try {
     const { firstName, lastName, email } = await req.json();
     if (!firstName || !email) {
-      return NextResponse.json(
-        { error: "Missing required fields." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
     }
     // Connect to MongoDB
     const User = await getUserModel();
@@ -94,10 +93,7 @@ export async function POST(req) {
         await sendEmail(validEmail, firstName, lastName, otp);
       }
 
-      return NextResponse.json(
-        { message: "OTP sent successfully!" },
-        { status: 200 }
-      );
+      return NextResponse.json({ message: "OTP sent successfully!" }, { status: 200 });
     }
 
     // Create a new OTP record
@@ -117,15 +113,9 @@ export async function POST(req) {
       await sendEmail(validEmail, firstName, lastName, otp);
     }
 
-    return NextResponse.json(
-      { message: "OTP sent successfully!" },
-      { status: 201 }
-    );
+    return NextResponse.json({ message: "OTP sent successfully!" }, { status: 201 });
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { error: "Something went wrong." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Something went wrong." }, { status: 500 });
   }
 }

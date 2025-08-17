@@ -1,9 +1,11 @@
+// apps/auth/app/api/auth/createUser/route.js
+
 import getUserModel from "@shared/lib/db/models/User";
 import { NextResponse } from "next/server";
 
 const ADMIN_TOKEN = process.env.AUTH_SECRET; // Store the admin token as an environment variable
 
-export async function generateUniqueUserId(digits = 10) {
+async function generateUniqueUserId(digits = 10) {
   let userId;
   let exists = true;
   const min = Math.pow(10, digits - 1); // Smallest number with `digits` length
@@ -33,10 +35,7 @@ export async function POST(req) {
     }
 
     if (token !== ADMIN_TOKEN) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 403 }
-      );
+      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 403 });
       // throw new Error('Unauthorized');
     }
 
@@ -45,8 +44,7 @@ export async function POST(req) {
 
     const userData = formDatas.userDetails;
 
-    const { firstName, lastName, email, isVerified, profilePic, referredBy } =
-      userData;
+    const { firstName, lastName, email, isVerified, profilePic, referredBy } = userData;
 
     // console.log(userData)
     // Ensure required fields are present
