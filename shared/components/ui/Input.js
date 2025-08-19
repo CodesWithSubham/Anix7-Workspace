@@ -351,7 +351,7 @@ export function Checkbox({
 export function OTPInput({
   value = "",
   maxLength = 6,
-  onChange = () => {},
+  onChange = (e) => {},
   className = "",
   ...props
 }) {

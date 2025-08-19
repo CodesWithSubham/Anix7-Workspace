@@ -3,7 +3,7 @@
 import Image from "next/image";
 import ImageUploader from "./ImageUploader";
 import { WorkBox } from "@shared/components/ui/Boxes";
-import { IfLoggedIn, IfLoggedOut } from "@shared/components/auth/LoggedInWraper";
+import { IfLoggedIn, IfLoggedOut } from "@shared/components/auth/LoggedInWrapper";
 import { Button } from "@shared/components/ui/Button";
 
 export const metadata = {

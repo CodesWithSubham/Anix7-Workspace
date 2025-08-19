@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import UrlShortner from "./UrlShortner";
-import { IfLoggedIn, IfLoggedOut } from "@shared/components/auth/LoggedInWraper";
+import { IfLoggedIn, IfLoggedOut } from "@shared/components/auth/LoggedInWrapper";
 import { WorkBox } from "@shared/components/ui/Boxes";
 import { Button } from "@shared/components/ui/Button";
 

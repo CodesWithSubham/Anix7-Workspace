@@ -47,7 +47,7 @@ export async function POST(req) {
 
     if (!signUpOtp) {
       return NextResponse.json(
-        { error: "Somthing Wrong! Please Refresh the page and try again." },
+        { error: "Something Wrong! Please Refresh the page and try again." },
         { status: 400 }
       );
     }

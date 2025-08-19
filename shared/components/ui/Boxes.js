@@ -26,8 +26,8 @@ export function PopUpBox({
   id = "",
   visible = true,
   className = "",
-  header = "",
-  svg = "",
+  header,
+  svg,
   closeable = false,
   onClose = () => {},
   ...props

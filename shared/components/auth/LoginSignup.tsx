@@ -1,15 +1,28 @@
 // /components/LoginSignup.js
 "use client";
-import { useEffect, useState } from "react";
+import { ChangeEventHandler, FormEventHandler, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
-import { PopUpBox } from "../ui/Boxes";
 import { Button } from "../ui/Button";
 import { Input, OTPInput, PasswordInput } from "../ui/Input";
 import { signIn, useSession } from "next-auth/react";
+import { ZodError } from "zod";
+import { PopUpBox } from "../ui/Boxes";
 import { signInSchema, signupSchema } from "@shared/lib/zod";
-import { doCredentialLogin, doSocialLogin } from "@shared/lib/auth/action";
+import { doCredentialLogin, doSocialLogin, signUpVerificationSendOtp, signUpVerificationVerifyOtp } from "@shared/lib/auth/action";
+
+type SignUpFormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  refer?: string;
+};
+
+// Errors are optional strings for each field
+type SignUpErrors = Partial<Record<keyof SignUpFormData | "otp", string>>;
 
 export default function LoginSignup() {
   const { data: session } = useSession();
@@ -20,7 +33,7 @@ export default function LoginSignup() {
   const [isLoading, setIsLoading] = useState(false);
 
   const searchParams = useSearchParams();
-  const referedBy = searchParams.get("r") ?? null;
+  const referBy = searchParams.get("r") ?? null;
   const goNext = searchParams.get("next") ?? null;
   const defaultOpen = searchParams.has("openLogin");
 
@@ -37,21 +50,25 @@ export default function LoginSignup() {
     refer: "",
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<SignUpErrors>({});
   const [verifyOtpPage, setVerifyOtpPage] = useState(false);
-  const [otp, setOtp] = useState(null);
+  const [otp, setOtp] = useState<string | null>(null);
 
-  const handleSignUpChange = (e) => {
+  type SignUpFormData = typeof formData; // whatever shape your formData has
+
+  const handleSignUpChange: ChangeEventHandler<HTMLFormElement> = (e) => {
     const { name, value } = e.target;
-    const updatedData = { ...formData, [name]: value };
+    const key = name as keyof SignUpFormData;
+
+    const updatedData = { ...formData, [key]: value };
     const validation = signupSchema.safeParse(updatedData);
 
     setErrors((prev) => {
-      const { [name]: _, ...rest } = prev;
+      const { [key]: _, ...rest } = prev;
       const issue = validation.success
         ? null
-        : validation.error.errors.find((err) => err.path[0] === name);
-      return issue ? { ...rest, [name]: issue.message } : rest;
+        : validation.error.errors.find((err) => err.path[0] === key);
+      return issue ? { ...rest, [key]: issue.message } : rest;
     });
 
     setFormData(updatedData);
@@ -70,33 +87,27 @@ export default function LoginSignup() {
     setIsLoading(true);
     setErrors({});
 
-    if (otp.length !== 6) {
+    if (!otp || (otp && otp.length !== 6)) {
       setErrors({ otp: "Please enter a valid OTP" });
       setIsLoading(false);
       return;
     }
 
     try {
-      const res = await fetch("/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, otp }),
-      });
+      const res = await signUpVerificationVerifyOtp({ ...formData, otp });
 
-      const result = await res.json();
-
-      if (res.ok) {
+      if (res.success) {
         const credentials = {
           email: formData.email,
           password: formData.password,
         };
-
-        const res = await doCredentialLogin(credentials);
+        // Sign in the user after successful verification
+        await doCredentialLogin(credentials);
         toast.success("Sign up successful!");
         window.location.href = goNext || window.location.href;
       } else {
-        setErrors(result.errorPath ? { [result.errorPath]: result.error } : {});
-        if (!result.errorPath) toast.error(result.error || "Sign up failed.");
+        setErrors(res.errorPath ? { [res.errorPath]: res.message } : {});
+        if (!res.errorPath) toast.error(res.message || "Sign up failed.");
       }
     } catch {
       toast.error("Something went wrong. Please try again.");
@@ -105,7 +116,7 @@ export default function LoginSignup() {
     }
   };
 
-  const onSubmit = async (e) => {
+  const onSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
     setIsLoading(true);
     setErrors({});
@@ -113,35 +124,27 @@ export default function LoginSignup() {
     try {
       signupSchema.parse(formData);
 
-      const res = await fetch("/api/sendOtp/signUpVerification", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.email,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-        }),
-      });
+      const res = await signUpVerificationSendOtp(formData);
 
-      const result = await res.json();
-
-      if (res.ok) {
+      if (res.success) {
         setVerifyOtpPage(true);
         setTimer(RESEND_OTP_INTERVAL);
-        e?.target?.reset();
       } else {
-        setErrors(result.errorPath ? { [result.errorPath]: result.error } : {});
-        if (!result.errorPath)
-          toast.error(result.error || "Failed to send OTP.");
+        setErrors(res.errorPath ? { [res.errorPath]: res.message } : {});
+        if (!res.errorPath) toast.error(res.message || "Failed to send OTP.");
       }
     } catch (err) {
-      setErrors(
-        err.errors?.reduce(
-          (acc, { path, message }) => ({ ...acc, [path[0]]: message }),
-          {}
-        ) || {}
-      );
-      if (!err.errors) toast.error("An unexpected error occurred.");
+      console.error("Error during sign up:", err);
+      if (err instanceof ZodError) {
+        setErrors(
+          err.errors.reduce(
+            (acc, { path, message }) => ({ ...acc, [path[0]]: message }),
+            {} as SignUpErrors
+          )
+        );
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -150,40 +153,49 @@ export default function LoginSignup() {
   // ====================================
   // ========= Sign In Function =========
   // ====================================
-  const [signInError, setSignInError] = useState({});
+  const [signInError, setSignInError] = useState<SignUpErrors>({});
 
-  async function handleSignIn(e) {
+  async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
     setSignInError({});
 
     try {
-      const { email, password } = e.currentTarget;
+      const { email, password } = e.currentTarget as typeof e.currentTarget & {
+        email: HTMLInputElement;
+        password: HTMLInputElement;
+      };
       const credentials = signInSchema.parse({
         email: email.value,
         password: password.value,
       });
 
-      credentials.redirect = false;
-
-      const res = await signIn("credentials", credentials);
+      const res = await signIn("credentials", {
+        ...credentials,
+        redirect: false,
+      });
 
       if (res?.error) throw new Error(res.error);
 
       toast.success("Sign Success!");
       window.location.href = goNext || window.location.href;
     } catch (err) {
-      const errors = err.errors?.reduce((acc, { path, message }) => {
-        acc[path[0]] = message;
-        return acc;
-      }, {}) || {
-        password:
-          err.message == "CredentialsSignin"
-            ? "Invalid credentials"
-            : "Something went wrong?",
-      };
-
-      setSignInError(errors);
+      if (err instanceof ZodError) {
+        // Collect field-level validation errors
+        const errors = err.errors.reduce<Record<string, string>>((acc, { path, message }) => {
+          acc[path[0] as string] = message;
+          return acc;
+        }, {});
+        setSignInError(errors);
+      } else if (err instanceof Error) {
+        // Handle NextAuth or unknown errors
+        setSignInError({
+          password:
+            err.message === "CredentialsSignin" ? "Invalid credentials" : "Something went wrong!",
+        });
+      } else {
+        toast.error("Unexpected error occurred.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -215,17 +227,13 @@ export default function LoginSignup() {
           className={`logOrSign flex p-1 border border-(color:--linkC) rounded-full *:p-2 *:flex-1 *:w-[50%] *:rounded-full *:transition-all duration-500 *:ease-in-out relative`}
         >
           <div
-            className={`z-10 ${
-              isLoginTab ? "text-white" : "text-(--linkC) cursor-pointer"
-            }`}
+            className={`z-10 ${isLoginTab ? "text-white" : "text-(--linkC) cursor-pointer"}`}
             onClick={() => setIsLoginTab(true)}
           >
             Login
           </div>
           <div
-            className={`z-10 ${
-              !isLoginTab ? "text-white" : "text-(--linkC) cursor-pointer"
-            }`}
+            className={`z-10 ${!isLoginTab ? "text-white" : "text-(--linkC) cursor-pointer"}`}
             onClick={() => setIsLoginTab(false)}
           >
             Sign Up
@@ -241,9 +249,7 @@ export default function LoginSignup() {
       {isLoginTab ? (
         <form onSubmit={handleSignIn} className="px-1">
           <Input type="email" name="email" placeholder="Email" />
-          {signInError?.email && (
-            <p className="text-xs pl-2  text-red-600">{signInError.email}</p>
-          )}
+          {signInError?.email && <p className="text-xs pl-2  text-red-600">{signInError.email}</p>}
           <PasswordInput name="password" placeholder="Password" />
 
           {signInError?.password && (
@@ -256,10 +262,7 @@ export default function LoginSignup() {
                 Terms of Use
               </Link>
               ,{" "}
-              <Link
-                href="https://www.anix7.in/page/privacy-policy"
-                target="_blank"
-              >
+              <Link href="https://www.anix7.in/page/privacy-policy" target="_blank">
                 Privacy Policy
               </Link>
               , and{" "}
@@ -269,12 +272,7 @@ export default function LoginSignup() {
               .
             </p>
 
-            <Button
-              type="submit"
-              className="min-w-26"
-              loading={isLoading}
-              loadingText="Loading"
-            >
+            <Button type="submit" className="min-w-26" loading={isLoading} loadingText="Loading">
               Submit
             </Button>
           </div>
@@ -289,10 +287,8 @@ export default function LoginSignup() {
           </p>
 
           {/* OTP Input Fields */}
-          <OTPInput onChange={setOtp} />
-          {errors.otp && (
-            <p className="text-xs mt-1 text-red-600">{errors.otp}</p>
-          )}
+          <OTPInput onChange={(o: string) => setOtp(o)} />
+          {errors.otp && <p className="text-xs mt-1 text-red-600">{errors.otp}</p>}
           <div className="text-right text-xs mt-2">
             <button
               onClick={() => onSubmit()}
@@ -316,70 +312,43 @@ export default function LoginSignup() {
           </div>
         </div>
       ) : (
-        <form
-          className="px-1"
-          onSubmit={onSubmit}
-          onChange={handleSignUpChange}
-        >
+        <form className="px-1" onSubmit={onSubmit} onChange={handleSignUpChange}>
           <div className="flex gap-2">
             <Input name="firstName" placeholder="First Name" />
             <Input name="lastName" placeholder="Last Name" />
           </div>
           {errors.firstName && (
-            <p className="text-xs pl-2 -mt-1 text-red-600">
-              {errors.firstName}
-            </p>
+            <p className="text-xs pl-2 -mt-1 text-red-600">{errors.firstName}</p>
           )}
-          {errors.lastName && (
-            <p className="text-xs pl-2 -mt-1 text-red-600">{errors.lastName}</p>
-          )}
+          {errors.lastName && <p className="text-xs pl-2 -mt-1 text-red-600">{errors.lastName}</p>}
           <Input type="email" name="email" placeholder="Email" />
-          {errors.email && (
-            <p className="text-xs pl-2 -mt-1 text-red-600">{errors.email}</p>
-          )}
+          {errors.email && <p className="text-xs pl-2 -mt-1 text-red-600">{errors.email}</p>}
 
           <PasswordInput name="password" placeholder="Password" />
-          {errors.password && (
-            <p className="text-xs pl-2 -mt-1 text-red-600">{errors.password}</p>
-          )}
-          <PasswordInput
-            name="confirmPassword"
-            placeholder="Confirm Password"
-          />
+          {errors.password && <p className="text-xs pl-2 -mt-1 text-red-600">{errors.password}</p>}
+          <PasswordInput name="confirmPassword" placeholder="Confirm Password" />
           {errors.confirmPassword && (
-            <p className="text-xs pl-2 -mt-1 text-red-600">
-              {errors.confirmPassword}
-            </p>
+            <p className="text-xs pl-2 -mt-1 text-red-600">{errors.confirmPassword}</p>
           )}
 
           <div>
-            {referedBy ? (
-              <Input name="refer" disabled value={referedBy} />
+            {referBy ? (
+              <Input name="refer" disabled value={referBy} />
             ) : (
               <>
                 <div
                   id="enterRef"
                   onClick={() => setIsRefer((prev) => !prev)}
-                  className={`mt-2 cursor-pointer  ${
-                    isRefer ? "text-red-500" : "text-(--linkC)"
-                  }`}
+                  className={`mt-2 cursor-pointer  ${isRefer ? "text-red-500" : "text-(--linkC)"}`}
                 >
-                  {isRefer ? (
-                    <>&times; Remove Refer Code</>
-                  ) : (
-                    <>&#43; Enter Refer Code</>
-                  )}
+                  {isRefer ? <>&times; Remove Refer Code</> : <>&#43; Enter Refer Code</>}
                 </div>
                 <div
                   className={`transition-all duration-500 ${
                     isRefer ? "max-h-32" : "max-h-0 overflow-hidden"
                   }`}
                 >
-                  <Input
-                    type="number"
-                    name="refer"
-                    placeholder="Enter Refer Code"
-                  />
+                  <Input type="number" name="refer" placeholder="Enter Refer Code" />
                 </div>
               </>
             )}
@@ -417,13 +386,8 @@ export default function LoginSignup() {
               or
             </span>
           </div>
-          <form
-            action={doSocialLogin}
-            className="w-full flex flex-row gap-3 justify-center"
-          >
-            {referedBy && (
-              <input type="hidden" name="referCode" value={referedBy} />
-            )}
+          <form action={doSocialLogin} className="w-full flex flex-row gap-3 justify-center">
+            {referBy && <input type="hidden" name="referCode" value={referBy} />}
             <Button
               className="text-lg flex bg-transparent text-inherit items-center gap-1 border-2 shadow-md hover:scale-100 hover:shadow-inner"
               type="submit"

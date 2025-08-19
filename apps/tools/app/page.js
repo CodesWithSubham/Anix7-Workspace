@@ -3,7 +3,7 @@
 import Image from "next/image";
 import MobileMenu from "@shared/components/navigation/MobileMenu";
 import { ShadowBox, WorkBox } from "@shared/components/ui/Boxes";
-import { IfLoggedIn, IfLoggedOut } from "@shared/components/auth/LoggedInWraper";
+import { IfLoggedIn, IfLoggedOut } from "@shared/components/auth/LoggedInWrapper";
 import { Button } from "@shared/components/ui/Button";
 import Link from "next/link";
 
