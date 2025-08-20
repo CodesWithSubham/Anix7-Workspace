@@ -1,6 +1,6 @@
 // /utils/WaterDrop.js
 
-export default function WaterDrop({ children }) {
+export default function WaterDrop({ children }: React.PropsWithChildren<{}>) {
   const getRandomBorderRadius = () => {
     const getRandomPercentage = () =>
       `${Math.floor(Math.random() * (70 - 35 + 1) + 35)}%`;

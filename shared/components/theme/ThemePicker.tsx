@@ -21,7 +21,7 @@ export default function ThemePicker({ className = "" }) {
   const [showSystemButton, setShowSystemButton] = useState(false);
   const [isLocalhost, setIsLocalhost] = useState(false);
 
-  const setCookie = (name, value) => {
+  const setCookie = (name: string, value: string) => {
     const domain = isLocalhost
       ? ""
       : "; domain=" + window.location.hostname.split(".").slice(-2).join(".");
@@ -31,10 +31,8 @@ export default function ThemePicker({ className = "" }) {
   };
 
   useEffect(() => {
-    if (window?.matchMedia) setShowSystemButton(true);
-    setIsLocalhost(
-      typeof window !== "undefined" && window.location.hostname === "localhost"
-    );
+    if ("matchMedia" in window) setShowSystemButton(true);
+    setIsLocalhost(typeof window !== "undefined" && window.location.hostname === "localhost");
   }, []);
 
   // useEffect(() => {
@@ -50,14 +48,13 @@ export default function ThemePicker({ className = "" }) {
   //   }
   // }, [showSystem]);
 
-  const setMetaThemeColor = (mode) => {
+  const setMetaThemeColor = (mode: string) => {
     const themeColor =
       mode === "dark"
         ? "#1d1d1d"
-        : getComputedStyle(document.body).getPropertyValue("--linkC")?.trim() ||
-          "#fffdfc";
+        : getComputedStyle(document.body).getPropertyValue("--linkC")?.trim() || "#fffdfc";
 
-    let themeMeta = document.querySelector("meta[name='theme-color']");
+    let themeMeta = document.querySelector<HTMLMetaElement>("meta[name='theme-color']");
     if (!themeMeta) {
       themeMeta = document.createElement("meta");
       themeMeta.name = "theme-color";
@@ -66,7 +63,7 @@ export default function ThemePicker({ className = "" }) {
     themeMeta.setAttribute("content", themeColor);
   };
 
-  const setMode = (m) => {
+  const setMode = (m: string) => {
     let mode = m;
     let isSystem = mode === "system";
 
@@ -75,9 +72,7 @@ export default function ThemePicker({ className = "" }) {
 
     // If no preference saved, use system preference
     if (isSystem) {
-      const systemPrefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
+      const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
       mode = systemPrefersDark ? "dark" : "light";
     }
 
@@ -86,12 +81,10 @@ export default function ThemePicker({ className = "" }) {
     setMetaThemeColor(mode);
   };
 
-  const setThemeColor = (index) => {
+  const setThemeColor = (index: number) => {
     const colorClass = `theme${index}`;
     // Remove old theme color classes
-    document.body.classList.remove(
-      ...(document.body.className.match(/theme\d+/g) || [])
-    );
+    document.body.classList.remove(...(document.body.className.match(/theme\d+/g) || []));
     document.body.classList.add(colorClass); // Apply the new theme to body
 
     localStorage.setItem("themeColor", colorClass);

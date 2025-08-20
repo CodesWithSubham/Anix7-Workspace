@@ -5,7 +5,7 @@
 import Image from "next/image";
 import Error from "./Error";
 
-export default function GlobalErrorLayout({ error, reset }) {
+export default function GlobalErrorLayout({ error }: { error: Error }) {
   // Infer error code based on the error message
   const errorCode = error.message?.includes("Mongo")
     ? 502 // Database errors
@@ -20,13 +20,7 @@ export default function GlobalErrorLayout({ error, reset }) {
       <body className="h-[80vh] relative flex flex-col justify-center items-center bg-slate-300">
         <header className=" absolute top-0 w-full flex justify-between items-center p-3">
           <div className="flex items-center gap-2">
-            <Image
-              src="/favicon.ico"
-              alt="favicon"
-              width={50}
-              height={50}
-              className="w-9"
-            />
+            <Image src="/favicon.ico" alt="favicon" width={50} height={50} className="w-9" />
             <span className="text-xl font-bold">Anix7 - Tools</span>
           </div>
           <span>

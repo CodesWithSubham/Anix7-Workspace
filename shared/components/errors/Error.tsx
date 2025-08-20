@@ -16,34 +16,16 @@ export default function Error() {
       return () => clearInterval(interval);
     }
   }, [timer]);
-  
+
   return (
     <article className="flex flex-col gap-2 justify-center items-center text-center">
       <h1>Something went wrong!</h1>
-      <svg
-        alt="Web browser with concerned expression"
-        viewBox="0 0 151 140"
-        className="w-60 h-60"
-      >
+      <svg viewBox="0 0 151 140" className="w-60 h-60">
         <title>Just a moment...</title>
-        <g
-          id="Well shoot..."
-          stroke="none"
-          strokeWidth="1"
-          fill="none"
-          fillRule="evenodd"
-        >
+        <g id="Well shoot..." stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           <g transform="translate(-31.000000, -40.000000)">
             <g transform="translate(31.000000, 40.000000)">
-              <rect
-                id="exclaim-1"
-                fill="#584B86"
-                x="22"
-                y="0"
-                width="2"
-                height="14"
-                rx="1"
-              />
+              <rect id="exclaim-1" fill="#584B86" x="22" y="0" width="2" height="14" rx="1" />
               <rect
                 id="exclaim-2"
                 fill="#584B86"
@@ -73,15 +55,7 @@ export default function Error() {
                 rx="72"
                 ry="10.5"
               />
-              <rect
-                id="body"
-                fill="#FFFFFF"
-                x="22"
-                y="22"
-                width="114"
-                height="106"
-                rx="9"
-              />
+              <rect id="body" fill="#FFFFFF" x="22" y="22" width="114" height="106" rx="9" />
               <polygon
                 id="toolbar"
                 fill="#CDCADD"
@@ -142,14 +116,7 @@ export default function Error() {
                 rx="9"
               />
               <g id="eyes">
-                <ellipse
-                  id="eye-left"
-                  fill="#584B86"
-                  cx="56.5"
-                  cy="72.5"
-                  rx="3.5"
-                  ry="3.5"
-                >
+                <ellipse id="eye-left" fill="#584B86" cx="56.5" cy="72.5" rx="3.5" ry="3.5">
                   <animate
                     attributeName="ry"
                     repeatCount="indefinite"
@@ -162,14 +129,7 @@ export default function Error() {
                     d="leftEyeAnim"
                   />
                 </ellipse>
-                <ellipse
-                  id="eye-right"
-                  fill="#584B86"
-                  cx="101.5"
-                  cy="72.5"
-                  rx="3.5"
-                  ry="3.5"
-                >
+                <ellipse id="eye-right" fill="#584B86" cx="101.5" cy="72.5" rx="3.5" ry="3.5">
                   <animate
                     attributeName="ry"
                     repeatCount="indefinite"
@@ -194,15 +154,7 @@ export default function Error() {
                       H 0
                       "
                 />
-                <rect
-                  id="mouth"
-                  fill="#584B86"
-                  x="65"
-                  y="94"
-                  width="28"
-                  height="2"
-                  rx="1"
-                />
+                <rect id="mouth" fill="#584B86" x="65" y="94" width="28" height="2" rx="1" />
               </g>
             </g>
           </g>

@@ -1,12 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { XSvg } from "../svg/XSvg";
 import { Button } from "./Button";
 import { DocumentSvg } from "../svg/DocumentSvg";
 
-export function WorkBox({ children, className = "", ...props }) {
+export function WorkBox({ children, className = "", ...props }: React.HTMLProps<HTMLDivElement>) {
   return (
     <div
       className={twMerge(
@@ -31,11 +31,20 @@ export function PopUpBox({
   closeable = false,
   onClose = () => {},
   ...props
-}) {
+}: React.PropsWithChildren<{
+  id?: string;
+  visible?: boolean;
+  className?: string;
+  header?: React.ReactNode;
+  svg?: React.ReactNode;
+  closeable?: boolean;
+  onClose?: () => void;
+}> &
+  React.HTMLProps<HTMLDivElement>) {
   const [isScrollable, setIsScrollable] = useState(false);
   const [isAtBottom, setIsAtBottom] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const scrollRef = useRef(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setIsVisible(visible);
@@ -95,6 +104,7 @@ export function PopUpBox({
         className={`fixed inset-0 z-98 bg-black/40 transition-opacity duration-500 ${
           isVisible ? "visible opacity-100" : "opacity-0 invisible"
         }`}
+        {...props}
       >
         <div className="fixed inset-0 z-99 p-5 flex flex-col justify-center items-center">
           <div className="relative bg-slate-50 dark:bg-neutral-900 w-full max-w-xl pt-4 px-5 pb-6 rounded-3xl">
@@ -109,9 +119,7 @@ export function PopUpBox({
 
             <div className="mx-auto mb-1 w-6">{svg || <DocumentSvg />}</div>
 
-            <div className="text-lg md:text-xl font-bold mb-2 text-center">
-              {header}
-            </div>
+            <div className="text-lg md:text-xl font-bold mb-2 text-center">{header}</div>
 
             <div
               className="max-h-[55vh] overflow-x-hidden overflow-y-auto"
@@ -149,9 +157,21 @@ function DoubleDownIcon() {
   );
 }
 
-export function Note({ children, className = "", type, ...props }) {
+export function Note({
+  children,
+  className = "",
+  type,
+  ...props
+}: {
+  children: React.ReactNode;
+  className?: string;
+  type?: string;
+} & React.HTMLProps<HTMLDivElement>) {
   return (
-    <div className="my-2 relative pt-5 pl-12 pr-5 bg-(--headerB) dark:bg-neutral-800 rounded-xl overflow-hidden">
+    <div
+      className="my-2 relative pt-5 pl-12 pr-5 bg-(--headerB) dark:bg-neutral-800 rounded-xl overflow-hidden"
+      {...props}
+    >
       <div className="absolute w-14 h-14 bg-black/5 rounded-full -top-3 -left-3" />
       <div className=" absolute left-4 top-4">&#9733;</div>
       {children}
@@ -159,7 +179,11 @@ export function Note({ children, className = "", type, ...props }) {
   );
 }
 
-export function ShadowBox({ children, className = "", ...props }) {
+export function ShadowBox({
+  children,
+  className = "",
+  ...props
+}: { children: React.ReactNode; className?: string } & React.HTMLProps<HTMLDivElement>) {
   return (
     <div
       className={twMerge(

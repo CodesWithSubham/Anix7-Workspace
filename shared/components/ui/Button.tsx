@@ -58,7 +58,7 @@ export function Button({
 export const IconButton = ({
   className,
   ...props
-}: ButtonAsButton & {
+}: ButtonProps & {
   children?: React.ReactNode;
 }) => {
   return (

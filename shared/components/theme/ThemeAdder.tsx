@@ -44,7 +44,7 @@ export default function ThemeAdder() {
       const themeColor = rootStyles.getPropertyValue("--themeC")?.trim();
 
       if (themeColor) {
-        let themeMeta = document.querySelector("meta[name='theme-color']");
+        let themeMeta = document.querySelector<HTMLMetaElement>("meta[name='theme-color']");
         if (!themeMeta) {
           themeMeta = document.createElement("meta");
           themeMeta.name = "theme-color";

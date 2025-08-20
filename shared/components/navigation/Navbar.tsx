@@ -15,19 +15,10 @@ export default async function Navbar({ appName = "Anix7", appSubName = "" }) {
           <div className="flex items-center w-56 pl-4 md:pl-5 transition-all">
             <div className="basis-7 text-xs flex">
               <IconButton className="tNav mx-0" htmlFor="SideBarInput">
-                <svg
-                  className="line *:opacity-0 *:transition-all"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="line *:opacity-0 *:transition-all" viewBox="0 0 24 24">
                   <g className="h1">
                     <path d="M 3 18 H 14 M 10 6 H 21"></path>
-                    <line
-                      className="svgC"
-                      x1="3"
-                      x2="21"
-                      y1="12"
-                      y2="12"
-                    ></line>
+                    <line className="svgC" x1="3" x2="21" y1="12" y2="12"></line>
                   </g>
                   <g
                     className="h2"

@@ -3,7 +3,7 @@
 
 import { useSession } from "next-auth/react";
 
-export function IfLoggedIn({ children }) {
+export function IfLoggedIn({ children }: React.PropsWithChildren<{}>) {
   const { data: session, status } = useSession();
 
   if (status === "loading") return null; // optional: show nothing during loading
@@ -12,7 +12,7 @@ export function IfLoggedIn({ children }) {
   return <>{children}</>;
 }
 
-export function IfLoggedOut({ children }) {
+export function IfLoggedOut({ children }: React.PropsWithChildren<{}>) {
   const { data: session, status } = useSession();
 
   if (status === "loading") return null;

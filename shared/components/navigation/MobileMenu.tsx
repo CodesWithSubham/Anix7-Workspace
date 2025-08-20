@@ -45,7 +45,7 @@ const menuItems = [
   },
 ];
 
-export default async function MobileMenu() {
+export default function MobileMenu() {
   return (
     <>
       <div className="fixed bottom-0 left-0 right-0 z-10 bg-(--mobB) shadow-[0_-10px_25px_-5px_#00000020] rounded-t-3xl px-5 md:hidden dark:bg-neutral-800">

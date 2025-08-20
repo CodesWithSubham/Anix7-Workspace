@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { IconButton } from "../ui/Button";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Hr from "../ui/Hr";
 import { twJoin, twMerge } from "tailwind-merge";
 import { usePathname } from "next/navigation";
@@ -16,7 +16,19 @@ import { DisclaimerSvg } from "../svg/DisclaimerSvg";
 import { DocumentSecureSvg } from "../svg/DocumentSvg";
 import { PowerButtonSvg } from "../svg/PowerButtonSvg";
 
-const commonMenu = [
+type MenuItemDefault = {
+  label: string;
+  icon: React.ReactNode;
+  url?: string;
+  onClick?: () => void;
+  hr?: boolean;
+  showOnLoggedIn?: boolean;
+  showOnLoggedOut?: boolean;
+};
+type MenuItem = MenuItemDefault & {
+  subMenu?: MenuItem[];
+};
+const commonMenu: MenuItem[] = [
   {
     label: "About Us",
     icon: <ProfileGroupSvg />,
@@ -56,7 +68,7 @@ const commonQuickURLs = [
 
 export default function SlideBarLayout({ menuItem = [], quickURLs = [] }) {
   const { data: session } = useSession();
-  const checkboxRef = useRef(null);
+  const checkboxRef = useRef<HTMLInputElement | null>(null);
   const pathname = usePathname();
   const finalQuickURLs = [...quickURLs, ...commonQuickURLs].slice(0, 3); // maximum 3 items
   // Clone menuItem to avoid mutating props
@@ -73,8 +85,7 @@ export default function SlideBarLayout({ menuItem = [], quickURLs = [] }) {
   }
   // Add menu items based on session state
   const filteredMenu = updatedMenu.filter(
-    (item) =>
-      !((!session && item.showOnLoggedIn) || (session && item.showOnLoggedOut))
+    (item) => !((!session && item.showOnLoggedIn) || (session && item.showOnLoggedOut))
   );
   // Auto-close sidebar on route change if on mobile
   useEffect(() => {
@@ -90,9 +101,7 @@ export default function SlideBarLayout({ menuItem = [], quickURLs = [] }) {
     <>
       {/* SideBar Input */}
       <style>
-        {showSideBar
-          ? `.tNav .h2 {opacity: 1 !important;}`
-          : `.tNav .h1 {opacity: 1 !important;}`}
+        {showSideBar ? `.tNav .h2 {opacity: 1 !important;}` : `.tNav .h1 {opacity: 1 !important;}`}
       </style>
       <input
         type="checkbox"
@@ -125,18 +134,11 @@ export default function SlideBarLayout({ menuItem = [], quickURLs = [] }) {
                 showSideBar ? "md:w-56" : "md:w-16 md:pb-4"
               }`}
             >
-              <div
-                className={
-                  showSideBar ? "whitespace-nowrap overflow-hidden" : "hidden"
-                }
-              >
+              <div className={showSideBar ? "whitespace-nowrap overflow-hidden" : "hidden"}>
                 <ul className="space-x-2 *:inline">
                   {finalQuickURLs.map((val, i) => (
                     <li key={i}>
-                      <Link
-                        href={val.url}
-                        className="text-inherit hover:underline"
-                      >
+                      <Link href={val.url} className="text-inherit hover:underline">
                         {val.label}
                       </Link>
                     </li>
@@ -204,15 +206,11 @@ export default function SlideBarLayout({ menuItem = [], quickURLs = [] }) {
             >
               <ul
                 className="[&_svg]:opacity-80"
-                itemScope="itemScope"
+                itemScope
                 itemType="https://schema.org/SiteNavigationElement"
               >
                 {filteredMenu.map((item, index) => (
-                  <SideBarItem
-                    key={index}
-                    item={item}
-                    showSideBar={showSideBar}
-                  />
+                  <SideBarItem key={index} item={item} showSideBar={showSideBar} />
                 ))}
               </ul>
             </div>
@@ -229,8 +227,25 @@ export default function SlideBarLayout({ menuItem = [], quickURLs = [] }) {
   );
 }
 
-function SideBarItem({ item, showSideBar }) {
-  const Comp = item.url ? Link : "button";
+function CompWrapper({
+  href,
+  children,
+  ...rest
+}: {
+  href?: string;
+  children: React.ReactNode;
+} & React.HTMLAttributes<HTMLElement>) {
+  if (href) {
+    return (
+      <Link href={href} {...rest}>
+        {children}
+      </Link>
+    );
+  }
+  return <button {...rest}>{children}</button>;
+}
+
+function SideBarItem({ item, showSideBar }: { item: MenuItem; showSideBar: boolean }) {
   return (
     <li
       className={`relative  [&_svg]:shrink-0 ${
@@ -264,9 +279,7 @@ function SideBarItem({ item, showSideBar }) {
               {item.label}
             </span>
             <svg
-              className={`line transition-all duration-300 d ${
-                showSideBar ? "" : "hidden"
-              }`}
+              className={`line transition-all duration-300 d ${showSideBar ? "" : "hidden"}`}
               viewBox="0 0 24 24"
             >
               <g transform="translate(5.000000, 8.500000)">
@@ -282,9 +295,7 @@ function SideBarItem({ item, showSideBar }) {
                 : "md:m-0 md:overflow-hidden md:block md:absolute md:left-5 md:top-1 p-0.5 pl-4 pt-2 bg-transparent md:opacity-0 md:invisible md:z-10"
             )}
           >
-            {showSideBar && (
-              <span className="border-l absolute h-[calc(100%-20px)] left-3.5 " />
-            )}
+            {showSideBar && <span className="border-l absolute h-[calc(100%-20px)] left-3.5 " />}
             <ul
               className={twJoin(
                 "ml-2",
@@ -293,21 +304,18 @@ function SideBarItem({ item, showSideBar }) {
               )}
             >
               {item.subMenu.map((subItem, i) => {
-                const SubComp = subItem.url ? Link : "button";
                 return (
                   <li
                     key={i}
                     itemProp="name"
                     className={twMerge(
                       `relative block whitespace-nowrap overflow-hidden text-ellipsis grow shrink-0 *:text-inherit hover:*:text-(--linkC)`,
-                      showSideBar
-                        ? "overflow-visible w-full mt-2"
-                        : "rounded-none"
+                      showSideBar ? "overflow-visible w-full mt-2" : "rounded-none"
                     )}
                   >
                     {!showSideBar && i !== 0 && <Hr className="my-1" />}
-                    <SubComp
-                      href={subItem.url}
+                    <CompWrapper
+                      {...(subItem.url ? { href: subItem.url } : {})}
                       aria-label={subItem.label}
                       onClick={subItem.onClick}
                       className={`peer flex items-center gap-2 relative w-full rounded-lg cursor-pointer py-2 px-2 hover:bg-black/10 transition-all duration-300 *:line-clamp-1 *:flex [&>svg]:mr-1 ${
@@ -318,7 +326,7 @@ function SideBarItem({ item, showSideBar }) {
                     >
                       {subItem.icon}
                       {subItem.label}
-                    </SubComp>
+                    </CompWrapper>
                     {showSideBar && (
                       <span className="border-b border-dotted absolute rounded-none -left-[21px] top-1/2 -translate-y-1/2 w-5 peer-hover:border-(--linkC)" />
                     )}
@@ -329,7 +337,7 @@ function SideBarItem({ item, showSideBar }) {
           </div>
         </>
       ) : (
-        <Comp
+        <CompWrapper
           href={item.url}
           aria-label={item.label}
           className={twJoin(
@@ -356,7 +364,7 @@ function SideBarItem({ item, showSideBar }) {
               {item.label}
             </span>
           </span>
-        </Comp>
+        </CompWrapper>
       )}
       {item.hr && <Hr className="w-full my-2" />}
     </li>
