@@ -1,6 +1,6 @@
 // Do not use any script that is not compatible with Edge Runtime in this file
 
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthConfig, NextAuthResult } from "next-auth";
 
 import credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
@@ -22,14 +22,10 @@ const adminList = [
 ];
 
 // ✅ Added getRole util
-function getRole(email) {
-  return email === OWNER_EMAIL
-    ? "owner"
-    : adminList.includes(email)
-    ? "admin"
-    : "user"; // Check if the email matches the owner email or is in the admin list
+function getRole(email: string) {
+  return email === OWNER_EMAIL ? "owner" : adminList.includes(email) ? "admin" : "user"; // Check if the email matches the owner email or is in the admin list
 }
-async function getUserFromDb(email) {
+async function getUserFromDb(email: string) {
   try {
     const response = await fetch(`${AUTH_BASE_URL}/api/auth/getUserByEmail`, {
       method: "POST",
@@ -54,7 +50,14 @@ async function getUserFromDb(email) {
   }
 }
 
-async function createUser(userDetails) {
+async function createUser(userDetails: {
+  firstName: string;
+  lastName: string | null;
+  email: string;
+  profilePic: string | null | undefined;
+  isVerified: boolean;
+  referredBy?: string | null; // Optional, can be null if not referred
+}) {
   try {
     const response = await fetch(`${AUTH_BASE_URL}/api/auth/createUser`, {
       method: "POST",
@@ -80,16 +83,17 @@ async function createUser(userDetails) {
 
 function getCookieDomain() {
   try {
+    if (!process.env.AUTH_BASE_URL) {
+      throw new Error("❌ AUTH_BASE_URL is not defined");
+    }
+
     const url = new URL(process.env.AUTH_BASE_URL);
     const hostname = url.hostname;
 
     if (hostname === "localhost") return undefined; // For local dev
 
-    // Example: tools.anix7.in -> ['tools', 'anix7', 'in']
     const parts = hostname.split(".");
-
     if (parts.length >= 2) {
-      // Get last two parts: 'anix7.in'
       const baseDomain = parts.slice(-2).join(".");
       return `.${baseDomain}`; // -> '.anix7.in'
     }
@@ -101,12 +105,7 @@ function getCookieDomain() {
   }
 }
 
-export const {
-  handlers: { GET, POST },
-  auth,
-  signIn,
-  signOut,
-} = NextAuth({
+const config: NextAuthConfig = {
   session: {
     strategy: "jwt",
   },
@@ -125,9 +124,7 @@ export const {
         if (!credentials) return null;
 
         try {
-          const { email, password } = await signInSchema.parseAsync(
-            credentials
-          );
+          const { email, password } = await signInSchema.parseAsync(credentials);
 
           const userData = await getUserFromDb(email);
           if (!userData) {
@@ -142,15 +139,8 @@ export const {
             // throw new Error("Invalid email or password");
           }
 
-          const {
-            userId,
-            firstName,
-            lastName,
-            isVerified,
-            profilePic,
-            balance,
-            referredBy,
-          } = userData;
+          const { userId, firstName, lastName, isVerified, profilePic, balance, referredBy } =
+            userData;
 
           // Return user data for the session
           const user = {
@@ -185,7 +175,7 @@ export const {
   callbacks: {
     async signIn({ user, account, profile }) {
       try {
-        if (account.provider === "google") {
+        if (account?.provider === "google") {
           if (!user?.email) {
             return false; // Reject sign-in
           }
@@ -198,7 +188,7 @@ export const {
             const referredBy = cookieStore.get("referral_id")?.value || null;
 
             return await createUser({
-              firstName: user.name,
+              firstName: user.name || "User",
               lastName: null,
               email: user.email,
               isVerified: profile?.email_verified || false,
@@ -214,48 +204,23 @@ export const {
         return false; // Reject sign-in
       }
     },
-    async jwt({ token, user, account, profile }) {
-      // Persist the OAuth access_token and or the user id to the token right after signin
-      if (user && account) {
-        // token.accessToken = account?.access_token
-        // token.id = profile.id
-
-        const userData = user.userId ? user : await getUserFromDb(token.email);
-
-        token.userId = userData?.userId;
-        token.firstName = userData?.firstName;
-        token.lastName = userData?.lastName;
-        token.isVerified = userData?.isVerified;
-        token.profilePic = userData?.profilePic;
-        token.balance = userData?.balance;
-        token.referredBy = userData?.referredBy;
-        token.loggedBy = account?.provider;
-        token.role = getRole(userData.email); // ✅ Added getRole flag
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = {
+          ...user,
+          role: user.email ? getRole(user.email) : "user",
+        };
       }
       return token;
     },
     session({ session, token }) {
-      if (token) {
-        // token.accessToken = account?.access_token
-        // token.id = profile.id
-        session.user.userId = token.userId;
-        session.user.firstName = token.firstName;
-        session.user.lastName = token.lastName;
-        session.user.isVerified = token.isVerified;
-        session.user.profilePic = token.profilePic;
-        // session.user.balance = token.balance
-        // session.user.referredBy = token.referredBy
-        session.loggedBy = token.loggedBy;
-        session.user.role = token.role; // ✅ Expose getRole
-      }
+      if (token.user) session.user = token.user as any; // Cast to any to avoid type issues
       return session;
     },
   },
   cookies: {
     sessionToken: {
-      name: `${
-        process.env.NODE_ENV === "production" ? "__Secure-" : ""
-      }authjs.session-token`,
+      name: `${process.env.NODE_ENV === "production" ? "__Secure-" : ""}authjs.session-token`,
       options: {
         httpOnly: true,
         sameSite: "lax",
@@ -265,4 +230,32 @@ export const {
       },
     },
   },
-});
+};
+
+const authSetup = NextAuth(config) as NextAuthResult;
+
+export const {
+  handlers: { GET, POST },
+  auth,
+  signIn,
+  signOut,
+} = authSetup;
+
+// 👇 Customize this according to your `AuthUser` shape
+declare module "next-auth" {
+  interface User {
+    userId: number;
+    firstName: string;
+    lastName?: string;
+    isVerified: boolean;
+    profilePic?: string | null;
+    balance?: {
+      diamond: number;
+      coin: number;
+      life: number;
+    };
+    referredBy?: string | null; // Optional, can be null if not referred
+    loggedBy?: "credentials" | "google" | "github"; // Auth provider
+    role?: "user" | "owner" | "admin";
+  }
+}

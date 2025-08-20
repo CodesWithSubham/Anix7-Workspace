@@ -1,1 +1,1 @@
-export { GET, POST } from "@shared/lib/auth/index.js";
+export { GET, POST } from "@shared/lib/auth";

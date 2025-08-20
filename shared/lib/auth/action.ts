@@ -123,8 +123,8 @@ export async function signUpVerificationSendOtp(data: {
     // Find existing OTP record
     const oldOtp = await SignUpOtp.findOne({ email: validEmail });
 
-    if (oldOtp) {
-      const timeElapsed = now - oldOtp.firstTry;
+    if (oldOtp && oldOtp.firstTry && oldOtp.lastTry) {
+      const timeElapsed = now - oldOtp.firstTry.getTime();
       const isBlocked = oldOtp.totalTries >= 3 && timeElapsed < RETRY_INTERVAL;
       if (isBlocked) {
         return {
@@ -137,10 +137,10 @@ export async function signUpVerificationSendOtp(data: {
 
       oldOtp.otp = otp;
       const tmp = new Date(oldOtp.lastTry);
-      oldOtp.lastTry = now;
+      oldOtp.lastTry = new Date(now);
       oldOtp.totalTries = oldOtp.totalTries + 1;
       oldOtp.firstName = firstName;
-      oldOtp.lastName = lastName;
+      oldOtp.lastName = lastName || "";
       oldOtp.totalInputTries = 0;
 
       // On the 4th attempt, reset tracking
@@ -197,7 +197,8 @@ async function generateUniqueUserId(digits = 10) {
     userId = Math.floor(min + Math.random() * (max - min));
 
     // Check if the generated userId already exists
-    exists = await User.exists({ userId });
+    // Convert `Document | null` to boolean
+    exists = !!(await User.exists({ userId }));
   }
 
   return userId;
