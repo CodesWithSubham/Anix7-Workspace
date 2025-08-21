@@ -20,9 +20,9 @@ const menuItem = [
         url: "https://tools.anix7.in",
       },
       {
-        label: "Url Shortner",
+        label: "Url Shortener",
         icon: <UrlSvg />,
-        url: "https://tools.anix7.in/url-shortner",
+        url: "https://tools.anix7.in/url-shortener",
       },
       {
         label: "QR Code Generator",

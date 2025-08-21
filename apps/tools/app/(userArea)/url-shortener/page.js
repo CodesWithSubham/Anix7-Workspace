@@ -1,10 +1,10 @@
-// /app/(pages)/url-shortner/page.js
+// /app/(pages)/url-shortener/page.js
 
 import Image from "next/image";
-import UrlShortner from "./UrlShortner";
 import { IfLoggedIn, IfLoggedOut } from "@shared/components/auth/LoggedInWrapper";
 import { WorkBox } from "@shared/components/ui/Boxes";
 import { Button } from "@shared/components/ui/Button";
+import UrlShortener from "./UrlShortener";
 
 export const metadata = {
   title: "Simple, fast, and secure URL Shortener",
@@ -39,7 +39,7 @@ export const metadata = {
     "shareable URL shortening",
     "shorten links for tracking",
     "URL shortener for content creators",
-    "short URLs for influencers",
+    "short URLs for influencer",
     "short link generator with analytics",
     "easily create tiny URLs",
     "personalized link shortener",
@@ -48,7 +48,7 @@ export const metadata = {
     "anonymized URL shortener",
     "safe URL shortener",
     "efficient URL shortening",
-    "URL shortener for ecommerce",
+    "URL shortener for e-commerce",
     "create fast short links",
     "short link generator for businesses",
     "brandable short links",
@@ -80,7 +80,7 @@ export const metadata = {
   ],
 
   openGraph: {
-    url: `/url-shortner`,
+    url: `/url-shortener`,
     siteName: "Anix7 Tools",
     images: [
       {
@@ -93,7 +93,7 @@ export const metadata = {
     type: "website",
   },
   twitter: { card: "summary_large_image" },
-  alternates: { canonical: "/url-shortner" },
+  alternates: { canonical: "/url-shortener" },
   addToSitemap: true,
 };
 
@@ -138,7 +138,7 @@ export default async function ImageUploading() {
   return (
     <>
       <IfLoggedIn>
-        <UrlShortner />
+        <UrlShortener />
       </IfLoggedIn>
 
       <div className="my-5">

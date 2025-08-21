@@ -3,6 +3,11 @@ export function verifyMail({
   userEmail,
   otp,
   profilePicLink,
+}: {
+  userName: string;
+  userEmail: string;
+  otp: string;
+  profilePicLink: string;
 }) {
   const baseUrl = process.env.BASE_URL;
   const contactEmail = process.env.CONTACT_EMAIL;

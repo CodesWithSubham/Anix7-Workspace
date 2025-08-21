@@ -1,4 +1,4 @@
-// /app/(pages)/url-shortner/page.js
+// /app/(pages)/url-shortener/page.js
 
 "use client";
 import { useState } from "react";
@@ -12,7 +12,7 @@ import { ErrorText } from "@shared/components/ui/Texts";
 import { CircleLoadingSvg } from "@shared/components/svg/LoadingSvg";
 import { Button } from "@shared/components/ui/Button";
 
-export default function UrlShortner() {
+export default function UrlShortener() {
   // Create URL Box
   const [longUrl, setLongUrl] = useState("");
   const [urlError, setUrlError] = useState("");
@@ -20,7 +20,7 @@ export default function UrlShortner() {
   const [isAlias, setIsAlias] = useState(false);
   const [alias, setAlias] = useState("");
   const [aliasError, setAliasError] = useState("");
-  const [aliseLoading, setAliseLoading] = useState(false);
+  const [aliasLoading, setAliasLoading] = useState(false);
   const [shortUrl, setShortUrl] = useState("");
   // My URLs
   const [urls, setUrls] = useState([]);
@@ -45,7 +45,7 @@ export default function UrlShortner() {
     }
 
     try {
-      setAliseLoading(true);
+      setAliasLoading(true);
 
       // 🔥 Use server action directly
       const res = await checkAlias({ alias: value });
@@ -64,7 +64,7 @@ export default function UrlShortner() {
       console.error("Error checking alias:", error);
       setAliasError("Something went wrong. Please try again.");
     } finally {
-      setAliseLoading(false);
+      setAliasLoading(false);
     }
   };
 
@@ -160,7 +160,7 @@ export default function UrlShortner() {
               />
 
               <span className="absolute top-1/2 right-3 -translate-y-1/2 text-green-600 font-bold">
-                {alias ? "Avalable ✓" : aliseLoading && <CircleLoadingSvg />}
+                {alias ? "Available ✓" : aliasLoading && <CircleLoadingSvg />}
               </span>
 
               <ErrorText>{aliasError}</ErrorText>

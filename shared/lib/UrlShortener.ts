@@ -1,9 +1,9 @@
-// lib/UrlShortner.js
+// lib/UrlShortener.ts
 
 import getShortUrlModel from "./db/models/ShortUrl";
 
 // Function to get URL by alias
-export async function getUrl(alias) {
+export async function getUrl(alias: string) {
   const ShortUrl = await getShortUrlModel();
   const url = await ShortUrl.findOne({ alias });
   return url;
@@ -23,7 +23,7 @@ export async function generateAlias() {
 }
 
 // Function to create a new short URL
-export async function createShortUrl(longUrl, uploadedBy) {
+export async function createShortUrl(longUrl: string, uploadedBy: string) {
   const alias = await generateAlias();
   const ShortUrl = await getShortUrlModel();
   const newShortUrl = new ShortUrl({
@@ -41,14 +41,14 @@ export async function createShortUrl(longUrl, uploadedBy) {
 }
 
 // Function to update the URL's details
-export async function updateShortUrl(alias, updates) {
+export async function updateShortUrl(alias: string, updates: Partial<{ longUrl: string; adsLabel: number; expiredAt: Date }>) {
   const ShortUrl = await getShortUrlModel();
   const shortUrl = await ShortUrl.findOneAndUpdate({ alias }, { $set: updates }, { new: true });
   return shortUrl;
 }
 
 // Function to delete a short URL by alias
-export async function deleteShortUrl(alias) {
+export async function deleteShortUrl(alias: string) {
   const ShortUrl = await getShortUrlModel();
   const deletedUrl = await ShortUrl.findOneAndDelete({ alias });
   return deletedUrl;

@@ -12,20 +12,20 @@ export function Input({
   placeholder = "Enter...",
   className = "",
   maxLength = 256,
-  onChange = (e) => {},
+  onChange = (e: React.ChangeEvent<HTMLInputElement>) => {},
   label = "",
   labelClassName = "",
   ...props
 }) {
-  const ref = useRef();
+  const ref = useRef<NodeJS.Timeout | null>(null);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (props.value !== undefined) {
       // Controlled component — skip debounce
       onChange(e);
     } else {
       // Uncontrolled — debounce the onChange
-      clearTimeout(ref.current);
+      clearTimeout(ref.current as NodeJS.Timeout);
       ref.current = setTimeout(() => onChange(e), debounceTime);
     }
   };
@@ -58,19 +58,14 @@ export function Input({
   );
 }
 
-export function CopyInput({ value, className = "", ...props }) {
+export function CopyInput({ value, className = "", ...props }: React.HTMLProps<HTMLInputElement>) {
   return (
     <div className="relative">
-      <Input
-        readOnly
-        defaultValue={value}
-        className={twMerge("pr-8", className)}
-        {...props}
-      />
+      <Input readOnly defaultValue={value} className={twMerge("pr-8", className)} {...props} />
       <svg
         role="button"
         viewBox="0 0 24 24"
-        onClick={() => copyToClipboard(value)}
+        onClick={() => copyToClipboard((value || "").toString())}
         className="fill-(--linkC) absolute top-1/2 -translate-y-1/2 right-1 hover:scale-110 cursor-pointer transition-all duration-500"
       >
         <path d="M16 20H8a3 3 0 0 1-3-3V7a1 1 0 0 0-2 0v10a5 5 0 0 0 5 5h8a1 1 0 0 0 0-2Zm5-11.06a1.31 1.31 0 0 0-.06-.27v-.09a1.07 1.07 0 0 0-.19-.28l-6-6a1.07 1.07 0 0 0-.28-.19h-.09L14.06 2H10a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8.94Zm-6-3.53L17.59 8H16a1 1 0 0 1-1-1ZM19 15a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3v3a3 3 0 0 0 3 3h3Z" />
@@ -135,12 +130,12 @@ export function ColorWithInput({
   value = "#ffffff",
   placeholder = "Enter Hex Color Code",
   className = "",
-  onChange = () => {},
+  onChange = (color: string) => {},
   debounceTime = 300,
   ...props
 }) {
   const [localColor, setLocalColor] = useState(value);
-  const debounceRef = useRef();
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
   // Sync when external value changes
   useEffect(() => {
@@ -149,32 +144,27 @@ export function ColorWithInput({
 
   // Debounced onChange
   useEffect(() => {
-    clearTimeout(debounceRef.current);
+    clearTimeout(debounceRef.current as NodeJS.Timeout);
     debounceRef.current = setTimeout(() => {
       if (localColor.length === 7 && localColor !== value) {
         onChange(localColor);
       }
     }, debounceTime);
 
-    return () => clearTimeout(debounceRef.current);
+    return () => clearTimeout(debounceRef.current as NodeJS.Timeout);
   }, [localColor, debounceTime, onChange, value]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLocalColor(e.target.value);
   };
 
   return (
     <div className={`flex gap-2 ${className}`} {...props}>
-      <Input
-        value={localColor}
-        onChange={handleChange}
-        placeholder={placeholder}
-        maxLength={7}
-      />
+      <Input value={localColor} onChange={handleChange} placeholder={placeholder} maxLength={7} />
       <ColorInput
         className="w-24"
         value={localColor}
-        onChange={(e) => setLocalColor(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocalColor(e.target.value)}
       />
     </div>
   );
@@ -186,12 +176,12 @@ export function SliderWithTooltip({
   value = 25,
   step = 1,
   name = "range",
-  onChange = () => {}, // Function to update parent state
+  onChange = (e: React.ChangeEvent<HTMLInputElement>) => {}, // Function to update parent state
   ...props
 }) {
   const [v, setV] = useState(value);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = Number(e.target.value);
     setV(newValue);
     onChange(e); // Call parent function
@@ -233,14 +223,14 @@ export function TextArea({
   placeholder = "Enter Your Text...",
   className = "",
   maxLength = 256,
-  onChange = () => {}, // Function to update parent state
+  onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {}, // Function to update parent state
   ...props
 }) {
   const [count, setCount] = useState(0);
-  const ref = useRef();
+  const ref = useRef<NodeJS.Timeout | null>(null);
 
-  const handleChange = (e) => {
-    clearTimeout(ref.current);
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    clearTimeout(ref.current as NodeJS.Timeout);
     setCount(e.target.value.length);
     ref.current = setTimeout(() => onChange(e), debounceTime);
   };
@@ -254,37 +244,40 @@ export function TextArea({
         onChange={handleChange}
         {...props}
       ></textarea>
-      <p
-        className={`text-xs -mt-3 ml-3 ${
-          count == maxLength ? "text-red-500" : ""
-        }`}
-      >
-        {count === 0
-          ? `Maximum ${maxLength} characters`
-          : `${maxLength - count} characters left`}
+      <p className={`text-xs -mt-3 ml-3 ${count == maxLength ? "text-red-500" : ""}`}>
+        {count === 0 ? `Maximum ${maxLength} characters` : `${maxLength - count} characters left`}
       </p>
     </div>
   );
 }
+
+type Option = string | { value: string | number; label: string };
+
+type Options = Option[] | Record<string, string>;
 
 export function Select({
   label = "",
   labelClassName = "",
   name = "select",
   value,
-  onChange = () => {}, // Function to update parent state
+  onChange = () => {},
   className = "",
   options = [],
   ...props
-}) {
+}: React.PropsWithChildren<{
+  label?: string;
+  labelClassName?: string;
+  name?: string;
+  value?: string | number;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  className?: string;
+  options?: Options;
+}>) {
   return (
     <div className={twMerge("w-full flex flex-col relative", label && "mt-3")}>
       {label && (
         <label
-          className={twMerge(
-            "text-xs text-(--linkC) absolute -top-2 left-1.5",
-            labelClassName
-          )}
+          className={twMerge("text-xs text-(--linkC) absolute -top-2 left-1.5", labelClassName)}
         >
           {label}
         </label>
@@ -297,11 +290,17 @@ export function Select({
         {...props}
       >
         {Array.isArray(options)
-          ? options.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))
+          ? options.map((option, i) =>
+              typeof option === "string" ? (
+                <option key={i} value={option}>
+                  {option}
+                </option>
+              ) : (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              )
+            )
           : Object.entries(options).map(([key, displayName]) => (
               <option key={key} value={key}>
                 {displayName}
@@ -317,11 +316,11 @@ export function Checkbox({
   checked = false,
   name = "checkbox",
   className = "",
-  onChange = () => {}, // Function to update parent state
+  onChange = (e: React.ChangeEvent<HTMLInputElement>) => {}, // Function to update parent state
   ...props
 }) {
   const [ck, setCk] = useState(checked);
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = e.target;
     setCk(checked);
     onChange(e);
@@ -329,10 +328,7 @@ export function Checkbox({
   return (
     <div>
       <label
-        className={twMerge(
-          "inline-flex items-center gap-2 cursor-pointer select-none",
-          className
-        )}
+        className={twMerge("inline-flex items-center gap-2 cursor-pointer select-none", className)}
       >
         <input
           type="checkbox"
@@ -351,25 +347,21 @@ export function Checkbox({
 export function OTPInput({
   value = "",
   maxLength = 6,
-  onChange = (e) => {},
+  onChange = (e: string) => {},
   className = "",
   ...props
 }) {
   const [otp, setOtp] = useState(
-    value
-      .split("")
-      .slice(0, maxLength)
-      .concat(Array(maxLength).fill(""))
-      .slice(0, maxLength)
+    value.split("").slice(0, maxLength).concat(Array(maxLength).fill("")).slice(0, maxLength)
   );
-  const inputRefs = useRef([]);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
     const otpValue = otp.join("");
     onChange(otpValue);
   }, [otp, onChange]);
 
-  const handleChangeOtp = (index, val) => {
+  const handleChangeOtp = (index: number, val: string) => {
     if (!/^\d*$/.test(val)) return; // only allow digits
     const updated = [...otp];
     updated[index] = val;
@@ -380,22 +372,16 @@ export function OTPInput({
     }
   };
 
-  const handleKeyDown = (index, e) => {
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
   };
 
-  const handlePaste = (e) => {
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const pasted = e.clipboardData
-      .getData("text")
-      .replace(/\D/g, "")
-      .slice(0, maxLength);
-    const updated = pasted
-      .split("")
-      .concat(Array(maxLength).fill(""))
-      .slice(0, maxLength);
+    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, maxLength);
+    const updated = pasted.split("").concat(Array(maxLength).fill("")).slice(0, maxLength);
     setOtp(updated);
     updated.forEach((_, i) => {
       if (inputRefs.current[i]) inputRefs.current[i].focus();
@@ -407,13 +393,13 @@ export function OTPInput({
       {otp.map((digit, index) => (
         <Input
           key={index}
-          ref={(el) => (inputRefs.current[index] = el)}
+          ref={(el: HTMLInputElement | null) => (inputRefs.current[index] = el)}
           type="text"
           inputMode="numeric"
           maxLength={1}
           value={digit}
           onChange={(e) => handleChangeOtp(index, e.target.value)}
-          onKeyDown={(e) => handleKeyDown(index, e)}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => handleKeyDown(index, e)}
           onPaste={handlePaste}
           autoComplete="off"
           placeholder="0"

@@ -7,7 +7,7 @@ import Navbar from "@shared/components/navigation/Navbar";
 import NoScriptWarning from "@shared/components/errors/NoScriptWarning";
 import ScrollToTopButton from "@shared/components/ScrollToTopButton";
 import Wave from "@shared/components/Wave";
-import SlideBar from "@/components/navigations/SlideBar";
+import SlideBar from "@/components/navigation/SlideBar";
 import DefaultHead from "@shared/head";
 import Providers from "@shared/providers";
 
@@ -17,7 +17,7 @@ const inter = Inter({
   display: "swap", // Best for avoiding layout shift
 });
 
-const baseUrl = process.env.BASE_URL;
+const baseUrl = process.env.BASE_URL!;
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
@@ -78,7 +78,7 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={inter.className}>
       <head>
@@ -101,7 +101,7 @@ export default function RootLayout({ children }) {
                 <Footer />
               </div>
             </div>
-            {/* Bottom Wave Animataion */}
+            {/* Bottom Wave Animation */}
             <Wave />
           </div>
         </Providers>

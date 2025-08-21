@@ -15,7 +15,7 @@ export default function Home() {
       title: "URL Shortener",
       description: "Shorten long URLs from various platforms and share them effortlessly",
       image: "/assets/img/link.png",
-      link: "/url-shortner",
+      link: "/url-shortener",
     },
     {
       title: "QR Code Generator",

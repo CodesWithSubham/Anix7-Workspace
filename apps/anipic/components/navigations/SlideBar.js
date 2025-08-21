@@ -21,9 +21,9 @@ const menuItem = [
     hr: true,
   },
   {
-    label: "Url Shortner",
+    label: "Url Shortener",
     icon: <UrlSvg />,
-    url: "/url-shortner",
+    url: "/url-shortener",
   },
   {
     label: "QR Code Generator",

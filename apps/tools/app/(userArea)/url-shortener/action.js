@@ -1,4 +1,4 @@
-// app/(userArea)/url-shortner/action.js
+// app/(userArea)/url-shortener/action.js
 "use server";
 
 import { auth } from "@shared/lib/auth";

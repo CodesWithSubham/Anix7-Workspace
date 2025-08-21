@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge";
 
-export default function Hr({ className = "", ...props }) {
+export default function Hr({ className = "", ...props }: React.HTMLProps<HTMLDivElement>) {
   return (
     <div
       className={twMerge(

@@ -8,6 +8,23 @@ import { XSvg } from "../svg/XSvg";
 import Link from "next/link";
 import { DeleteSvg } from "../svg/DeleteSvg";
 
+type DropZoneProps = {
+  accept?: Record<string, string[]>;
+  multiple?: boolean;
+  maxItem?: number;
+  maxSize?: number;
+  onFilesChange?: (files: ExtendedFile[]) => void;
+  label?: string;
+  disabled?: boolean;
+  className?: string;
+};
+
+// Custom file type with extra fields
+export type ExtendedFile = File & {
+  url?: string;
+  uid?: string;
+};
+
 export default function DropZone({
   accept = {
     "image/*": [".png", ".jpg", ".jpeg", ".webp", ".bmp", ".gif", ".svg"],
@@ -20,10 +37,11 @@ export default function DropZone({
   label = "Drag & drop some files here, or click to select files",
   disabled = false,
   className = "",
-}) {
-  const [files, setFiles] = useState([]);
-  const [previewFile, setPreviewFile] = useState(null);
-  const [customErrors, setCustomErrors] = useState([]);
+}: DropZoneProps) {
+  const [files, setFiles] = useState<ExtendedFile[]>([]);
+  const [previewFile, setPreviewFile] = useState<ExtendedFile | null>(null);
+  const [customErrors, setCustomErrors] = useState<string[]>([]);
+
   useEffect(() => {
     onFilesChange(files);
   }, [files]);
@@ -34,7 +52,7 @@ export default function DropZone({
     .map((e) => e.toLowerCase());
 
   const acceptedTypesStr = useMemo(() => {
-    const categoryMap = {};
+    const categoryMap: Record<string, Set<string>> = {};
 
     Object.keys(accept).forEach((type) => {
       const [main, sub] = type.split("/");
@@ -60,22 +78,19 @@ export default function DropZone({
       .join(", ");
   }, [accept]);
 
-  const errorMap = useMemo(
+  const errorMap: Record<string, string> = useMemo(
     () => ({
       "file-invalid-type": `Only ${acceptedTypesStr} are allowed.`,
       "file-too-large": `File size should not exceed ${mb} MB.`,
       "too-many-files": `You can upload a maximum of ${maxItem} files.`,
-      // "wrong-extension": `Only these extensions are allowed: ${allowedExts.join(
-      //   ", "
-      // )}`,
     }),
-    [acceptedTypesStr, mb, maxItem, allowedExts]
+    [acceptedTypesStr, mb, maxItem]
   );
 
   const onDropAccepted = useCallback(
-    (accepted) => {
-      const withPreview = accepted.map((f) => {
-        const copy = Object.assign(f, {});
+    (acceptedFiles: File[]) => {
+      const withPreview: ExtendedFile[] = acceptedFiles.map((f) => {
+        const copy = f as ExtendedFile;
         copy.url = URL.createObjectURL(f);
         copy.uid = crypto.randomUUID();
         return copy;
@@ -120,13 +135,12 @@ export default function DropZone({
     onDropAccepted,
     disabled,
     validator: (file) => {
-      const errors = [];
+      const errors: string[] = [];
       const ext = file.name?.split(".").pop()?.toLowerCase();
       if (file.size > maxSize) errors.push("file-too-large");
       // if (!allowedExts.includes(`.${ext}`)) errors.push("wrong-extension");
       const mimeAccepted = Object.keys(accept).some((mime) => {
-        if (mime.endsWith("/*"))
-          return file.type.startsWith(mime.split("/")[0]);
+        if (mime.endsWith("/*")) return file.type.startsWith(mime.split("/")[0]);
         return file.type === mime;
       });
       if (!mimeAccepted) errors.push("file-invalid-type");
@@ -151,13 +165,7 @@ export default function DropZone({
 
     let thumb;
     if (isImage) {
-      thumb = (
-        <img
-          src={file.url}
-          alt={file.name}
-          className="w-20 h-20 object-cover rounded-md"
-        />
-      );
+      thumb = <img src={file.url} alt={file.name} className="w-20 h-20 object-cover rounded-md" />;
     }
     // else if (isPdf) {
     //   thumb = (
@@ -232,7 +240,7 @@ export default function DropZone({
         {isDragActive && (
           <div className="fixed top-5/6 inset-0 bg-red-700 dark:bg-red-800 z-50 flex justify-center items-center text-white text-xl font-semibold">
             <DeleteSvg className="w-6 h-6 mr-2" />
-            Cancle Drop
+            Cancel Drop
           </div>
         )}
 
@@ -244,9 +252,7 @@ export default function DropZone({
           </ul>
         )}
 
-        {previews.length > 0 && (
-          <div className="flex flex-wrap gap-3 mt-4">{previews}</div>
-        )}
+        {previews.length > 0 && <div className="flex flex-wrap gap-3 mt-4">{previews}</div>}
       </div>
 
       {previewFile && (
@@ -285,9 +291,7 @@ export default function DropZone({
               // previewFile.type !== "application/pdf" &&
               <div className="flex flex-col items-center text-white">
                 <div className="text-6xl font-bold mb-4">
-                  {(
-                    previewFile.name.match(/\.(\w+)$/)?.[1] || "FILE"
-                  ).toUpperCase()}
+                  {(previewFile.name.match(/\.(\w+)$/)?.[1] || "FILE").toUpperCase()}
                 </div>
                 <div className="text-xl wrap-anywhere">{previewFile.name}</div>
               </div>

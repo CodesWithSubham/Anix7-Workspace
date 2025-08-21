@@ -18,7 +18,7 @@ import { PowerButtonSvg } from "../svg/PowerButtonSvg";
 
 type MenuItemDefault = {
   label: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   url?: string;
   onClick?: () => void;
   hr?: boolean;
@@ -66,7 +66,10 @@ const commonQuickURLs = [
   { url: "https://www.anix7.in/page/privacy-policy", label: "Privacy Policy" },
 ];
 
-export default function SlideBarLayout({ menuItem = [], quickURLs = [] }) {
+export default function SlideBarLayout({ menuItem = [], quickURLs = [] }: {
+  menuItem?: MenuItem[];
+  quickURLs?: { url: string; label: string }[];
+}) {
   const { data: session } = useSession();
   const checkboxRef = useRef<HTMLInputElement | null>(null);
   const pathname = usePathname();

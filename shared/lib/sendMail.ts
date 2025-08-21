@@ -5,6 +5,11 @@ export async function sendNoReplyMail({
   subject,
   html,
   fromName = "Anix7 - Tools",
+}: {
+  sendTo: string;
+  subject: string;
+  html: string;
+  fromName?: string;
 }) {
   if (!sendTo || !subject || !html) {
     console.error("Missing Parameters in sendMail");
@@ -37,20 +42,24 @@ export async function sendNoReplyMail({
       html: html,
     });
     return { success: true, messageId: info.messageId };
-
   } catch (error) {
     console.error("Email sending failed:", error);
 
     let errorMessage = "Something went wrong while sending the email.";
 
-    if (error.responseCode === 550) {
-      errorMessage = "Invalid recipient email address.";
-    } else if (error.responseCode === 535) {
-      errorMessage = "Authentication failed. Check SMTP credentials.";
-    } else if (error.message.includes("getaddrinfo ENOTFOUND")) {
-      errorMessage = "SMTP server not found. Check EMAIL_HOST.";
+    // Narrow unknown → object
+    if (typeof error === "object" && error !== null) {
+      const maybeErr = error as { responseCode?: number; message?: string };
+
+      if (maybeErr.responseCode === 550) {
+        errorMessage = "Invalid recipient email address.";
+      } else if (maybeErr.responseCode === 535) {
+        errorMessage = "Authentication failed. Check SMTP credentials.";
+      } else if (maybeErr.message?.includes("getaddrinfo ENOTFOUND")) {
+        errorMessage = "SMTP server not found. Check EMAIL_HOST.";
+      }
     }
-    
+
     return { success: false, error: errorMessage };
   }
 }
