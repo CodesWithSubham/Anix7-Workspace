@@ -1,7 +1,8 @@
-import QRCodeGenerator, { LaunchQRCodeGenerator } from "./genarator";
+
 import Image from "next/image";
 import { Button } from "@shared/components/ui/Button";
 import { ColorPaletteSvg } from "@shared/components/svg/ColorPaletteSvg";
+import QRCodeGenerator, { LaunchQRCodeGenerator } from "./generator";
 
 export const metadata = {
   title: "Fully customized QR Code Generator with colors, shapes, and logos",
@@ -100,7 +101,7 @@ export const metadata = {
     siteName: "Anix7 Tools",
     images: [
       {
-        url: `/assets/img/qr-code-genarator-og.jpeg`,
+        url: `/assets/img/qr-code-generator-og.jpeg`,
         width: 1200,
         height: 630,
         alt: "Anix7 Tools QR Code Generator",

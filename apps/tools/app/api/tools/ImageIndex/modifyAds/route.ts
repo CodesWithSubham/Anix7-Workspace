@@ -2,15 +2,12 @@ import { auth } from "@shared/lib/auth";
 import getImageUploadModel from "@shared/lib/db/models/ImageUpload";
 import { NextResponse } from "next/server";
 
-export async function POST(req) {
+export async function POST(req: Request) {
   try {
     const session = await auth();
 
-    if (!session) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 }
-      );
+    if (!session || !session.user) {
+      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
     }
 
     const { alias, ad } = await req.json(); // Destructure directly from req.json()
@@ -36,10 +33,7 @@ export async function POST(req) {
     const ImageUpload = await getImageUploadModel();
     const url = await ImageUpload.findOne({ alias });
     if (!url) {
-      return NextResponse.json(
-        { success: false, message: "Alias not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, message: "Alias not found" }, { status: 404 });
     }
     // Check if the URL is already shortened
     if (url.adsLabel === ad) {

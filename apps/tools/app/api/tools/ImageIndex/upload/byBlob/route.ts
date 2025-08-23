@@ -5,10 +5,15 @@ import getImageUploadModel from "@shared/lib/db/models/ImageUpload";
 import { del } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
-const isAllowed = (imageUrl) => {
+const blobBaseUrl = process.env.BLOB_BASE_URL;
+if (!blobBaseUrl) {
+  throw new Error("BLOB_BASE_URL is not defined");
+}
+
+const isAllowed = (imageUrl: string) => {
   try {
     const imageHostname = new URL(imageUrl).hostname;
-    const blobBaseHostname = new URL(process.env.BLOB_BASE_URL).hostname;
+    const blobBaseHostname = new URL(blobBaseUrl).hostname;
 
     return imageHostname === blobBaseHostname;
   } catch {
@@ -16,23 +21,17 @@ const isAllowed = (imageUrl) => {
   }
 };
 
-export async function POST(req) {
+export async function POST(req: Request) {
   const { image, name } = await req.json();
 
   if (!image || !name) {
-    return Response.json(
-      { error: "Image and name are required" },
-      { status: 400 }
-    );
+    return Response.json({ error: "Image and name are required" }, { status: 400 });
   }
 
   try {
     const session = await auth();
-    if (!session) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 }
-      );
+    if (!session || !session.user) {
+      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
     }
     const uploadedBy = session.user.userId;
 

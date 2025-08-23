@@ -11,6 +11,7 @@ import { CopyInput, Input } from "@shared/components/ui/Input";
 import { ErrorText } from "@shared/components/ui/Texts";
 import { CircleLoadingSvg } from "@shared/components/svg/LoadingSvg";
 import { Button } from "@shared/components/ui/Button";
+import { Urls } from "./types";
 
 export default function UrlShortener() {
   // Create URL Box
@@ -23,11 +24,11 @@ export default function UrlShortener() {
   const [aliasLoading, setAliasLoading] = useState(false);
   const [shortUrl, setShortUrl] = useState("");
   // My URLs
-  const [urls, setUrls] = useState([]);
+  const [urls, setUrls] = useState<Urls[]>([]);
   const [total, setTotal] = useState(0);
 
   // Check alias using server action
-  const handleAlias = async (e) => {
+  const handleAlias = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
     setAlias("");
     setAliasError("");
@@ -69,8 +70,8 @@ export default function UrlShortener() {
   };
 
   // Validate URL
-  const validateUrl = (e) => {
-    let url = e.target.value.trim();
+  const validateUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const url = e.target.value.trim();
     setUrlError("");
     setLongUrl("");
 
@@ -79,8 +80,7 @@ export default function UrlShortener() {
       return;
     }
 
-    const urlPattern =
-      /^(https:\/\/)((?!localhost)[\w.-]+)\.([a-z]{2,})(:\d{1,5})?(\/.*)?$/i;
+    const urlPattern = /^(https:\/\/)((?!localhost)[\w.-]+)\.([a-z]{2,})(:\d{1,5})?(\/.*)?$/i;
     if (urlPattern.test(url)) {
       setLongUrl(url);
     } else {
@@ -171,10 +171,7 @@ export default function UrlShortener() {
                 type="submit"
                 className="w-1/3"
                 disabled={
-                  (isAlias && (!alias || aliasError)) ||
-                  !longUrl ||
-                  urlError ||
-                  submitLoading
+                  !!((isAlias && (!alias || aliasError)) || !longUrl || urlError || submitLoading)
                 }
                 onClick={handleSubmit}
                 loading={submitLoading}
@@ -193,12 +190,7 @@ export default function UrlShortener() {
         )}
       </WorkBox>
 
-      <ShortedURLs
-        urls={urls}
-        setUrls={setUrls}
-        total={total}
-        setTotal={setTotal}
-      />
+      <ShortedURLs urls={urls} setUrls={setUrls} total={total} setTotal={setTotal} />
     </>
   );
 }

@@ -5,7 +5,7 @@ import { auth } from "@shared/lib/auth";
 import { disallowedDomains } from "./disallowedDomains";
 import getShortUrlModel from "@shared/lib/db/models/ShortUrl";
 
-export async function checkAlias({ alias }) {
+export async function checkAlias({ alias }: { alias: string }) {
   try {
     const session = await auth();
 
@@ -49,14 +49,11 @@ export async function checkAlias({ alias }) {
   }
 }
 
-async function isValidURL(url) {
-  const disallowedPattern = `^https:\\/\\/(?:${disallowedDomains.join(
-    "|"
-  )})\\b`;
+async function isValidURL(url: string) {
+  const disallowedPattern = `^https:\\/\\/(?:${disallowedDomains.join("|")})\\b`;
   const disallowedRegex = new RegExp(disallowedPattern, "i");
 
-  const urlPattern =
-    /^https:\/\/((?!localhost)[\w.-]+)\.([a-z]{2,})(:\d{1,5})?(\/.*)?$/i;
+  const urlPattern = /^https:\/\/((?!localhost)[\w.-]+)\.([a-z]{2,})(:\d{1,5})?(\/.*)?$/i;
   const urlRegex = new RegExp(urlPattern);
 
   return urlRegex.test(url) && !disallowedRegex.test(url);
@@ -64,8 +61,7 @@ async function isValidURL(url) {
 
 // Function to generate a random alias
 async function generateAlias() {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
   let alias;
   const ShortUrl = await getShortUrlModel();
@@ -79,11 +75,11 @@ async function generateAlias() {
   return alias;
 }
 
-export async function createShortUrl({ longUrl, alias }) {
+export async function createShortUrl({ longUrl, alias }: { longUrl: string; alias?: string }) {
   try {
     const session = await auth();
 
-    if (!session) {
+    if (!session || !session.user) {
       return { success: false, message: "Unauthorized" };
     }
     const uploadedBy = session.user.userId;
@@ -94,9 +90,7 @@ export async function createShortUrl({ longUrl, alias }) {
     // Invalid alias if not: 1. alphanumeric and numberic, 2. length other then 6, 3. not already taken
     if (
       alias &&
-      (!/^[a-zA-Z0-9]+$/.test(alias) ||
-        alias.length !== 6 ||
-        (await ShortUrl.findOne({ alias })))
+      (!/^[a-zA-Z0-9]+$/.test(alias) || alias.length !== 6 || (await ShortUrl.findOne({ alias })))
     ) {
       // Check if alias is valid
       return { success: false, message: "Invalid alias" };
@@ -163,7 +157,7 @@ export async function createShortUrl({ longUrl, alias }) {
   }
 }
 
-export async function modifyAds({ alias, ad }) {
+export async function modifyAds({ alias, ad }: { alias: string; ad: number }) {
   try {
     const session = await auth();
 
@@ -183,8 +177,7 @@ export async function modifyAds({ alias, ad }) {
     if (!url) return { success: false, message: "Alias not found" };
 
     // Check if the URL is already shortened
-    if (url.adsLabel === ad)
-      return { success: true, message: "Waiting already updated" };
+    if (url.adsLabel === ad) return { success: true, message: "Waiting already updated" };
 
     // Update the URL with the new ad
     url.adsLabel = ad;
@@ -201,10 +194,10 @@ export async function modifyAds({ alias, ad }) {
   }
 }
 
-export async function deleteShortUrl({ alias }) {
+export async function deleteShortUrl({ alias }: { alias: string }) {
   try {
     const session = await auth();
-    if (!session) return { success: false, error: "Unauthorized" };
+    if (!session || !session.user) return { success: false, error: "Unauthorized" };
 
     if (!alias || alias.trim().length !== 6 || !/^[a-zA-Z0-9]+$/.test(alias))
       return { success: false, error: "Invalid Request!" };
@@ -225,11 +218,11 @@ export async function deleteShortUrl({ alias }) {
   }
 }
 
-export async function editShortUrl({ editedUrl, alias }) {
+export async function editShortUrl({ editedUrl, alias }: { editedUrl: string; alias: string }) {
   try {
     const session = await auth();
 
-    if (!session) {
+    if (!session || !session.user) {
       return { success: false, message: "Unauthorized" };
     }
     const uploadedBy = session.user.userId;

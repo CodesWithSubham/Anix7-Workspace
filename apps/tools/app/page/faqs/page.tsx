@@ -21,7 +21,7 @@ export const metadata = {
 };
 
 export default function Faqs() {
-  const baseUrl = new URL(process.env.BASE_URL).hostname;
+  const baseUrl = new URL(process.env.BASE_URL!).hostname;
   return (
     <>
       <h1>Frequently Asked Questions (FAQs)</h1>
@@ -43,7 +43,7 @@ export default function Faqs() {
       </h3>
       <p className="my-1 ml-1">
         {baseUrl} is an all-in-one platform offering a wide range of free online tools including URL
-        shorteners, image resizers, QR code generators, file uploaders, and more.
+        shorteners, image resizer, QR code generators, file uploader, and more.
       </p>
 
       <h3>

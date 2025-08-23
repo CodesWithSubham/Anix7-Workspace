@@ -1,49 +1,48 @@
 import { auth } from "@shared/lib/auth";
-import getShortUrlModel from "@shared/lib/db/models/ShortUrl";
+import getImageUploadModel from "@shared/lib/db/models/ImageUpload";
+
 import { NextResponse } from "next/server";
 
 // Function to get URLs by uploadedBy with pagination (start and limit of 10)
-async function getUrlsByUploadedBy(uploadedBy, start = 0, limit = 10) {
-  const ShortUrl = await getShortUrlModel();
+async function getImagesByUploadedBy(uploadedBy: number, start = 0, limit = 10) {
+  const ImageUpload = await getImageUploadModel();
 
   // Get the URLs for a given uploadedBy with pagination
-  const urls = await ShortUrl.find({ uploadedBy })
-    .select("longUrl alias adsLabel createdAt")
+  const images = await ImageUpload.find({ uploadedBy })
+    .select("alias extension adsLabel createdAt")
     .sort({ createdAt: -1 }) // Sort by creation date (descending)
     .skip(start) // Skip the first 'start' number of documents
     .limit(limit) // Limit to the next 10 URLs after 'start'
     .lean();
 
   // Get total count of URLs for a given uploadedBy
-  const totalUrlsCount = await ShortUrl.countDocuments({ uploadedBy });
+  const totalImagesCount = await ImageUpload.countDocuments({ uploadedBy });
 
   return {
-    urls,
-    totalUrlsCount,
-    BASE_URL: process.env.SHORT_URL,
+    images,
+    totalImagesCount,
+    IMAGE_INDEX_URL: `${process.env.BASE_URL}/i`,
+    IMGUR_IMAGE_URL: process.env.IMGUR_IMAGE_URL,
   };
 }
 
-export async function POST(req) {
+export async function POST(req: Request) {
   try {
     const session = await auth();
 
-    if (!session) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 }
-      );
+    if (!session || !session.user) {
+      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
     }
     const { userId } = session.user;
     // const userId = 1234567890
 
     const { page } = await req.json(); // Destructure directly from req.json()
 
-    const limit = 20;
-    const skip = page ? page * limit : 0;
+    const limit = 12;
+    const skip = page ? (page - 1) * limit : 0;
 
     // Get the URL using the userId
-    const results = await getUrlsByUploadedBy(userId, skip, limit);
+    const results = await getImagesByUploadedBy(userId, skip, limit);
 
     // Return the response with availability status
     return NextResponse.json({

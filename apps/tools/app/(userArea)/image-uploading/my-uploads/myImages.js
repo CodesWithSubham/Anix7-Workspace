@@ -64,7 +64,7 @@ export default function MyImages() {
   }, [images, pageNum]);
 
   const modifyAds = async (alias, ad) => {
-    // toast.warn("This Option Avalable Soon!")
+    // toast.warn("This Option Available Soon!")
     // return;
     setAdsLoading(true);
     try {

@@ -3,19 +3,27 @@
 import DropZone from "@shared/components/ui/DropZone";
 import { useState, useEffect } from "react";
 import JSZip from "jszip";
-import {
-  Checkbox,
-  Input,
-  SliderWithTooltip,
-} from "@shared/components/ui/Input";
+import { Checkbox, Input, SliderWithTooltip } from "@shared/components/ui/Input";
 import { XSvg } from "@shared/components/svg/XSvg";
 import { Button } from "@shared/components/ui/Button";
 import { DownloadCloudSvg } from "@shared/components/svg/DownloadSvg";
 import { formatBytes } from "@shared/utils/unit";
 import { WorkBox } from "@shared/components/ui/Boxes";
 
+type ImageFile = File & {
+  uid: string;
+  url: string;
+  width: number;
+  height: number;
+  resizedBlob?: Blob;
+  resizedUrl?: string;
+  resizedWidth?: number;
+  resizedHeight?: number;
+  type: string; // keep type because File already has one
+};
+
 export default function Resizer() {
-  const [images, setImages] = useState([]); // { file, url, width, height, uid, name, resizedBlob, resizedUrl }
+  const [images, setImages] = useState<ImageFile[]>([]); // { file, url, width, height, uid, name, resizedBlob, resizedUrl }
   const [widthType, setWidthType] = useState("pixels");
   const [maintainAspect, setMaintainAspect] = useState(true);
   const [quality, setQuality] = useState(90);
@@ -31,11 +39,16 @@ export default function Resizer() {
     console.log(quality, loading);
   }, [quality, loading]);
 
-  const handleFileChange = (files) => {
-    const newImages = files.map((f) => {
-      const copy = Object.assign(f, {});
-      copy.width = copy.height = 0;
-      return copy;
+  const handleFileChange = (files: File[]) => {
+    const newImages: ImageFile[] = files.map((f) => {
+      const uid = crypto.randomUUID();
+      const url = URL.createObjectURL(f);
+      return Object.assign(f, {
+        uid,
+        url,
+        width: 0,
+        height: 0,
+      });
     });
     setImages(newImages);
   };
@@ -70,6 +83,12 @@ export default function Resizer() {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
 
+    if (!ctx) {
+      console.error("Canvas 2D context not available");
+      setLoading((p) => ({ ...p, resize: false }));
+      return;
+    }
+
     const updatedImages = [...images];
     let index = 0;
 
@@ -87,11 +106,11 @@ export default function Resizer() {
         let h = img.height;
 
         if (widthType === "percent") {
-          w = (w * parseFloat(widthInput || 100)) / 100;
-          h = (h * parseFloat(heightInput || 100)) / 100;
+          w = (w * (widthInput || 100)) / 100;
+          h = (h * (heightInput || 100)) / 100;
         } else {
-          if (widthInput) w = parseInt(widthInput);
-          if (heightInput) h = parseInt(heightInput);
+          if (widthInput) w = widthInput;
+          if (heightInput) h = heightInput;
         }
 
         if (maintainAspect) {
@@ -101,10 +120,7 @@ export default function Resizer() {
         canvas.width = w;
         canvas.height = h;
 
-        if (
-          isCompress &&
-          ["image/png", "image/webp", "image/svg+xml"].includes(img.type)
-        ) {
+        if (isCompress && ["image/png", "image/webp", "image/svg+xml"].includes(img.type)) {
           ctx.fillStyle = "white";
           ctx.fillRect(0, 0, w, h);
         }
@@ -116,6 +132,12 @@ export default function Resizer() {
 
         canvas.toBlob(
           (blob) => {
+            if (!blob) {
+              console.error("Failed to create blob for resized image");
+              index++;
+              setTimeout(processNext, 50);
+              return;
+            }
             const resizedUrl = URL.createObjectURL(blob);
             updatedImages[index].resizedBlob = blob;
             updatedImages[index].resizedWidth = w;
@@ -140,9 +162,7 @@ export default function Resizer() {
     const zip = new JSZip();
     images.forEach((img) => {
       if (img.resizedBlob) {
-        const fileName = `${img.name.replace(/\.\w+$/, "")}.${
-          img.resizedBlob?.type.split("/")[1]
-        }`;
+        const fileName = `${img.name.replace(/\.\w+$/, "")}.${img.resizedBlob?.type.split("/")[1]}`;
         zip.file(fileName, img.resizedBlob);
       }
     });
@@ -182,15 +202,13 @@ export default function Resizer() {
                 placeholder="Width"
                 type="number"
                 value={widthInput}
-                onChange={(e) => setWidthInput(e.target.value)} // raw value
+                onChange={(e) => setWidthInput(Number(e.target.value))} // raw value
                 onBlur={() => {
-                  const num = Number(widthInput);
-                  if (isNaN(num)) return;
                   const clamped =
                     widthType === "percent"
-                      ? Math.max(10, Math.min(100, num))
-                      : Math.max(16, Math.min(maxWidth, num));
-                  setWidthInput(clamped.toString());
+                      ? Math.max(10, Math.min(100, widthInput))
+                      : Math.max(16, Math.min(maxWidth, widthInput));
+                  setWidthInput(clamped);
                 }}
                 label="Width"
                 min={widthType === "percent" ? 10 : 16}
@@ -215,15 +233,14 @@ export default function Resizer() {
                     placeholder="Height"
                     type="number"
                     value={heightInput}
-                    onChange={(e) => setHeightInput(e.target.value)}
+                    onChange={(e) => setHeightInput(Number(e.target.value))}
                     onBlur={() => {
                       const num = Number(heightInput);
-                      if (isNaN(num)) return;
                       const clamped =
                         widthType === "percent"
                           ? Math.max(10, Math.min(100, num))
                           : Math.max(16, Math.min(maxHeight, num));
-                      setHeightInput(parseInt(clamped).toString());
+                      setHeightInput(clamped);
                     }}
                     label="Height"
                     min={widthType === "percent" ? 10 : 16}
@@ -259,11 +276,7 @@ export default function Resizer() {
             />
           )}
           <div className="flex gap-2 mt-2 flex-wrap justify-around">
-            <Button
-              onClick={handleResize}
-              loading={loading.resize}
-              disabled={!images.length}
-            >
+            <Button onClick={handleResize} loading={loading.resize} disabled={!images.length}>
               Resize
             </Button>
             {images.filter((img) => img.resizedUrl).length >= 2 && (
@@ -297,9 +310,9 @@ export default function Resizer() {
                     <span className="text-nowrap">
                       {img.resizedWidth} &times; {img.resizedHeight}
                     </span>
-                    <span className="text-nowrap">
-                      {formatBytes(img.resizedBlob.size)}
-                    </span>
+                    {img.resizedBlob && (
+                      <span className="text-nowrap">{formatBytes(img.resizedBlob.size)}</span>
+                    )}
                   </p>
 
                   <Button

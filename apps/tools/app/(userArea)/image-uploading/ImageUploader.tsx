@@ -8,15 +8,15 @@ import { Button } from "@shared/components/ui/Button";
 import { CopyInput } from "@shared/components/ui/Input";
 import { UploadSvg } from "@shared/components/svg/UploadSvg";
 import { DocumentSvg } from "@shared/components/svg/DocumentSvg";
-import DropZone from "@shared/components/ui/DropZone";
+import DropZone, { ExtendedFile } from "@shared/components/ui/DropZone";
 import Hr from "@shared/components/ui/Hr";
 
 export default function ImageUploader() {
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<ExtendedFile | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [uploadedURL, setUploadedURL] = useState(null);
+  const [uploadedURL, setUploadedURL] = useState<string | null>(null);
 
-  const handleFileChange = (files) => {
+  const handleFileChange = (files: ExtendedFile[]) => {
     setImage(null);
     setUploadedURL(null);
     const file = files[0];
@@ -29,12 +29,16 @@ export default function ImageUploader() {
     setUploading(true);
 
     try {
+      if (!image) {
+        toast.error("No image selected");
+        return;
+      }
       const id = window.crypto.randomUUID();
 
       const newBlob = await upload(image.name, image, {
         access: "public",
         handleUploadUrl: "/api/tools/ImageIndex/upload/blob",
-        clientPayload: { id },
+        clientPayload: id,
       });
 
       const res = await fetch("/api/tools/ImageIndex/upload/byBlob", {
@@ -78,9 +82,7 @@ export default function ImageUploader() {
 
       {uploadedURL && (
         <div className="w-5/6 max-w-xs mt-4">
-          <p className="text-xs text-(--linkC) ml-2 -mb-1">
-            Uploaded Image URL
-          </p>
+          <p className="text-xs text-(--linkC) ml-2 -mb-1">Uploaded Image URL</p>
           <CopyInput value={uploadedURL} />
         </div>
       )}

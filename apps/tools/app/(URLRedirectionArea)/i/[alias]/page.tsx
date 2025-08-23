@@ -8,7 +8,7 @@ import {
 import getImageUploadModel from "@shared/lib/db/models/ImageUpload";
 import Image from "next/image";
 
-export default async function ViewImage({ params }) {
+export default async function ViewImage({ params }: { params: Promise<{ alias: string }> }) {
   const { alias } = await params;
   const ImageUpload = await getImageUploadModel();
   const imageData = await ImageUpload.findOne({ alias }).lean();
@@ -18,9 +18,7 @@ export default async function ViewImage({ params }) {
       <>
         <Ads ad={1} />
         <div className="w-full h-20 grid place-content-center">
-          <p className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl">
-            Image Not Found!
-          </p>
+          <p className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl">Image Not Found!</p>
         </div>
         <AdsterraNativeBanner />
       </>
@@ -54,7 +52,7 @@ export default async function ViewImage({ params }) {
   );
 }
 
-function Ads({ ad }) {
+function Ads({ ad }: { ad: number }) {
   switch (ad) {
     case 1:
       return <MonetagVignetteBanner01 />;

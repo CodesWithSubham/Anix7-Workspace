@@ -13,13 +13,21 @@ import {
 import { toPng } from "html-to-image";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { QRCode } from "react-qrcode-logo";
+import { JSX, useCallback, useEffect, useRef, useState } from "react";
+import { IProps, QRCode } from "react-qrcode-logo";
+import {
+  contentTab,
+  DesignTab,
+  InnerOuterEyeColor,
+  InnerOuterRadii,
+  QrData,
+  QrFrame,
+} from "./types";
 
 // ==================================================
 // =================== Presets ======================
 // ==================================================
-const frames = [
+const frameIcons = [
   <svg key={0} strokeWidth="0" viewBox="0 0 16 16" className="p-2">
     <path
       stroke="none"
@@ -113,7 +121,7 @@ const frames = [
     </g>
   </svg>,
 ];
-const shape = [
+const shape: { type: NonNullable<IProps["qrStyle"]>; svg: JSX.Element }[] = [
   // squares | dots | fluid
   {
     type: "squares",
@@ -167,7 +175,11 @@ const shape = [
     ),
   },
 ];
-const eyes = {
+
+const eyes: {
+  inner: { svg: JSX.Element; style: NonNullable<IProps["eyeRadius"]> }[];
+  outer: { svg: JSX.Element; style: NonNullable<IProps["eyeRadius"]> }[];
+} = {
   inner: [
     {
       svg: (
@@ -273,6 +285,8 @@ const eyes = {
   ],
 };
 
+const designTabs: DesignTab[] = ["Frame", "Style", "Logo", "Advance"];
+
 // The logo image. It can be a url/path or a base64 value
 const defaultLogos = [
   null,
@@ -295,20 +309,20 @@ const defaultLogos = [
   "/assets/img/bitcoin.png",
   "/assets/img/paypal.png",
 ];
-const allContent = ["URL", "Text", "Email", "Wifi", "Image", "Video"];
+const allContent: contentTab[] = ["URL", "Text", "Email", "Wifi", "Image", "Video"];
 
 export default function QRCodeGenerator() {
   const [isLoading, setIsLoading] = useState(false);
-  const downloadRef = useRef(null);
+  const downloadRef = useRef<HTMLDivElement | null>(null);
   const [tab, setTab] = useState(false);
-  const [designTab, setDesignTab] = useState("Frame");
+  const [designTab, setDesignTab] = useState(designTabs[0]);
   const [content, setContent] = useState(allContent[0]);
   const searchParams = useSearchParams();
   // Set initial state from URL
   useEffect(() => {
-    const initial = searchParams.get("content");
+    const initial = searchParams.get("content") as contentTab;
     if (initial && allContent.includes(initial)) {
-      setContent(initial);
+      setContent(allContent.includes(initial) ? initial : allContent[0]);
     }
   }, [searchParams]);
   // Update URL when content changes (without full reload)
@@ -321,65 +335,171 @@ export default function QRCodeGenerator() {
     }
   }, [content]);
 
-  const [qrData, setQrData] = useState({});
+  const [qrData, setQrData] = useState<QrData>({});
   // const [logo, setLogo] = useState(defaultLogos);
   const [logo] = useState(defaultLogos);
-  const [qrSetting, setQrSetting] = useState({
-    frame: {
-      type: 0,
-      bg: "#000000",
-      text: "SCAN ME",
-      color: "#ffffff",
-    },
-    qr: {
-      ecLevel: "Q",
-      quietZone: 35,
-      qrStyle: "squares",
-      bgColor: "#ffffff",
-      fgColor: "#000000",
-      logoImage: null,
-      logoWidth: 250,
-      logoHeight: 250,
-      logoOpacity: 1,
-      removeQrCodeBehindLogo: true,
-      logoPadding: 0,
-      logoPaddingStyle: "square",
-      removeQrCodeBehindLogo: false,
-      eyeRadius: [
-        // top/left eye
-        {
-          outer: [0, 0, 0, 0],
-          inner: [0, 0, 0, 0],
-        },
-        // top/right eye
-        {
-          outer: [0, 0, 0, 0],
-          inner: [0, 0, 0, 0],
-        },
-        // bottom/left
-        {
-          outer: [0, 0, 0, 0],
-          inner: [0, 0, 0, 0],
-        },
-      ],
-      eyeColor: [
-        {
-          outer: "#000000",
-          inner: "#000000",
-        },
-        {
-          outer: "#000000",
-          inner: "#000000",
-        },
-        {
-          outer: "#000000",
-          inner: "#000000",
-        },
-      ],
-    },
+
+  const [qrSetting, setQrSetting] = useState<IProps>({
+    ecLevel: "Q",
+    quietZone: 35,
+    qrStyle: "squares",
+    bgColor: "#ffffff",
+    fgColor: "#000000",
+    logoWidth: 250,
+    logoHeight: 250,
+    logoOpacity: 1,
+    removeQrCodeBehindLogo: true,
+    logoPadding: 0,
+    logoPaddingStyle: "square",
+    eyeRadius: [
+      // top/left eye
+      { outer: [0, 0, 0, 0], inner: [0, 0, 0, 0] },
+      // top/right eye
+      { outer: [0, 0, 0, 0], inner: [0, 0, 0, 0] },
+      // bottom/left
+      { outer: [0, 0, 0, 0], inner: [0, 0, 0, 0] },
+    ],
+    eyeColor: [
+      { outer: "#000000", inner: "#000000" },
+      { outer: "#000000", inner: "#000000" },
+      { outer: "#000000", inner: "#000000" },
+    ],
   });
-  const ref = useRef(null);
+  const [frame, setFrame] = useState<QrFrame>({
+    type: 0,
+    bg: "#000000",
+    text: "SCAN ME",
+    font: "Arial",
+    color: "#ffffff",
+  });
+  const ref = useRef<QRCode>(null);
   const [eyeStyle, setEyeStyle] = useState({ inner: 0, outer: 0 });
+
+  const setEyeRadius = useCallback(
+    (
+      eye: "inner" | "outer",
+      value: NonNullable<IProps["eyeRadius"]>,
+      eyeIndex?: 0 | 1 | 2 // optional
+    ) => {
+      const defaultObj: InnerOuterRadii = { inner: [0, 0, 0, 0], outer: [0, 0, 0, 0] };
+
+      // Normalize always into tuple [InnerOuterRadii, InnerOuterRadii, InnerOuterRadii]
+      const normalize = (
+        val: NonNullable<IProps["eyeRadius"]>
+      ): [InnerOuterRadii, InnerOuterRadii, InnerOuterRadii] => {
+        if (Array.isArray(val)) {
+          // case 1: tuple-of-3
+          if (val.length === 3) {
+            return val.map((item) => {
+              if (typeof item === "number") return { inner: item, outer: item };
+              if (Array.isArray(item)) return { inner: item, outer: item };
+              return item;
+            }) as [InnerOuterRadii, InnerOuterRadii, InnerOuterRadii];
+          }
+
+          // case 2: array of 4 numbers -> treat as one CornerRadii
+          if (val.length === 4 && val.every((n) => typeof n === "number")) {
+            return [
+              { inner: val, outer: val },
+              { inner: val, outer: val },
+              { inner: val, outer: val },
+            ];
+          }
+        }
+
+        if (typeof val === "number") {
+          return [
+            { inner: val, outer: val },
+            { inner: val, outer: val },
+            { inner: val, outer: val },
+          ];
+        }
+
+        // already InnerOuterRadii
+        return [val as InnerOuterRadii, val as InnerOuterRadii, val as InnerOuterRadii];
+      };
+
+      setQrSetting((prev) => {
+        const prevNormalized = normalize(prev.eyeRadius ?? [defaultObj, defaultObj, defaultObj]);
+        const newNormalized = normalize(value);
+
+        if (eyeIndex === undefined) {
+          return {
+            ...prev,
+            eyeRadius: [
+              { ...prevNormalized[0], [eye]: newNormalized[0][eye] },
+              { ...prevNormalized[1], [eye]: newNormalized[1][eye] },
+              { ...prevNormalized[2], [eye]: newNormalized[2][eye] },
+            ],
+          };
+        }
+
+        return {
+          ...prev,
+          eyeRadius: prevNormalized.map((item, idx) =>
+            idx === eyeIndex ? { ...item, [eye]: newNormalized[eyeIndex][eye] } : item
+          ) as [InnerOuterRadii, InnerOuterRadii, InnerOuterRadii],
+        };
+      });
+    },
+    []
+  );
+  const setEyeColor = useCallback(
+    (eye: "inner" | "outer", value: NonNullable<IProps["eyeColor"]>, eyeIndex?: 0 | 1 | 2) => {
+      const defaultObj: InnerOuterEyeColor = { inner: "#000000", outer: "#000000" };
+
+      // Normalize into tuple [InnerOuterEyeColor, InnerOuterEyeColor, InnerOuterEyeColor]
+      const normalize = (
+        val: NonNullable<IProps["eyeColor"]>
+      ): [InnerOuterEyeColor, InnerOuterEyeColor, InnerOuterEyeColor] => {
+        if (Array.isArray(val)) {
+          // tuple-of-3
+          if (val.length === 3) {
+            return val.map((item) => {
+              if (typeof item === "string") return { inner: item, outer: item };
+              return item;
+            }) as [InnerOuterEyeColor, InnerOuterEyeColor, InnerOuterEyeColor];
+          }
+        }
+
+        if (typeof val === "string") {
+          return [
+            { inner: val, outer: val },
+            { inner: val, outer: val },
+            { inner: val, outer: val },
+          ];
+        }
+
+        // already InnerOuterEyeColor
+        return [val as InnerOuterEyeColor, val as InnerOuterEyeColor, val as InnerOuterEyeColor];
+      };
+
+      setQrSetting((prev) => {
+        const prevNormalized = normalize(prev.eyeColor ?? [defaultObj, defaultObj, defaultObj]);
+        const newNormalized = normalize(value);
+
+        if (eyeIndex === undefined) {
+          return {
+            ...prev,
+            eyeColor: [
+              { ...prevNormalized[0], [eye]: newNormalized[0][eye] },
+              { ...prevNormalized[1], [eye]: newNormalized[1][eye] },
+              { ...prevNormalized[2], [eye]: newNormalized[2][eye] },
+            ],
+          };
+        }
+
+        return {
+          ...prev,
+          eyeColor: prevNormalized.map((item, idx) =>
+            idx === eyeIndex ? { ...item, [eye]: newNormalized[eyeIndex][eye] } : item
+          ) as [InnerOuterEyeColor, InnerOuterEyeColor, InnerOuterEyeColor],
+        };
+      });
+    },
+    []
+  );
+
   // useEffect(() => {
   //   setQrSetting((prev) => ({
   //     ...prev,
@@ -419,41 +539,45 @@ export default function QRCodeGenerator() {
 
   useEffect(() => {
     let val = "";
-    if (content === "URL" && qrData?.URL?.url) {
+    if (content === "URL" && qrData.URL?.url) {
       val = qrData.URL.url;
-      setQrSetting((prev) => ({ ...prev, qr: { ...prev.qr, value: val } }));
+      setQrSetting((prev) => ({ ...prev, value: val }));
       return;
     }
-    if (content === "Text" && qrData?.Text?.text) {
+    if (content === "Text" && qrData.Text?.text) {
       val = qrData.Text.text;
-      setQrSetting((prev) => ({ ...prev, qr: { ...prev.qr, value: val } }));
+      setQrSetting((prev) => ({ ...prev, value: val }));
       return;
     }
-    if (content === "Wifi" && qrData?.Wifi?.name) {
-      val = `WIFI:S:${qrData?.Wifi?.name};T:${qrData?.Wifi?.encryption ?? ""};P:${
-        qrData?.Wifi?.password ?? ""
-      };H:${qrData?.Wifi?.hidden ? "true" : "false"};;`;
+    if (content === "Wifi" && qrData.Wifi?.name) {
+      val = `WIFI:S:${qrData.Wifi?.name};T:${qrData.Wifi?.encryption ?? ""};P:${
+        qrData.Wifi?.encryption && qrData.Wifi?.password ? qrData.Wifi.password : ""
+      };H:${qrData.Wifi?.hidden ? "true" : "false"};;`;
 
-      setQrSetting((prev) => ({ ...prev, qr: { ...prev.qr, value: val } }));
+      setQrSetting((prev) => ({ ...prev, value: val }));
       return;
     }
 
-    if (content === "Email" && qrData?.Email?.email) {
-      val = `mailto:${qrData?.Email?.email}?subject=${encodeURIComponent(
-        qrData?.Email?.subject ?? ""
-      )}&body=${encodeURIComponent(qrData?.Email?.body ?? "")}`;
+    if (content === "Email" && qrData.Email?.email) {
+      val = `mailto:${qrData.Email?.email}?subject=${encodeURIComponent(
+        qrData.Email?.subject ?? ""
+      )}&body=${encodeURIComponent(qrData.Email?.body ?? "")}`;
 
-      setQrSetting((prev) => ({ ...prev, qr: { ...prev.qr, value: val } }));
+      setQrSetting((prev) => ({ ...prev, value: val }));
       return;
     }
     setQrSetting((prev) => ({
       ...prev,
-      qr: { ...prev.qr, value: "https://tools.anix7.in" },
+      value: "https://tools.anix7.in",
     }));
   }, [qrData, content]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>
+      | { target: { name: string; value: boolean } }
+  ) => {
+    const { name, value }: { name: string; value: string | boolean } = e.target;
 
     setQrData((prev) => ({
       ...prev,
@@ -476,13 +600,13 @@ export default function QRCodeGenerator() {
                 ref={downloadRef}
                 className="flex items-center justify-center p-1 bg-transparent"
               >
-                <Frame type={0} frame={qrSetting.frame}>
+                <Frame frame={frame}>
                   <QRCode
                     style={{ height: 200, width: 200 }}
                     ref={ref}
                     // logoOnLoad={(e) => console.log("logo loaded", e)}
                     size={1000}
-                    {...{ ...qrSetting.qr }}
+                    {...qrSetting}
                   />
                 </Frame>
               </div>
@@ -562,21 +686,39 @@ export default function QRCodeGenerator() {
                 )}
                 {content === "Wifi" && (
                   <>
-                    <p>Enter the Wifi Network Name:</p>
-                    <Input type="text" name="name" onChange={handleChange} placeholder="SSID" />
-                    <p>Enter the Wifi Password:</p>
-                    <PasswordInput name="password" onChange={handleChange} />
-                    <Select
-                      label="Encryption Type"
-                      name="encryption"
+                    <Input
+                      type="text"
+                      name="name"
                       onChange={handleChange}
-                      options={{
-                        "": "None",
-                        WPA: "WPA/WPA2",
-                        WEP: "WEP",
-                      }}
+                      placeholder="SSID"
+                      label="Wifi Network Name:"
                     />
+                    <Select
+                      label="Encryption Type:"
+                      name="encryption"
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                        e.target = e.currentTarget; // Fix for React 18+ event handling
+                        handleChange(e);
+                      }}
+                      options={[
+                        { value: "nopass", label: "None" },
+                        { value: "WPA", label: "WPA/WPA2" },
+                        { value: "WEP", label: "WEP" },
+                      ]}
+                    />
+                    <div
+                      className={`-mx-1 px-1 overflow-hidden transition-all duration-500 ${
+                        qrData.Wifi?.encryption ? "max-h-28" : "max-h-0 "
+                      }`}
+                    >
+                      <PasswordInput
+                        name="password"
+                        onChange={handleChange}
+                        label="Wifi Password:"
+                      />
+                    </div>
                     <Checkbox
+                      className="mt-2"
                       onChange={(e) =>
                         handleChange({
                           target: { name: "hidden", value: e.target.checked },
@@ -588,21 +730,19 @@ export default function QRCodeGenerator() {
                 )}
                 {content === "Email" && (
                   <>
-                    <p>Enter the Wifi Network Name:</p>
                     <Input
                       type="email"
                       name="email"
-                      // value={qrData?.Email?.email}
                       onChange={handleChange}
                       placeholder="Email Address"
+                      label="Enter Email Address:"
                     />
-                    <p>Enter the Wifi Password:</p>
                     <Input
                       type="text"
                       name="subject"
-                      // value={qrData?.Email?.subject}
                       onChange={handleChange}
                       placeholder="Subject of Email"
+                      label="Enter Email Subject:"
                     />
                     <TextArea name="body" onChange={handleChange} maxLength={512} />
                   </>
@@ -618,7 +758,7 @@ export default function QRCodeGenerator() {
               <h2 className="text-xl hidden md:block">Design:</h2>
               {/* Design Option */}
               <div className="flex  justify-stretch gap-2">
-                {["Frame", "Style", "Logo", "Advance"].map((item, index) => (
+                {designTabs.map((item, index) => (
                   <Button
                     key={`con-${index}`}
                     className={`w-full px-0.5 py-2 m-0 font-semibold rounded-t-md rounded-b-none hover:scale-100 ${
@@ -635,18 +775,13 @@ export default function QRCodeGenerator() {
                   <>
                     <div className="flex flex-wrap justify-stretch gap-2 mb-5">
                       {/* Frame Type */}
-                      {frames.map((item, i) => (
+                      {frameIcons.map((item, i) => (
                         <button
                           key={`con-${i}`}
                           className={`flex-1 p-1.5 min-w-16 h-16 md:min-w-20 md:h-20 flex justify-center items-center border-[3px] font-semibold rounded-md cursor-pointer ${
-                            qrSetting.frame.type == i ? "border-(--linkC)" : ""
+                            frame.type == i ? "border-(--linkC)" : ""
                           } `}
-                          onClick={() =>
-                            setQrSetting((prev) => ({
-                              ...prev,
-                              frame: { ...prev.frame, type: i },
-                            }))
-                          }
+                          onClick={() => setFrame((prev) => ({ ...prev, type: i }))}
                         >
                           <span className="h-full dark:bg-white dark:p-0.5 rounded-xs [&>svg]:h-full [&>svg]:w-full">
                             {item}
@@ -656,59 +791,68 @@ export default function QRCodeGenerator() {
                     </div>
                     <div
                       className={`overflow-hidden transition-all duration-700 ease-in-out ${
-                        qrSetting.frame.type ? "max-h-[999px]" : "max-h-0"
+                        frame.type ? "max-h-[999px]" : "max-h-0"
                       }`}
                     >
                       <h3 className="text-lg">Frame Background:</h3>
                       <ColorWithInput
-                        value={qrSetting.frame.bg}
-                        onChange={(e) =>
-                          setQrSetting((prev) => ({
-                            ...prev,
-                            frame: { ...prev.frame, bg: e },
-                          }))
-                        }
+                        value={frame.bg}
+                        onChange={(e) => setFrame((prev) => ({ ...prev, bg: e }))}
                       />
                       <div className="flex flex-wrap justify-stretch gap-2 mb-5">
                         <div className=" flex-1">
                           <h3 className="text-lg">Frame Text</h3>
                           <Input
                             name="frameText"
-                            value={qrSetting.frame.text}
+                            value={frame.text}
                             onChange={({ target }) =>
-                              setQrSetting((prev) => ({
+                              setFrame((prev) => ({
                                 ...prev,
-                                frame: {
-                                  ...prev.frame,
-                                  text: target.value.slice(0, 21),
-                                },
+                                text: target.value.slice(0, 21),
                               }))
                             }
                           />
                         </div>
                         <div className=" flex-1">
-                          <h3 className="text-lg">Frame Text</h3>
-                          <Input
-                            name="frameText"
-                            // value={qrSetting.frame.text}
-                            onChange={({ target }) =>
-                              setQrSetting((prev) => ({
+                          <h3 className="text-lg">Text Font</h3>
+                          <Select
+                            className="w-full"
+                            style={{ fontFamily: frame.font }}
+                            options={[
+                              { value: "Arial, sans-serif", label: "Arial" },
+                              { value: "'Courier New', monospace", label: "Courier New" },
+                              { value: "'Times New Roman', serif", label: "Times New Roman" },
+                              { value: "'Lucida Console', monospace", label: "Lucida Console" },
+                              {
+                                value: "'Lucida Sans Unicode', sans-serif",
+                                label: "Lucida Sans Unicode",
+                              },
+                              { value: "'Palatino Linotype', serif", label: "Palatino Linotype" },
+                              { value: "'Tahoma', sans-serif", label: "Tahoma" },
+                              { value: "'Trebuchet MS', sans-serif", label: "Trebuchet MS" },
+                              { value: "'Verdana', sans-serif", label: "Verdana" },
+                              { value: "'Impact', sans-serif", label: "Impact" },
+                              {
+                                value: "'Comic Sans MS', cursive, sans-serif",
+                                label: "Comic Sans MS",
+                              },
+                            ].map((font) => ({ ...font, style: { fontFamily: font.value } }))}
+                            value={frame.font}
+                            onChange={(e) => {
+                              const { value } = e.currentTarget;
+                              setFrame((prev) => ({
                                 ...prev,
-                                frame: { ...prev.frame, text: target.value },
-                              }))
-                            }
+                                font: value,
+                                text: "SCAN ME", // Reset text when font changes
+                              }));
+                            }}
                           />
                         </div>
                       </div>
                       <h3 className="text-lg">Text Color:</h3>
                       <ColorWithInput
-                        value={qrSetting.frame.color}
-                        onChange={(e) =>
-                          setQrSetting((prev) => ({
-                            ...prev,
-                            frame: { ...prev.frame, color: e },
-                          }))
-                        }
+                        value={frame.color}
+                        onChange={(e) => setFrame((prev) => ({ ...prev, color: e }))}
                       />
                     </div>
                   </>
@@ -718,11 +862,11 @@ export default function QRCodeGenerator() {
                     <div>
                       <h3 className="text-lg">Background:</h3>
                       <ColorWithInput
-                        value={qrSetting.qr.bgColor}
+                        value={qrSetting.bgColor}
                         onChange={(c) =>
                           setQrSetting((prev) => ({
                             ...prev,
-                            qr: { ...prev.qr, bgColor: c },
+                            bgColor: c ?? "#ffffff", // Default to white if no color is selected
                           }))
                         }
                       />
@@ -736,12 +880,12 @@ export default function QRCodeGenerator() {
                           <button
                             key={`con-${i}`}
                             className={`flex-1 p-1.5 min-w-14 h-14 md:min-w-16 md:h-16 flex justify-center items-center border-[3px] font-semibold rounded-md cursor-pointer ${
-                              qrSetting.qr?.qrStyle == type ? "border-(--linkC)" : ""
+                              qrSetting.qrStyle == type ? "border-(--linkC)" : ""
                             } `}
                             onClick={() =>
                               setQrSetting((prev) => ({
                                 ...prev,
-                                qr: { ...prev.qr, qrStyle: type },
+                                qrStyle: type,
                               }))
                             }
                           >
@@ -752,11 +896,11 @@ export default function QRCodeGenerator() {
                         ))}
                       </div>
                       <ColorWithInput
-                        value={qrSetting.qr.fgColor}
+                        value={qrSetting.fgColor}
                         onChange={(c) =>
                           setQrSetting((prev) => ({
                             ...prev,
-                            qr: { ...prev.qr, fgColor: c },
+                            fgColor: c, // Default to black if no color is selected
                           }))
                         }
                       />
@@ -774,16 +918,7 @@ export default function QRCodeGenerator() {
                             } `}
                             onClick={() => {
                               setEyeStyle((p) => ({ ...p, inner: i }));
-                              setQrSetting((prev) => ({
-                                ...prev,
-                                qr: {
-                                  ...prev.qr,
-                                  eyeRadius: prev.qr.eyeRadius.map((item, index) => ({
-                                    ...item,
-                                    inner: style[index] ?? item.inner ?? [0, 0, 0, 0], // Update inner, keep default if missing
-                                  })),
-                                },
-                              }));
+                              setEyeRadius("inner", style);
                             }}
                           >
                             <span className="h-full dark:bg-white dark:p-0.5 rounded-xs [&>svg]:h-full [&>svg]:w-full">
@@ -793,19 +928,8 @@ export default function QRCodeGenerator() {
                         ))}
                       </div>
                       <ColorWithInput
-                        value={qrSetting.qr.fgColor}
-                        onChange={(c) =>
-                          setQrSetting((prev) => ({
-                            ...prev,
-                            qr: {
-                              ...prev.qr,
-                              eyeColor: prev.qr.eyeColor.map((item) => ({
-                                ...item,
-                                inner: c ?? "black", // Update inner safely
-                              })),
-                            },
-                          }))
-                        }
+                        value={qrSetting.fgColor}
+                        onChange={(c) => setEyeColor("inner", c)}
                       />
                     </div>
                     <Hr />
@@ -821,16 +945,7 @@ export default function QRCodeGenerator() {
                             } `}
                             onClick={() => {
                               setEyeStyle((p) => ({ ...p, outer: i }));
-                              setQrSetting((prev) => ({
-                                ...prev,
-                                qr: {
-                                  ...prev.qr,
-                                  eyeRadius: prev.qr.eyeRadius.map((item, index) => ({
-                                    ...item,
-                                    outer: style[index] ?? [0, 0, 0, 0], // Update inner, keep default if missing
-                                  })),
-                                },
-                              }));
+                              setEyeRadius("outer", style);
                             }}
                           >
                             <span className="h-full dark:bg-white dark:p-0.5 rounded-xs [&>svg]:h-full [&>svg]:w-full">
@@ -840,19 +955,8 @@ export default function QRCodeGenerator() {
                         ))}
                       </div>
                       <ColorWithInput
-                        value={qrSetting.qr.fgColor}
-                        onChange={(c) =>
-                          setQrSetting((prev) => ({
-                            ...prev,
-                            qr: {
-                              ...prev.qr,
-                              eyeColor: prev.qr.eyeColor.map((item) => ({
-                                ...item,
-                                outer: c ?? "black",
-                              })),
-                            },
-                          }))
-                        }
+                        value={qrSetting.fgColor}
+                        onChange={(c) => setEyeColor("outer", c)}
                       />
                     </div>
                   </>
@@ -865,12 +969,12 @@ export default function QRCodeGenerator() {
                         <button
                           key={`con-${i}`}
                           className={`flex-1 p-1.5 min-w-16 h-16 md:min-w-20 md:h-20 flex justify-center items-center border-[3px] font-semibold rounded-md cursor-pointer ${
-                            qrSetting.qr.logoImage == item ? "border-(--linkC)" : ""
+                            qrSetting.logoImage == item ? "border-(--linkC)" : ""
                           } `}
                           onClick={() =>
                             setQrSetting((prev) => ({
                               ...prev,
-                              qr: { ...prev.qr, logoImage: item },
+                              logoImage: item ?? "", // Ensure item is not null
                             }))
                           }
                         >
@@ -898,19 +1002,16 @@ export default function QRCodeGenerator() {
                     </div>
 
                     <Checkbox
-                      checked={qrSetting.qr.removeQrCodeBehindLogo}
+                      checked={qrSetting.removeQrCodeBehindLogo}
                       onChange={(e) =>
                         setQrSetting((prev) => ({
                           ...prev,
-                          qr: {
-                            ...prev.qr,
-                            removeQrCodeBehindLogo: e.target.checked,
-                          },
+                          removeQrCodeBehindLogo: e.target.checked,
                         }))
                       }
                       label="Remove Qr Code Behind Logo"
                       className={` overflow-hidden transition-all duration-700 ${
-                        qrSetting.qr.logoImage ? "max-h-[99px]" : "max-h-0"
+                        qrSetting.logoImage ? "max-h-[99px]" : "max-h-0"
                       }`}
                     />
                   </>
@@ -925,66 +1026,67 @@ export default function QRCodeGenerator() {
   );
 }
 
-function Frame({ frame, children }) {
-  const childrenRef = useRef(null);
-  const [childWidth, setChildWidth] = useState(200); // State to store the width
+function Frame({ frame, children }: { frame: QrFrame; children: React.ReactNode }) {
+  const childrenRef = useRef<HTMLDivElement | null>(null);
+  const [childWidth, setChildWidth] = useState(200);
+
+  const textRef = useRef<HTMLDivElement | null>(null);
+  const [scale, setScale] = useState(1);
+  const [prevTextLen, setPrevTextLen] = useState(0);
 
   useEffect(() => {
     if (childrenRef.current) {
-      // Get the width of the child element
       setChildWidth(childrenRef.current.clientWidth);
     }
-  }, [children]); // Re-run when children change
+  }, [children]);
 
-  const textRef = useRef(null);
-  const [fontSize, setFontSize] = useState(24); // initial font size
   useEffect(() => {
-    if (!textRef.current) return; // Check if the ref is valid
-    let newFontSize = fontSize;
+    if (!textRef.current || !childWidth) return;
+    const textWidth = textRef.current.scrollWidth;
+    console.log("textWidth", textWidth);
+    const INC = 0.06; // Increment to reduce scale
 
-    if (textRef.current.offsetWidth > childWidth - fontSize - 12) {
-      newFontSize -= 0.1;
-    }
-    if (textRef.current.offsetWidth < childWidth - 10) {
-      newFontSize += 0.1;
-    }
+    setScale((prevScale) => {
+      if (textWidth > childWidth && frame.text.length > prevTextLen) {
+        return Math.max(0.1, prevScale - INC); // prevent going negative
+      }
+      if (textWidth <= childWidth && frame.text.length < prevTextLen) {
+        return Math.min(1, prevScale + INC); // prevent exceeding 1
+      }
+      return prevScale; // no change
+    });
 
-    newFontSize = Math.max(newFontSize, 10); // Set a minimum font size
-    newFontSize = Math.min(newFontSize, 24); // Set a maximum font size
-    setFontSize(newFontSize);
-  }, [frame.text, fontSize, childWidth]); // Dependency on `text`, so it will resize whenever the text changes
+    setPrevTextLen(frame.text.length);
+  }, [frame.text, childWidth, prevTextLen]);
 
   const textBox = (
     <div
-      className="text-center text-lg p-1.5 rounded-md min-h-4"
+      className="flex justify-center p-1.5 rounded-md min-h-4 overflow-x-hidden hide-scrollbar"
       style={{
         color: frame.color,
         width: childWidth,
         backgroundColor: frame.bg,
       }}
+      ref={textRef}
     >
       <span
-        className="text-nowrap"
-        ref={textRef}
-        style={{
-          fontSize: `${fontSize}px`,
-        }}
+        className="inline-block text-xl whitespace-nowrap"
+        style={{ scale, fontFamily: frame.font }}
       >
         {frame.text}
       </span>
     </div>
   );
-  const QR = ({ className = "" }) => {
-    return (
-      <div
-        ref={childrenRef}
-        className={`rounded-md p-2 ${className}`}
-        style={{ backgroundColor: frame.bg }}
-      >
-        {children}
-      </div>
-    );
-  };
+
+  const QR = ({ className = "" }) => (
+    <div
+      ref={childrenRef}
+      className={`rounded-md p-2 ${className}`}
+      style={{ backgroundColor: frame.bg }}
+    >
+      {children}
+    </div>
+  );
 
   if (frame.type === 1)
     return (
@@ -1007,19 +1109,20 @@ function Frame({ frame, children }) {
       <div className="bg-transparent rounded-md relative z-0">
         <QR className="mb-3" />
         <div
-          className=" absolute w-5 h-5 top-[220px] left-1/2 -translate-x-1/2 rotate-45 -z-10"
+          className="absolute w-5 h-5 top-[220px] left-1/2 -translate-x-1/2 rotate-45 -z-10"
           style={{ backgroundColor: frame.bg }}
         />
         {textBox}
       </div>
     );
+
   if (frame.type === 4)
     return (
       <div className="bg-transparent rounded-md relative z-0">
         {textBox}
         <QR className="mt-3" />
         <div
-          className=" absolute w-5 h-5 bottom-[220px] left-1/2 -translate-x-1/2 rotate-45 -z-10"
+          className="absolute w-5 h-5 bottom-[220px] left-1/2 -translate-x-1/2 rotate-45 -z-10"
           style={{ backgroundColor: frame.bg }}
         />
       </div>

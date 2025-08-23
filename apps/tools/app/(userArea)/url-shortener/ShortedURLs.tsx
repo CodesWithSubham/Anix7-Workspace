@@ -11,8 +11,19 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { deleteShortUrl, editShortUrl, modifyAds } from "./action";
 import { ErrorText } from "@shared/components/ui/Texts";
+import { Urls } from "./types";
 
-export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
+export default function ShortedURLs({
+  urls,
+  setUrls,
+  total,
+  setTotal,
+}: {
+  urls: Urls[];
+  setUrls: React.Dispatch<React.SetStateAction<Urls[]>>;
+  total: number;
+  setTotal: React.Dispatch<React.SetStateAction<number>>;
+}) {
   const { data: session } = useSession();
   const [page, setPage] = useState(0);
   const [baseUrl, setBaseUrl] = useState("");
@@ -24,7 +35,7 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
   // =========================== //
   const fetchedPages = useRef(new Set());
   useEffect(() => {
-    const getURLs = async (pageNum) => {
+    const getURLs = async (pageNum: number) => {
       // Only fetch if this page hasn't been fetched already
       if (fetchedPages.current.has(pageNum)) return;
       fetchedPages.current.add(pageNum);
@@ -56,15 +67,13 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
     getURLs(page);
   }, [page, setTotal, setUrls]);
 
-  const modifyWaiting = async (alias, ad) => {
+  const modifyWaiting = async (alias: string, ad: number) => {
     setAdsLoading(true);
     try {
       const data = await modifyAds({ alias, ad });
       if (data?.success) {
         setUrls((prevUrls) =>
-          prevUrls.map((item) =>
-            item.alias === alias ? { ...item, adsLabel: ad } : item
-          )
+          prevUrls.map((item) => (item.alias === alias ? { ...item, adsLabel: ad } : item))
         );
         toast.success(data.message || "Waiting updated successfully");
       } else {
@@ -79,10 +88,10 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
   };
 
   const [showDeletePopup, setShowDeletePopup] = useState(false);
-  const [selectedUrl, setSelectedUrl] = useState(null);
+  const [selectedUrl, setSelectedUrl] = useState<Urls | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  const openDeletePopup = (url) => {
+  const openDeletePopup = (url: Urls) => {
     setSelectedUrl(url);
     setShowDeletePopup(true);
   };
@@ -95,15 +104,13 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
   const handleDelete = async () => {
     if (!selectedUrl) return;
     setDeleteLoading(true);
-    // return toast.info("Delete Avalable Soon");
+    // return toast.info("Delete Available Soon");
     try {
       const res = await deleteShortUrl({ alias: selectedUrl.alias });
 
       if (res?.success) {
         toast.success(res.message);
-        setUrls((prev) =>
-          prev.filter((url) => url.alias !== selectedUrl.alias)
-        ); // Remove from state
+        setUrls((prev) => prev.filter((url) => url.alias !== selectedUrl.alias)); // Remove from state
         setTotal((p) => --p);
       } else {
         toast.warn(res.message || "Failed to delete URL.");
@@ -122,7 +129,7 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
   const [editLoading, setEditLoading] = useState(false);
   const [editUrlError, setEditUrlError] = useState("");
 
-  const openEditPopup = (url) => {
+  const openEditPopup = (url: Urls) => {
     setSelectedUrl(url);
     setShowEditPopup(true);
   };
@@ -132,7 +139,7 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
     setSelectedUrl(null);
   };
 
-  const isValidUrl = (e) => {
+  const isValidUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
     const url = e.target.value.trim();
     setEditUrlError("");
     setEditedUrl("");
@@ -142,8 +149,7 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
       return;
     }
 
-    const urlPattern =
-      /^(https:\/\/)((?!localhost)[\w.-]+)\.([a-z]{2,})(:\d{1,5})?(\/.*)?$/i;
+    const urlPattern = /^(https:\/\/)((?!localhost)[\w.-]+)\.([a-z]{2,})(:\d{1,5})?(\/.*)?$/i;
     if (!urlPattern.test(url)) {
       setEditUrlError("Invalid URL");
       return;
@@ -161,9 +167,7 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
         toast.success(res.message);
         setUrls((prev) =>
           prev.map((url) =>
-            url.alias === selectedUrl.alias
-              ? { ...url, longUrl: editedUrl }
-              : url
+            url.alias === selectedUrl.alias ? { ...url, longUrl: editedUrl } : url
           )
         );
       } else {
@@ -202,7 +206,7 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
                   <td className="w-1/2 pt-2 border border-black">
                     <div className="py-4 w-11/12 mx-auto relative">
                       <label className="text-xs text-(--linkC) absolute top-0 left-1">
-                        Orginal Url
+                        Original Url
                       </label>
                       <input
                         className="border border-dotted border-(--linkC) w-full bg-transparent outline-hidden py-1 pl-2 pr-7 rounded-full"
@@ -233,9 +237,7 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
                       <svg
                         viewBox="0 0 24 24"
                         className="absolute right-1 top-1/2 -translate-y-1/2 cursor-pointer hover:scale-110 transition-all duration-300"
-                        onClick={() =>
-                          copyToClipboard(baseUrl + "/" + url.alias)
-                        }
+                        onClick={() => copyToClipboard(baseUrl + "/" + url.alias)}
                       >
                         <path
                           className="svgC"
@@ -247,8 +249,7 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
                   {/* Ads */}
                   <td className="p-2 border border-black">
                     <div className="flex flex-col justify-around items-start gap-0.5 disabled:*:opacity-70 min-h-24">
-                      {(session?.user?.role === "admin" ||
-                      session?.user?.role === "owner"
+                      {(session?.user?.role === "admin" || session?.user?.role === "owner"
                         ? ["None", "Low", "Mid", "High"]
                         : ["Off", "On"]
                       ).map((label, i) => (
@@ -260,9 +261,7 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
                         >
                           <span
                             className={`w-4 h-4 rounded-full mr-[6px] inline-block border-[3.5px] border-(--waveB) outline outline-(--linkC) ${
-                              url.adsLabel === i
-                                ? "bg-(--linkC)"
-                                : "bg-(--waveB)"
+                              url.adsLabel === i ? "bg-(--linkC)" : "bg-(--waveB)"
                             }`}
                           />
                           <span>{label}</span>
@@ -274,10 +273,7 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
                   <td className=" border border-black">
                     <div className="flex flex-col space-y-2 m-2 *:rounded-full">
                       <Button onClick={() => openEditPopup(url)}>Edit</Button>
-                      <Button
-                        className="bg-red-500"
-                        onClick={() => openDeletePopup(url)}
-                      >
+                      <Button className="bg-red-500" onClick={() => openDeletePopup(url)}>
                         Delete
                       </Button>
                     </div>
@@ -301,8 +297,7 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
       )}
       {!!urls.length && (
         <div className="mt-6 mb-14 text-xs text-gray-600">
-          * Waiting time is the 3-second delay before the URL redirects to the
-          original URL.
+          * Waiting time is the 3-second delay before the URL redirects to the original URL.
         </div>
       )}
 
@@ -310,8 +305,7 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
       {showDeletePopup && selectedUrl && (
         <PopUpBox header="Are you sure you want to delete?" svg={<DeleteSvg />}>
           <p className="my-2">
-            <span className="text-(--linkC)">Original URL:</span>{" "}
-            {selectedUrl.longUrl}
+            <span className="text-(--linkC)">Original URL:</span> {selectedUrl.longUrl}
           </p>
           <p>
             <span className="text-(--linkC)">Shortened URL:</span>{" "}
@@ -339,17 +333,9 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
 
       {/* Edit Popup */}
       {showEditPopup && selectedUrl && (
-        <PopUpBox
-          closeable={true}
-          header="Edit URL"
-          onClose={closeEditPopup}
-          svg={<DocumentSvg />}
-        >
+        <PopUpBox closeable={true} header="Edit URL" onClose={closeEditPopup} svg={<DocumentSvg />}>
           <div className="flex flex-col mb-5 px-2">
-            <label
-              htmlFor="editShortedUrl"
-              className="text-(--linkC) text-xs ml-1"
-            >
+            <label htmlFor="editShortedUrl" className="text-(--linkC) text-xs ml-1">
               Shorted URL
             </label>
             <Input
@@ -360,7 +346,7 @@ export default function ShortedURLs({ urls, setUrls, total, setTotal }) {
             />
 
             <label htmlFor="editOrgUrl" className="text-(--linkC) text-xs ml-1">
-              Orginal URL
+              Original URL
             </label>
             <Input
               type="url"

@@ -9,7 +9,7 @@
     "typecheck": "turbo run typecheck"
   },
   "dependencies": {
-    "@vercel/blob": "^0.27.1",
+    "@vercel/blob": "^1.1.1",
     "acorn": "^8.15.0",
     "acorn-jsx": "^5.3.2",
     "bcryptjs": "^3.0.2",

@@ -251,33 +251,34 @@ export function TextArea({
   );
 }
 
-type Option = string | { value: string | number; label: string };
-
-type Options = Option[] | Record<string, string>;
+type Option = { label: string } & React.HTMLProps<HTMLOptionElement>;
 
 export function Select({
   label = "",
   labelClassName = "",
   name = "select",
   value,
-  onChange = () => {},
   className = "",
   options = [],
   ...props
-}: React.PropsWithChildren<{
-  label?: string;
-  labelClassName?: string;
-  name?: string;
-  value?: string | number;
-  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  className?: string;
-  options?: Options;
-}>) {
+}: React.PropsWithChildren<
+  {
+    label?: string;
+    labelClassName?: string;
+    name?: string;
+    value?: string | number;
+    className?: string;
+    options?: Option[];
+  } & React.HTMLProps<HTMLSelectElement>
+>) {
   return (
     <div className={twMerge("w-full flex flex-col relative", label && "mt-3")}>
       {label && (
         <label
-          className={twMerge("text-xs text-(--linkC) absolute -top-2 left-1.5", labelClassName)}
+          className={twMerge(
+            "text-xs text-(--linkC) font-semibold absolute -top-2.5 left-1.5",
+            labelClassName
+          )}
         >
           {label}
         </label>
@@ -285,27 +286,17 @@ export function Select({
       <select
         name={name}
         value={value}
-        onChange={onChange}
         className={`w-full h-9 p-2 my-1.5 outline-hidden border bg-transparent border-(--linkC) focus:shadow-[0px_0px_5px_0px_var(--linkC)] select-none rounded-lg ${className}`}
         {...props}
       >
-        {Array.isArray(options)
-          ? options.map((option, i) =>
-              typeof option === "string" ? (
-                <option key={i} value={option}>
-                  {option}
-                </option>
-              ) : (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              )
-            )
-          : Object.entries(options).map(([key, displayName]) => (
-              <option key={key} value={key}>
-                {displayName}
-              </option>
-            ))}
+        {options.map((option, i) => {
+          const { label, ...rest } = option;
+          return (
+            <option key={i} {...rest}>
+              {label}
+            </option>
+          );
+        })}
       </select>
     </div>
   );
@@ -326,21 +317,19 @@ export function Checkbox({
     onChange(e);
   };
   return (
-    <div>
-      <label
-        className={twMerge("inline-flex items-center gap-2 cursor-pointer select-none", className)}
-      >
-        <input
-          type="checkbox"
-          name={name}
-          checked={ck}
-          className="w-5 h-5 accent-(--linkC) cursor-pointer"
-          onChange={handleChange}
-          {...props}
-        />
-        {label && <span className="text-sm font-medium">{label}</span>}
-      </label>
-    </div>
+    <label
+      className={twMerge("inline-flex items-center gap-2 cursor-pointer select-none", className)}
+    >
+      <input
+        type="checkbox"
+        name={name}
+        checked={ck}
+        className="w-5 h-5 accent-(--linkC) cursor-pointer"
+        onChange={handleChange}
+        {...props}
+      />
+      {label && <span className="text-sm font-medium">{label}</span>}
+    </label>
   );
 }
 
