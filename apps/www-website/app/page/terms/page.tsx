@@ -67,7 +67,7 @@ export default function Terms() {
       </p>
       <ul className="list-disc ml-5 pl-5 space-y-2">
         <li>
-          <strong>Anix7 Tools</strong>: Utilities such as URL shorteners, image resizers, QR code
+          <strong>Anix7 Tools</strong>: Utilities such as URL shorteners, image resizer, QR code
           generators, etc.
         </li>
         <li>
