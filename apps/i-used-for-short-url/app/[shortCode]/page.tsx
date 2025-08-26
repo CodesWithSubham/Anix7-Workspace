@@ -1,11 +1,14 @@
 import { notFound, redirect } from "next/navigation";
 import { EncryptJWT } from "jose";
-import getShortUrlModel from "@shared/lib/db/models/ShortUrl";
+import getShortUrlModel, { IShortUrl } from "@shared/lib/db/models/ShortUrl";
 
 const secretKey = new TextEncoder().encode(process.env.URL_SHORTENER_TOKEN);
 
 // Function to encrypt data and generate a URL-safe token
-async function encryptAndRedirect(data) {
+async function encryptAndRedirect(data: {
+  longUrl: IShortUrl["longUrl"];
+  adsLabel: IShortUrl["adsLabel"];
+}) {
   const encrypted = await new EncryptJWT(data)
     .setProtectedHeader({ alg: "dir", enc: "A256GCM" })
     .encrypt(secretKey);
@@ -19,7 +22,7 @@ async function encryptAndRedirect(data) {
   redirect(`${process.env.WHERE_TO_REDIRECT_AFTER_PROCESSING}/${token}`);
 }
 
-export default async function Page({ params }) {
+export default async function Page({ params }: { params: Promise<{ shortCode: string }> }) {
   const alias = (await params).shortCode;
 
   const ShortUrl = await getShortUrlModel();

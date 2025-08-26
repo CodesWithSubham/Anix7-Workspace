@@ -17,13 +17,13 @@ async function generateUniqueUserId(digits = 10) {
     userId = Math.floor(min + Math.random() * (max - min));
 
     // Check if the generated userId already exists
-    exists = await User.exists({ userId });
+    exists = !!(await User.exists({ userId }));
   }
 
   return userId;
 }
 
-export async function POST(req) {
+export async function POST(req: Request) {
   try {
     // Get the admin token from the request headers
     const token = req.headers.get("Authorization")?.split(" ")[1]; // Expecting "Bearer <token>"
@@ -40,9 +40,9 @@ export async function POST(req) {
     }
 
     // Get the user details from the request body
-    const formDatas = await req.json();
+    const formData = await req.json();
 
-    const userData = formDatas.userDetails;
+    const userData = formData.userDetails;
 
     const { firstName, lastName, email, isVerified, profilePic, referredBy } = userData;
 
@@ -82,7 +82,7 @@ export async function POST(req) {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { success: false, message: error.message || "Internal server error" },
+      { success: false, message: (error as Error).message || "Internal server error" },
       { status: 500 }
     );
   }

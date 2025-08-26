@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 const ADMIN_TOKEN = process.env.AUTH_SECRET; // Store the admin token as an environment variable or constant
 
-export async function POST(req) {
+export async function POST(req: Request) {
   try {
     // Get the admin token from the request headers
     const token = req.headers.get("Authorization")?.split(" ")[1]; // Expecting "Bearer <token>"
@@ -15,16 +15,13 @@ export async function POST(req) {
     }
 
     if (token !== ADMIN_TOKEN) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 403 }
-      );
+      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 403 });
       // throw new Error('Unauthorized');
     }
 
     // Get the user details from the request body
-    const formDatas = await req.json();
-    const email = formDatas.email;
+    const formData = await req.json();
+    const email = formData.email;
 
     // Ensure required fields are present
     if (!email) {
@@ -48,9 +45,6 @@ export async function POST(req) {
     );
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { success: false, message: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 });
   }
 }
