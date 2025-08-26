@@ -10,11 +10,18 @@ import { toast } from "react-toastify";
 import { ShareLeftSvg } from "@shared/components/svg/ShareSvg";
 import { DeleteSvg } from "@shared/components/svg/DeleteSvg";
 
+type UploadedImage = {
+  alias: string;
+  extension: string;
+  adsLabel: 0 | 1 | 2 | 3;
+  createdAt: string;
+};
+
 export default function MyImages() {
   const { data: session } = useSession();
 
   const [pageNum, setPageNum] = useState(1);
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState<UploadedImage[][]>([]);
   const [total, setTotal] = useState(0);
   const [imageUrl, setImageUrl] = useState("");
   const [indexUrl, setIndexUrl] = useState("");
@@ -27,7 +34,7 @@ export default function MyImages() {
   }, []);
 
   useEffect(() => {
-    const getURLs = async (pageN) => {
+    const getURLs = async (pageN: number) => {
       if (images[pageN - 1]) return;
       setPageLoading(true);
 
@@ -63,7 +70,7 @@ export default function MyImages() {
     getURLs(pageNum);
   }, [images, pageNum]);
 
-  const modifyAds = async (alias, ad) => {
+  const modifyAds = async (alias: UploadedImage["alias"], ad: UploadedImage["adsLabel"]) => {
     // toast.warn("This Option Available Soon!")
     // return;
     setAdsLoading(true);
@@ -81,9 +88,7 @@ export default function MyImages() {
 
           return prev.map((group, index) =>
             index === pageNum - 1
-              ? group.map((item) =>
-                  item.alias === alias ? { ...item, adsLabel: ad } : item
-                )
+              ? group.map((item) => (item.alias === alias ? { ...item, adsLabel: ad } : item))
               : group
           );
         });
@@ -101,10 +106,10 @@ export default function MyImages() {
   };
 
   const [showPopup, setShowPopup] = useState(false);
-  const [selectedUrl, setSelectedUrl] = useState(null);
+  const [selectedUrl, setSelectedUrl] = useState<UploadedImage | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  const openPopup = (img) => {
+  const openPopup = (img: UploadedImage) => {
     setSelectedUrl(img);
     setShowPopup(true);
   };
@@ -134,7 +139,8 @@ export default function MyImages() {
       } else {
         toast.error(res.error || "Failed to delete URL.");
       }
-    } catch (error) {
+    } catch (err) {
+      const error = err as Error;
       toast.error(error.message || "Error deleting image.");
       console.error("Delete Error:", error);
     } finally {
@@ -159,9 +165,7 @@ export default function MyImages() {
         </div>
       ) : total > 0 ? (
         <div>
-          <h2 className="text-3xl font-bold text-center m-5">
-            My Uploaded Images ({total})
-          </h2>
+          <h2 className="text-3xl font-bold text-center m-5">My Uploaded Images ({total})</h2>
           <div className="columns-1 min-[420px]:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
             {images[pageNum - 1]?.map((image) => (
               <div
@@ -178,10 +182,7 @@ export default function MyImages() {
 
                 <div className="flex w-full gap-2 items-center justify-around p-1 border-y-2 border-dotted border-(--linkC)">
                   <CopyInput value={`${indexUrl}/${image.alias}`} />
-                  <IconButton
-                    onClick={() => openPopup(image)}
-                    className="m-0.5 p-0"
-                  >
+                  <IconButton onClick={() => openPopup(image)} className="m-0.5 p-0">
                     <DeleteSvg />
                   </IconButton>
                 </div>
@@ -189,8 +190,7 @@ export default function MyImages() {
                 <div className="flex justify-center py-2">
                   <div className="pl-2">Ads: </div>
                   <div className="flex w-full justify-around items-center px-1">
-                    {(session?.user?.role === "admin" ||
-                    session?.user?.role === "owner"
+                    {(session?.user?.role === "admin" || session?.user?.role === "owner"
                       ? ["None", "Low", "Mid", "High"]
                       : ["Off", "On"]
                     ).map((label, value) => (
@@ -198,13 +198,11 @@ export default function MyImages() {
                         key={`${image.alias}-${value}`}
                         disabled={adsLoading || image.adsLabel === value}
                         className="cursor-pointer flex items-center gap-2"
-                        onClick={() => modifyAds(image.alias, value)}
+                        onClick={() => modifyAds(image.alias, value as 0 | 1 | 2 | 3)}
                       >
                         <span
                           className={`w-4 h-4 rounded-full mr-[6px] border-[3.5px] border-(--waveB) outline outline-(--linkC) ${
-                            image.adsLabel === value
-                              ? "bg-(--linkC)"
-                              : "bg-(--waveB)"
+                            image.adsLabel === value ? "bg-(--linkC)" : "bg-(--waveB)"
                           } ${adsLoading ? "opacity-70" : ""}`}
                         />
                         <span>{label}</span>
@@ -222,12 +220,7 @@ export default function MyImages() {
           <Button
             href="/image-uploading"
             svg={
-              <svg
-                stroke="currentColor"
-                fill="currentColor"
-                strokeWidth="0"
-                viewBox="0 0 512 512"
-              >
+              <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512">
                 <path
                   fill="none"
                   strokeLinecap="round"
@@ -256,12 +249,7 @@ export default function MyImages() {
             className="rounded-l-lg hover:scale-105 transition-all duration-300"
             onClick={() => setPageNum((p) => --p)}
           >
-            <svg
-              stroke="currentColor"
-              fill="currentColor"
-              strokeWidth="0"
-              viewBox="0 0 24 24"
-            >
+            <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24">
               <polyline
                 fill="none"
                 strokeWidth="2"
@@ -280,17 +268,8 @@ export default function MyImages() {
             onClick={() => setPageNum((p) => ++p)}
           >
             Next
-            <svg
-              stroke="currentColor"
-              fill="currentColor"
-              strokeWidth="0"
-              viewBox="0 0 24 24"
-            >
-              <polyline
-                fill="none"
-                strokeWidth="2"
-                points="9 6 15 12 9 18"
-              ></polyline>
+            <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24">
+              <polyline fill="none" strokeWidth="2" points="9 6 15 12 9 18"></polyline>
             </svg>
           </button>
         )}

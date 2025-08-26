@@ -15,7 +15,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { JSX, useCallback, useEffect, useRef, useState } from "react";
 import { IProps, QRCode } from "react-qrcode-logo";
-import {
+import type {
   contentTab,
   DesignTab,
   InnerOuterEyeColor,
@@ -1050,7 +1050,7 @@ function Frame({ frame, children }: { frame: QrFrame; children: React.ReactNode 
       if (textWidth > childWidth && frame.text.length > prevTextLen) {
         return Math.max(0.1, prevScale - INC); // prevent going negative
       }
-      if (textWidth <= childWidth && frame.text.length < prevTextLen) {
+      if (frame.text.length < prevTextLen) {
         return Math.min(1, prevScale + INC); // prevent exceeding 1
       }
       return prevScale; // no change

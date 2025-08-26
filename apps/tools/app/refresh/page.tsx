@@ -1,9 +1,9 @@
 // app/refresh/page.js
 
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const ClearDataPage = () => {
   const router = useRouter();
@@ -23,7 +23,7 @@ const ClearDataPage = () => {
     sessionStorage.clear();
 
     // Clear cache (not directly possible through JS but can be done by clearing specific URLs or using service worker)
-    if ('caches' in window) {
+    if ("caches" in window) {
       caches.keys().then((cacheNames) => {
         cacheNames.forEach((cacheName) => {
           caches.delete(cacheName);
@@ -32,7 +32,7 @@ const ClearDataPage = () => {
     }
 
     // Redirect to the home page or another page after clearing
-    router.push('/');
+    router.push("/");
   }, [router]);
 
   return (
