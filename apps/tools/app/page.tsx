@@ -4,8 +4,9 @@ import Image from "next/image";
 import MobileMenu from "@shared/components/navigation/MobileMenu";
 import { ShadowBox, WorkBox } from "@shared/components/ui/Boxes";
 import { IfLoggedIn, IfLoggedOut } from "@shared/components/auth/LoggedInWrapper";
-import { Button } from "@shared/components/ui/Button";
+import { Button, CardButton } from "@shared/components/ui/Button";
 import Link from "next/link";
+import Section from "@shared/components/ui/Section";
 
 export const metadata = { alternates: { canonical: "/" }, addToSitemap: true };
 
@@ -58,35 +59,13 @@ export default function Home() {
         </IfLoggedOut>
       </section>
 
-      <section className="py-10 px-4 text-center -mx-3 md:mx-auto">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-10">Our Key Features</h2>
+      <Section title="Our Key Features">
         <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(380px,1fr))] gap-8">
           {keyFeatures.map(({ title, description, image, link }, i) => (
-            <Link href={link} className="hover:scale-102 transition-all duration-500" key={i}>
-              <ShadowBox className="flex h-full flex-row items-center gap-4 p-4 hover:shadow-[0px_3px_10px_rgba(0,0,0,.20),_inset_20px_20px_18px_rgba(0,0,0,.07),_inset_-20px_-20px_18px_rgba(255,255,255,.9)] dark:hover:shadow-[0px_-1px_10px_rgba(255,255,255,.10),inset_20px_20px_18px_rgba(0,0,0,.9),_inset_-20px_-20px_18px_rgba(255,255,255,.07)] ">
-                {image && (
-                  <div className="w-24 h-24 flex-shrink-0 flex items-center justify-center">
-                    <Image
-                      src={image}
-                      alt={title || "Feature Image"}
-                      width={96}
-                      height={96}
-                      className="object-contain w-full h-full"
-                      priority={i === 0 || i === 1} // Only 1st & 2nd item prioritized
-                    />
-                  </div>
-                )}
-                <div className="text-left">
-                  {title && <h3 className="text-xl md:text-2xl font-semibold mb-2">{title}</h3>}
-                  {description && (
-                    <p className="text-sm text-gray-600 dark:text-gray-200">{description}</p>
-                  )}
-                </div>
-              </ShadowBox>
-            </Link>
+            <CardButton key={i} href={link} title={title} image={image} description={description} />
           ))}
         </div>
-      </section>
+      </Section>
 
       {/* <section className="bg-gradient-to-b from-blue-600 via-indigo-600 to-transparent text-white py-20">
         <div className="text-center mb-12">
@@ -120,9 +99,8 @@ export default function Home() {
         </div>
       </section> */}
 
-      <section className="py-16 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-8">How It Works</h2>
-        <div className="flex flex-wrap justify-center gap-4 mt-8">
+      <Section title="How It Works">
+        <div className="flex flex-wrap justify-center gap-4">
           {[
             {
               title: "Step 1: Choose a Tool",
@@ -149,7 +127,7 @@ export default function Home() {
             </div>
           ))}
         </div>
-      </section>
+      </Section>
 
       {/* <section className="py-16 bg-gradient-to-b from-gray-100 via-gray-200 to-transparent text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-8">

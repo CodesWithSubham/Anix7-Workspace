@@ -1,7 +1,8 @@
-import Link from "next/link";
+import Link, { LinkProps } from "next/link";
 import { twMerge } from "tailwind-merge";
 import { CircleLoadingSvg } from "../svg/LoadingSvg";
 import { AnchorHTMLAttributes, ButtonHTMLAttributes, LabelHTMLAttributes, ReactNode } from "react";
+import Image from "next/image";
 
 export function Button({
   children,
@@ -73,6 +74,62 @@ export const IconButton = ({
     </Button>
   );
 };
+
+type CardButtonProps = {
+  image: string | URL;
+  title: string;
+  description: string;
+  imageClassName?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+} & React.AnchorHTMLAttributes<HTMLAnchorElement> & // native <a> attributes
+  LinkProps; // next/link specific props
+
+export function CardButton({
+  image,
+  title,
+  description,
+  className = "",
+  imageClassName = "",
+  imageWidth,
+  imageHeight,
+  ...props
+}: CardButtonProps) {
+  return (
+    <Link
+      className={twMerge(
+        "w-full flex h-full flex-row items-center gap-4 p-4 overflow-hidden hover:scale-102 transition-all duration-500",
+        "shadow-[0px_3px_10px_rgba(0,0,0,.20),_inset_20px_20px_18px_rgba(255,255,255,.9),_inset_-20px_-20px_18px_rgba(0,0,0,.07)]",
+        "dark:shadow-[inset_20px_20px_18px_rgba(255,255,255,.07),_inset_-20px_-20px_18px_rgba(0,0,0,.9)]",
+        "hover:shadow-[0px_3px_10px_rgba(0,0,0,.20),_inset_20px_20px_18px_rgba(0,0,0,.07),_inset_-20px_-20px_18px_rgba(255,255,255,.9)]",
+        "dark:hover:shadow-[0px_-1px_10px_rgba(255,255,255,.10),inset_20px_20px_18px_rgba(0,0,0,.9),_inset_-20px_-20px_18px_rgba(255,255,255,.07)]",
+        className
+      )}
+      {...props}
+    >
+      {image && (
+        <div
+          className={twMerge(
+            "w-1/4 max-w-24 aspect-square flex-shrink-0 flex items-center justify-center overflow-hidden",
+            imageClassName
+          )}
+        >
+          <Image
+            src={image.toString()}
+            alt={title || "Feature Image"}
+            width={imageWidth || 96}
+            height={imageHeight || 96}
+            className="object-contain w-full h-full"
+          />
+        </div>
+      )}
+      <div className="text-left">
+        {title && <h3 className="text-xl md:text-2xl font-semibold mb-2">{title}</h3>}
+        {description && <p className="text-sm text-gray-600 dark:text-gray-200">{description}</p>}
+      </div>
+    </Link>
+  );
+}
 
 type CommonProps = {
   loading?: boolean;
