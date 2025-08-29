@@ -47,9 +47,9 @@ export default function Home() {
           Welcome to Anix7 Tools
         </h1>
         <p className="sm:text-md md:text-lg lg:text-xl mb-6 text-center">
-          Simplify your digital workflow with a powerful suite of online tools — from URL shorteners
-          and QR code generators to image resizing, uploading, and more. Everything you need, all in
-          one place.
+          Simplify your digital workflow with a powerful collection of online tools — from URL
+          shorteners and QR code generators to image resizing, uploading, and more. Everything you
+          need, all in one place.
         </p>
 
         <IfLoggedOut>
