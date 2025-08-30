@@ -6,7 +6,7 @@ import { ShadowBox, WorkBox } from "@shared/components/ui/Boxes";
 import { IfLoggedIn, IfLoggedOut } from "@shared/components/auth/LoggedInWrapper";
 import { Button, CardButton } from "@shared/components/ui/Button";
 import Link from "next/link";
-import Section from "@shared/components/ui/Section";
+import Section, { CardSection } from "@shared/components/ui/Section";
 
 export const metadata = { alternates: { canonical: "/" }, addToSitemap: true };
 
@@ -60,11 +60,11 @@ export default function Home() {
       </section>
 
       <Section title="Our Key Features">
-        <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(380px,1fr))] gap-8">
+        <CardSection>
           {keyFeatures.map(({ title, description, image, link }, i) => (
             <CardButton key={i} href={link} title={title} image={image} description={description} />
           ))}
-        </div>
+        </CardSection>
       </Section>
 
       {/* <section className="bg-gradient-to-b from-blue-600 via-indigo-600 to-transparent text-white py-20">

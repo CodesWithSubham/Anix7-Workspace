@@ -35,3 +35,15 @@ export default function Section({
     </section>
   );
 }
+
+export const CardSection = ({
+  children,
+  ...props
+}: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) => (
+  <div
+    className="grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(380px,1fr))] gap-8"
+    {...props}
+  >
+    {children}
+  </div>
+);

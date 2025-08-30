@@ -1,6 +1,6 @@
 // app/page.js
 import { CardButton } from "@shared/components/ui/Button";
-import Section from "@shared/components/ui/Section";
+import Section, { CardSection } from "@shared/components/ui/Section";
 
 export const metadata = {
   alternates: { canonical: "/" },
@@ -41,7 +41,7 @@ export default async function Home() {
           something new waiting for you.
         </p>
         <Section title="Explore & Create with Anix7">
-          <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(380px,1fr))] gap-8">
+          <CardSection>
             {Drops.map(({ url, image, title, description }, index) => (
               <CardButton
                 key={index}
@@ -55,7 +55,7 @@ export default async function Home() {
                 imageHeight={380}
               />
             ))}
-          </div>
+          </CardSection>
         </Section>
       </div>
     </>
