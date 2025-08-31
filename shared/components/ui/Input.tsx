@@ -47,7 +47,7 @@ export function Input({
         name={name}
         placeholder={placeholder}
         className={twMerge(
-          "w-full h-9 p-2 my-1.5 outline-hidden border bg-transparent border-(--linkC) focus:shadow-[0px_0px_5px_0px_var(--linkC)] select-none rounded-lg disabled:cursor-not-allowed disabled:bg-gray-200 disabled:border-gray-300 disabled:text-gray-500",
+          "w-full h-9 p-2 my-1.5 outline-hidden border bg-white hover:border-(--linkC) focus:shadow-[0px_0px_5px_0px_var(--linkC)] select-none rounded-lg disabled:cursor-not-allowed disabled:bg-gray-200 disabled:border-gray-300 disabled:text-gray-500",
           className
         )}
         maxLength={maxLength}

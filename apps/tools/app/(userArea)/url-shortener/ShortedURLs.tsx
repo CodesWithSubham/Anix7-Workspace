@@ -10,7 +10,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { deleteShortUrl, editShortUrl, modifyAds } from "./action";
-import { ErrorText } from "@shared/components/ui/Texts";
+import { ErrorText } from "@shared/components/ui/Paragraph";
 import { Urls } from "./types";
 
 export default function ShortedURLs({

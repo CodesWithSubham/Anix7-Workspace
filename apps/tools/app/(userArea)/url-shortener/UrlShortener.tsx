@@ -8,7 +8,7 @@ import ShortedURLs from "./ShortedURLs";
 import { twMerge } from "tailwind-merge";
 import { WorkBox } from "@shared/components/ui/Boxes";
 import { CopyInput, Input } from "@shared/components/ui/Input";
-import { ErrorText } from "@shared/components/ui/Texts";
+import { ErrorText } from "@shared/components/ui/Paragraph";
 import { CircleLoadingSvg } from "@shared/components/svg/LoadingSvg";
 import { Button } from "@shared/components/ui/Button";
 import { Urls } from "./types";

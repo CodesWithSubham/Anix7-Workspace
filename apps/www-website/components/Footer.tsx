@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { WorkBox } from "@shared/components/ui/Boxes";
 import Image from "next/image";
 import Hr from "@shared/components/ui/Hr";
+import Section from "@shared/components/ui/Section";
 
 // Updated importantLinks constant with multiple categories
 const importantLinks = [
@@ -61,12 +61,10 @@ const importantLinks = [
 export default function Footer() {
   return (
     <footer className="mb-8 mt-12">
-      <WorkBox className="text-center border border-gray-200/50 dark:border-neutral-600/60">
+      <Section className="text-center border border-gray-200/50 dark:border-neutral-600/60">
         {/* <!-- About --> */}
         <div>
-          <div className="text-gray-500 dark:text-gray-200">
-            Made with ❤️ by
-          </div>
+          <div className="text-gray-500 dark:text-gray-200">Made with ❤️ by</div>
           <Image
             className="w-1/3 max-w-60 aspect-square mt-2 mb-1 mx-auto rounded-2xl"
             src="/assets/img/logo/anix7-logo-512.jpg"
@@ -77,9 +75,8 @@ export default function Footer() {
           <div>
             <h2>Anix7</h2>
             <p>
-              Anix7 is your all-in-one hub for smart tools, anime updates, 4K
-              wallpapers, mini games and nature photography. Discover, create,
-              and download with ease.
+              Anix7 is your all-in-one hub for smart tools, anime updates, 4K wallpapers, mini games
+              and nature photography. Discover, create, and download with ease.
             </p>
           </div>
         </div>
@@ -122,7 +119,7 @@ export default function Footer() {
             &nbsp;&middot;&nbsp; All rights reserved.
           </span>
         </div>
-      </WorkBox>
+      </Section>
     </footer>
   );
 }

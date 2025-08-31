@@ -1,12 +1,10 @@
 // /app/page.js
 
-import Image from "next/image";
 import MobileMenu from "@shared/components/navigation/MobileMenu";
-import { ShadowBox, WorkBox } from "@shared/components/ui/Boxes";
+import {  WorkBox } from "@shared/components/ui/Boxes";
 import { IfLoggedIn, IfLoggedOut } from "@shared/components/auth/LoggedInWrapper";
 import { Button, CardButton } from "@shared/components/ui/Button";
-import Link from "next/link";
-import Section, { CardSection } from "@shared/components/ui/Section";
+import Section, { Card, CardSection } from "@shared/components/ui/Section";
 
 export const metadata = { alternates: { canonical: "/" }, addToSitemap: true };
 
@@ -100,7 +98,7 @@ export default function Home() {
       </section> */}
 
       <Section title="How It Works">
-        <div className="flex flex-wrap justify-center gap-4">
+        <CardSection>
           {[
             {
               title: "Step 1: Choose a Tool",
@@ -117,16 +115,10 @@ export default function Home() {
               description:
                 "Share your content instantly with shareable links, and access your uploads anytime from anywhere.",
             },
-          ].map((step, index) => (
-            <div
-              key={index}
-              className="flex-1 min-w-[250px] max-w-sm sm:basis-[calc(50%-1rem)] md:basis-[calc(33.333%-1rem)] border rounded-lg px-4 py-5 bg-background/80 shadow-xs hover:shadow-md transition-all"
-            >
-              <h3 className="text-2xl font-semibold mb-4">{step.title}</h3>
-              <p className="mb-4">{step.description}</p>
-            </div>
+          ].map(({ title, description }, index) => (
+            <Card key={index} title={title} description={description}/>
           ))}
-        </div>
+        </CardSection>
       </Section>
 
       {/* <section className="py-16 bg-gradient-to-b from-gray-100 via-gray-200 to-transparent text-center">

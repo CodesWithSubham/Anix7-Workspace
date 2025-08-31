@@ -1,10 +1,10 @@
 // /app/(userArea)/image-uploading/page.js
 
-import Image from "next/image";
 import ImageUploader from "./ImageUploader";
 import { WorkBox } from "@shared/components/ui/Boxes";
 import { IfLoggedIn, IfLoggedOut } from "@shared/components/auth/LoggedInWrapper";
 import { Button } from "@shared/components/ui/Button";
+import Section, { Card, CardSection } from "@shared/components/ui/Section";
 
 export const metadata = {
   title: "Image Uploading - Generate a shareable URL",
@@ -145,34 +145,23 @@ export default async function ImageUploading() {
       <IfLoggedIn>
         <ImageUploader />
       </IfLoggedIn>
-
-      <div className="my-5">
-        <h2 className="font-bold text-center mb-4">Fast & Secure Image Upload</h2>
+      <Section title="Fast & Secure Image Upload">
         <p className="text-center mb-6">
           Upload images up to 10MB, get a shareable public link, and access your uploads anytime.
         </p>
-      </div>
-      <div className="relative flex justify-center items-stretch flex-wrap gap-x-14 gap-y-16 mt-10">
-        {Drops.map((drop, index) => (
-          <div
-            key={index}
-            className="w-full max-w-md flex justify-center items-center shadow-[inset_20px_20px_20px_rgba(0,0,0,.05),_25px_35px_20px_rgba(0,0,0,.05),_25px_30px_30px_rgba(0,0,0,.05),_inset_-20px_-20px_25px_rgba(255,255,255,.9)] dark:shadow-[inset_20px_20px_20px_rgba(255,255,255,.05),_25px_35px_20px_rgba(255,255,255,.05),_25px_30px_30px_rgba(255,255,255,.05),_inset_-20px_-20px_25px_rgba(0,0,0,.9)] flex-col text-center p-5 min-h-[250px]"
-          >
-            <div className="w-20 aspect-square flex justify-center items-center border-4 rounded-full border-double border-(--linkC)">
-              <Image
-                src={drop.image}
-                alt={drop.title}
-                width={80}
-                height={80}
-                priority
-                className="w-5/6 hover:scale-105 transition-all duration-700"
-              />
-            </div>
-            <h3 className="mt-3 font-semibold">{drop.title}</h3>
-            <p className="text-gray-600">{drop.description}</p>
-          </div>
-        ))}
-      </div>
+
+        <CardSection>
+          {Drops.map(({ title, description, image }, index) => (
+            <Card
+              key={index}
+              title={title}
+              description={description}
+              image={image}
+              className="flex-col sm:flex-row md:flex-col text-center sm:text-justify md:text-center"
+            />
+          ))}
+        </CardSection>
+      </Section>
       <IfLoggedOut>
         <WorkBox className="mt-14 text-center">
           <h2>Upload & Share Your Images Instantly!</h2>

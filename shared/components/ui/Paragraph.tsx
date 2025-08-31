@@ -1,5 +1,17 @@
 import { twMerge } from "tailwind-merge";
 
+export function Paragraph({
+  children,
+  className = "",
+  ...props
+}: React.HTMLProps<HTMLParagraphElement>) {
+  return (
+    <p className={twMerge("my-1 text-justify", className)} {...props}>
+      {children}
+    </p>
+  );
+}
+
 export function ErrorText({
   children,
   className = "",

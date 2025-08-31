@@ -98,7 +98,7 @@ export function CardButton({
   return (
     <Link
       className={twMerge(
-        "w-full flex h-full flex-row items-center gap-4 p-4 overflow-hidden hover:scale-102 transition-all duration-500",
+        "w-full flex h-full flex-row items-center gap-4 p-4 overflow-hidden hover:scale-102 transition-all",
         "shadow-[0px_3px_10px_rgba(0,0,0,.20),_inset_20px_20px_18px_rgba(255,255,255,.9),_inset_-20px_-20px_18px_rgba(0,0,0,.07)]",
         "dark:shadow-[inset_20px_20px_18px_rgba(255,255,255,.07),_inset_-20px_-20px_18px_rgba(0,0,0,.9)]",
         "hover:shadow-[0px_3px_10px_rgba(0,0,0,.20),_inset_20px_20px_18px_rgba(0,0,0,.07),_inset_-20px_-20px_18px_rgba(255,255,255,.9)]",
@@ -125,7 +125,7 @@ export function CardButton({
       )}
       <div className="text-left">
         {title && <h3 className="text-xl md:text-2xl font-semibold mb-2">{title}</h3>}
-        {description && <p className="text-sm text-gray-600 dark:text-gray-200">{description}</p>}
+        {description && <p className="text-sm text-gray-700 dark:text-gray-200">{description}</p>}
       </div>
     </Link>
   );

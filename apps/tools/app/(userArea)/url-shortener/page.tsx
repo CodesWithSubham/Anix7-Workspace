@@ -1,10 +1,10 @@
 // /app/(pages)/url-shortener/page.js
 
-import Image from "next/image";
 import { IfLoggedIn, IfLoggedOut } from "@shared/components/auth/LoggedInWrapper";
 import { WorkBox } from "@shared/components/ui/Boxes";
 import { Button } from "@shared/components/ui/Button";
 import UrlShortener from "./UrlShortener";
+import Section, { Card, CardSection } from "@shared/components/ui/Section";
 
 export const metadata = {
   title: "Simple, fast, and secure URL Shortener",
@@ -141,34 +141,23 @@ export default async function ImageUploading() {
         <UrlShortener />
       </IfLoggedIn>
 
-      <div className="my-5">
-        <h2 className="font-bold text-center mb-4">Fast & Secure URL Shortener</h2>
+      <Section title="Fast & Secure URL Shortener">
         <p className="text-center mb-6">
           Shorten long URLs from various platforms, share them effortlessly, and track performance
           with ease.
         </p>
-      </div>
-      <div className="relative flex justify-center items-stretch flex-wrap gap-x-14 gap-y-16 mt-10">
-        {Drops.map((drop, index) => (
-          <div
-            key={index}
-            className="w-full max-w-md flex justify-center items-center shadow-[inset_20px_20px_20px_rgba(0,0,0,.05),_25px_35px_20px_rgba(0,0,0,.05),_25px_30px_30px_rgba(0,0,0,.05),_inset_-20px_-20px_25px_rgba(255,255,255,.9)] dark:shadow-[inset_20px_20px_20px_rgba(255,255,255,.05),_25px_35px_20px_rgba(255,255,255,.05),_25px_30px_30px_rgba(255,255,255,.05),_inset_-20px_-20px_25px_rgba(0,0,0,.9)] flex-col text-center p-5 min-h-[250px]"
-          >
-            <div className="w-20 aspect-square flex justify-center items-center border-4 rounded-full border-double border-(--linkC)">
-              <Image
-                src={drop.image}
-                alt={drop.title}
-                width={80}
-                height={80}
-                priority
-                className="w-5/6 hover:scale-105 transition-all duration-700"
-              />
-            </div>
-            <h3 className="mt-3 font-semibold">{drop.title}</h3>
-            <p className="text-gray-600">{drop.description}</p>
-          </div>
-        ))}
-      </div>
+        <CardSection>
+          {Drops.map(({ title, description, image }, index) => (
+            <Card
+              key={index}
+              image={image}
+              title={title}
+              description={description}
+              className="flex-col sm:flex-row md:flex-col text-center sm:text-justify md:text-center"
+            />
+          ))}
+        </CardSection>
+      </Section>
       <IfLoggedOut>
         <WorkBox className="mt-14 text-center">
           <h2>Make Your Links Short & Shareable!</h2>

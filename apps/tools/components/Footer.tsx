@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { WorkBox } from "../../../shared/components/ui/Boxes";
 import Image from "next/image";
 import Hr from "../../../shared/components/ui/Hr";
+import Section from "@shared/components/ui/Section";
 
 // Updated importantLinks constant with multiple categories
 const importantLinks = [
@@ -61,7 +61,7 @@ const importantLinks = [
 export default function Footer() {
   return (
     <footer className="mb-8 mt-10">
-      <WorkBox className="text-center">
+      <Section className="text-center">
         {/* <!-- About --> */}
         <div>
           <div className="text-gray-500 dark:text-gray-200">
@@ -117,7 +117,7 @@ export default function Footer() {
             &nbsp;&middot;&nbsp; All rights reserved.
           </span>
         </div>
-      </WorkBox>
+      </Section>
     </footer>
   );
 }
