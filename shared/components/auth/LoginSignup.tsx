@@ -10,7 +10,12 @@ import { signIn, useSession } from "next-auth/react";
 import { ZodError } from "zod";
 import { PopUpBox } from "../ui/Boxes";
 import { signInSchema, signupSchema } from "@shared/lib/zod";
-import { doCredentialLogin, doSocialLogin, signUpVerificationSendOtp, signUpVerificationVerifyOtp } from "@shared/lib/auth/action";
+import {
+  doCredentialLogin,
+  doSocialLogin,
+  signUpVerificationSendOtp,
+  signUpVerificationVerifyOtp,
+} from "@shared/lib/auth/action";
 
 type SignUpFormData = {
   firstName: string;
@@ -223,31 +228,32 @@ export default function LoginSignup() {
         </svg>
       }
       header={
-        <div
-          className={`logOrSign flex p-1 border border-(color:--linkC) rounded-full *:p-2 *:flex-1 *:w-[50%] *:rounded-full *:transition-all duration-500 *:ease-in-out relative`}
-        >
-          <div
-            className={`z-10 ${isLoginTab ? "text-white" : "text-(--linkC) cursor-pointer"}`}
+        <div className="font-extrabold text-lg relative flex p-1 border border-(--linkC) rounded-full *:p-1.5 *:flex-1 *:w-1/2 *:rounded-full *:transition-all *:duration-500 *:ease-in-out">
+          <button
+            aria-label="Login"
+            className={isLoginTab ? "text-white" : "text-(--linkC) cursor-pointer"}
             onClick={() => setIsLoginTab(true)}
           >
             Login
-          </div>
-          <div
-            className={`z-10 ${!isLoginTab ? "text-white" : "text-(--linkC) cursor-pointer"}`}
+          </button>
+          <button
+            aria-label="Sign Up"
+            className={!isLoginTab ? "text-white" : "text-(--linkC) cursor-pointer"}
             onClick={() => setIsLoginTab(false)}
           >
             Sign Up
-          </div>
+          </button>
+          {/* Sliding background */}
           <span
-            className={`absolute bg-(--linkC) top-[1px] bottom-[1px] ${
-              isLoginTab ? "left-[1px] right-[50%]" : "left-auto right-[1px]"
-            } rounded-full`}
+            className={`z-[-1] absolute top-px bottom-px w-1/2 bg-(--linkC) rounded-full ${
+              isLoginTab ? "left-px" : "left-[calc(50%-1px)]"
+            }`}
           ></span>
         </div>
       }
     >
       {isLoginTab ? (
-        <form onSubmit={handleSignIn} className="px-1">
+        <form onSubmit={handleSignIn} className="px-1" onChange={() => setSignInError({})}>
           <Input type="email" name="email" placeholder="Email" />
           {signInError?.email && <p className="text-xs pl-2  text-red-600">{signInError.email}</p>}
           <PasswordInput name="password" placeholder="Password" />
@@ -255,27 +261,11 @@ export default function LoginSignup() {
           {signInError?.password && (
             <p className="text-xs pl-2  text-red-600">{signInError.password}</p>
           )}
-          <div className="flex gap-5 mt-5 justify-between items-center">
-            <p className="text-xs text-gray-500 mt-2">
-              By continuing, you agree to Our&apos;s{" "}
-              <Link href="https://www.anix7.in/page/terms" target="_blank">
-                Terms of Use
-              </Link>
-              ,{" "}
-              <Link href="https://www.anix7.in/page/privacy-policy" target="_blank">
-                Privacy Policy
-              </Link>
-              , and{" "}
-              <Link href="https://www.anix7.in/page/disclaimer" target="_blank">
-                Disclaimer
-              </Link>
-              .
-            </p>
 
-            <Button type="submit" className="min-w-26" loading={isLoading} loadingText="Loading">
-              Submit
-            </Button>
-          </div>
+          <AgreeAndSubmitButton
+            disabled={Object.keys(signInError).length > 0}
+            loading={isLoading}
+          />
         </form>
       ) : verifyOtpPage ? (
         <div className="w-full max-w-sm mt-5 mx-auto">
@@ -353,28 +343,7 @@ export default function LoginSignup() {
               </>
             )}
           </div>
-          <div className="flex gap-5 mt-5 justify-between items-center">
-            <div className="text-xs text-gray-500">
-              By continuing, you agree to Our&apos;s{" "}
-              <Link href="/page/terms" target="_blank">
-                Terms of Use
-              </Link>{" "}
-              and{" "}
-              <Link href="/page/privacy-policy" target="_blank">
-                Privacy Policy
-              </Link>
-              .
-            </div>
-            <Button
-              type="submit"
-              className="min-w-26"
-              disabled={Object.keys(errors).length > 0}
-              loading={isLoading}
-              loadingText="Loading"
-            >
-              Submit
-            </Button>
-          </div>
+          <AgreeAndSubmitButton disabled={Object.keys(errors).length > 0} loading={isLoading} />
         </form>
       )}
 
@@ -434,5 +403,43 @@ export default function LoginSignup() {
         </>
       )}
     </PopUpBox>
+  );
+}
+
+export function AgreeAndSubmitButton({
+  disabled,
+  loading,
+}: {
+  disabled: boolean;
+  loading: boolean;
+}) {
+  return (
+    <div className="flex gap-5 mt-5 justify-between items-center">
+      <p className="text-xs text-gray-500 mt-2">
+        By continuing, you agree to Our&apos;s{" "}
+        <Link href="https://www.anix7.in/page/terms" target="_blank">
+          Terms of Use
+        </Link>
+        ,{" "}
+        <Link href="https://www.anix7.in/page/privacy-policy" target="_blank">
+          Privacy Policy
+        </Link>
+        , and{" "}
+        <Link href="https://www.anix7.in/page/disclaimer" target="_blank">
+          Disclaimer
+        </Link>
+        .
+      </p>
+
+      <Button
+        type="submit"
+        className="min-w-26"
+        disabled={disabled}
+        loading={loading}
+        loadingText="Loading"
+      >
+        Submit
+      </Button>
+    </div>
   );
 }

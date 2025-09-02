@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 import { XSvg } from "../svg/XSvg";
 import { Button } from "./Button";
 import { DocumentSvg } from "../svg/DocumentSvg";
+import { cn } from "@shared/utils/cn";
 
 export function WorkBox({ children, className = "", ...props }: React.HTMLProps<HTMLDivElement>) {
   return (
@@ -101,13 +102,20 @@ export function PopUpBox({
       />
 
       <div
-        className={`fixed inset-0 z-98 bg-black/40 transition-opacity duration-500 ${
+        className={cn(
+          "fixed inset-0 z-98 bg-black/40 transition-all duration-500",
           isVisible ? "visible opacity-100" : "opacity-0 invisible"
-        }`}
+        )}
         {...props}
       >
         <div className="fixed inset-0 z-99 p-5 flex flex-col justify-center items-center">
-          <div className="relative bg-slate-50 dark:bg-neutral-900 w-full max-w-xl pt-4 px-5 pb-6 rounded-3xl">
+          <div
+            className={cn(
+              "relative bg-slate-50 dark:bg-neutral-900 w-full max-w-xl pt-4 px-5 pb-6 rounded-3xl",
+              "transition-transform duration-300",
+              isVisible ? "scale-100" : "scale-0"
+            )}
+          >
             {closeable && (
               <Button
                 className="absolute -top-4 right-4 rounded-full w-7 h-7 m-0"

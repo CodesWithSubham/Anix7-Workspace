@@ -219,10 +219,6 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-body, body * {
-  transition: background-color 0.3s ease;
-}
-
 h1,
 h2,
 h3,
