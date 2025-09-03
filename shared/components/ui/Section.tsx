@@ -17,7 +17,7 @@ export default function Section({
     <section
       {...props}
       className={twMerge(
-        "relative bg-white dark:bg-neutral-800 px-5 py-8 mt-5 mb-12 shadow-[0_5px_35px_rgba(0,0,0,.07)] rounded-xl text-justify ",
+        "relative bg-white dark:bg-neutral-800 px-5 py-8 mt-5 mb-12 mx-auto shadow-[0_5px_35px_rgba(0,0,0,.07)] rounded-xl text-justify ",
         title && "pt-20",
         className
       )}

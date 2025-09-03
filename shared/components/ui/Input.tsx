@@ -341,7 +341,7 @@ export function Checkbox({
         onChange={handleChange}
         {...props}
       />
-      {label && <span className="text-sm font-medium">{label}</span>}
+      {label && <span className="text-sm font-medium cursor-pointer">{label}</span>}
     </label>
   );
 }
