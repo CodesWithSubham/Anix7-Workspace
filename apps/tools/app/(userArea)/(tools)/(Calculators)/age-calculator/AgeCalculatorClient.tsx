@@ -65,15 +65,15 @@ export default function AgeCalculator() {
     const d2 = new Date(dob2);
 
     // Ensure earlier <= later
-    let [earlier, later] = d1 < d2 ? [d1, d2] : [d2, d1];
-
-    let years = differenceInYears(later, earlier);
+    const [er, later] = d1 < d2 ? [d1, d2] : [d2, d1];
+    let earlier = er;
+    const years = differenceInYears(later, earlier);
     earlier = addYears(earlier, years);
 
-    let months = differenceInMonths(later, earlier);
+    const months = differenceInMonths(later, earlier);
     earlier = addMonths(earlier, months);
 
-    let days = differenceInDays(later, earlier);
+    const days = differenceInDays(later, earlier);
 
     return { years, months, days };
   };

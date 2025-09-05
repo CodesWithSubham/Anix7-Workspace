@@ -6,6 +6,8 @@ import { InformationQuestionMarkSvg } from "@shared/components/svg/InformationSv
 import { QrSvg } from "@shared/components/svg/QrSvg";
 import { ResizeSvg } from "@shared/components/svg/ResizeSvg";
 import { UrlSvg } from "@shared/components/svg/UrlSvg";
+import { PiCalculatorThin } from "react-icons/pi";
+import { FcManager } from "react-icons/fc";
 
 const menuItem = [
   {
@@ -17,6 +19,17 @@ const menuItem = [
     label: "QR Code Generator",
     icon: <QrSvg />,
     url: "/qr-code-generator",
+  },
+  {
+    label: "Calculators",
+    icon: <PiCalculatorThin />,
+    subMenu: [
+      {
+        label: "Age Calculator",
+        icon: <FcManager />,
+        url: "/age-calculator",
+      },
+    ],
   },
   {
     label: "Bulk Image Resizer",

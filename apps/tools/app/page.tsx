@@ -1,7 +1,7 @@
 // /app/page.js
 
 import MobileMenu from "@shared/components/navigation/MobileMenu";
-import {  WorkBox } from "@shared/components/ui/Boxes";
+import { WorkBox } from "@shared/components/ui/Boxes";
 import { IfLoggedIn, IfLoggedOut } from "@shared/components/auth/LoggedInWrapper";
 import { Button, CardButton } from "@shared/components/ui/Button";
 import Section, { Card, CardSection } from "@shared/components/ui/Section";
@@ -21,6 +21,13 @@ export default function Home() {
       description: "Generate fully customized QR Codes with colors, shapes, and logos.",
       image: "/assets/img/mobile-qr.png",
       link: "/qr-code-generator",
+    },
+    {
+      title: "Age Calculator",
+      description:
+        "Free Age Calculator to find exact age in years, months, days. Compare ages, differences & birthdays.",
+      image: "/assets/img/age-calculator.png",
+      link: "/age-calculator",
     },
     {
       title: "Bulk Image Resizer",
@@ -116,7 +123,7 @@ export default function Home() {
                 "Share your content instantly with shareable links, and access your uploads anytime from anywhere.",
             },
           ].map(({ title, description }, index) => (
-            <Card key={index} title={title} description={description}/>
+            <Card key={index} title={title} description={description} />
           ))}
         </CardSection>
       </Section>
