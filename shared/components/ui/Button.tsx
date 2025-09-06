@@ -65,7 +65,7 @@ export const IconButton = ({
   return (
     <Button
       className={twMerge(
-        "inline-block shrink-0 bg-transparent rounded-full p-2 aspect-square hover:shadow-[inset_1px_1px_5px_#00000045,inset_-1px_-1px_5px_#00000045] text-inherit",
+        "inline-block shrink-0 bg-transparent rounded-full p-2 m-0 aspect-square hover:shadow-[inset_1px_1px_5px_#00000045,inset_-1px_-1px_5px_#00000045] text-inherit",
         className
       )}
       {...props}
