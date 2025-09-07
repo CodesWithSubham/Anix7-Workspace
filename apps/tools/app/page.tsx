@@ -3,48 +3,13 @@
 import MobileMenu from "@shared/components/navigation/MobileMenu";
 import { WorkBox } from "@shared/components/ui/Boxes";
 import { IfLoggedIn, IfLoggedOut } from "@shared/components/auth/LoggedInWrapper";
-import { Button, CardButton } from "@shared/components/ui/Button";
+import { Button } from "@shared/components/ui/Button";
 import Section, { Card, CardSection } from "@shared/components/ui/Section";
+import { FeaturedTools, ToolsList } from "@/components/tools/toolsList";
 
 export const metadata = { alternates: { canonical: "/" }, addToSitemap: true };
 
 export default function Home() {
-  const keyFeatures = [
-    {
-      title: "URL Shortener",
-      description: "Shorten long URLs from various platforms and share them effortlessly",
-      image: "/assets/img/link.png",
-      link: "/url-shortener",
-    },
-    {
-      title: "QR Code Generator",
-      description: "Generate fully customized QR Codes with colors, shapes, and logos.",
-      image: "/assets/img/mobile-qr.png",
-      link: "/qr-code-generator",
-    },
-    {
-      title: "Age Calculator",
-      description:
-        "Free Age Calculator to find exact age in years, months, days. Compare ages, differences & birthdays.",
-      image: "/assets/img/age-calculator.png",
-      link: "/age-calculator",
-    },
-    {
-      title: "Bulk Image Resizer",
-      description:
-        "Free online image resizer — resize PNG, JPG, WebP, and more formats in bulk, quickly and securely.",
-      image: "/assets/img/image-resize-logo.png",
-      link: "/bulk-image-resizer",
-    },
-    {
-      title: "Image Uploading",
-      description:
-        "Upload images up to 10MB, get a shareable public link, and access your uploads anytime.",
-      image: "/assets/img/gallery.png",
-      link: "/image-uploading",
-    },
-  ];
-
   return (
     <>
       <section className="relative p-5 text-center mb-4 md:mb-8">
@@ -64,13 +29,9 @@ export default function Home() {
         </IfLoggedOut>
       </section>
 
-      <Section title="Our Key Features">
-        <CardSection>
-          {keyFeatures.map(({ title, description, image, link }, i) => (
-            <CardButton key={i} href={link} title={title} image={image} description={description} />
-          ))}
-        </CardSection>
-      </Section>
+      <FeaturedTools />
+
+      <ToolsList />
 
       {/* <section className="bg-gradient-to-b from-blue-600 via-indigo-600 to-transparent text-white py-20">
         <div className="text-center mb-12">
@@ -128,29 +89,26 @@ export default function Home() {
         </CardSection>
       </Section>
 
-      {/* <section className="py-16 bg-gradient-to-b from-gray-100 via-gray-200 to-transparent text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-8">
-          What Our Users Say
-        </h2>
+      {/* <Section title="What Our Users Say">
         <div className="flex justify-center gap-16">
-          <div className="bg-white shadow-lg p-8 rounded-lg max-w-xs text-center">
+          <div className="bg-white shadow p-8 rounded-lg max-w-xs text-center">
             <p className="text-lg italic mb-4">
-              "Anix7 Tools is a lifesaver! I can quickly shorten URLs and
-              generate QR codes without any hassle."
+              "Anix7 Tools is a lifesaver! I can quickly shorten URLs and generate QR codes without
+              any hassle."
             </p>
             <h4 className="text-xl font-semibold">John Doe</h4>
             <p className="text-gray-500">Marketing Specialist</p>
           </div>
-          <div className="bg-white shadow-lg p-8 rounded-lg max-w-xs text-center">
+          <div className="bg-white shadow p-8 rounded-lg max-w-xs text-center">
             <p className="text-lg italic mb-4">
-              "I love the image uploading feature. It's simple, fast, and
-              perfect for sharing with my team."
+              "I love the image uploading feature. It's simple, fast, and perfect for sharing with
+              my team."
             </p>
             <h4 className="text-xl font-semibold">Jane Smith</h4>
             <p className="text-gray-500">Photographer</p>
           </div>
         </div>
-      </section> */}
+      </Section> */}
 
       <IfLoggedOut>
         <WorkBox className="mt-14 text-center">

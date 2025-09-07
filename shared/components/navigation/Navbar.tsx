@@ -7,7 +7,30 @@ import Profile from "../Profile";
 import LoginSignup from "../auth/LoginSignup";
 import Link from "next/link";
 
-export default async function Navbar({ appName = "Anix7", appSubName = "" }) {
+type MoreIconType =
+  | {
+      component: React.ReactNode;
+      IfLoggedIn: true;
+    }
+  | {
+      component: React.ReactNode;
+      IfLoggedOut: true;
+    }
+  | {
+      component: React.ReactNode;
+    };
+
+export type NavBarType = {
+  appName?: string;
+  appSubName?: string;
+  moreIcon?: MoreIconType[];
+};
+
+export default async function Navbar({
+  appName = "Anix7",
+  appSubName = "",
+  moreIcon = [],
+}: NavBarType) {
   return (
     <>
       <header className="w-full z-20 sticky top-0 shadow-xs border-b md:dark:border-b-gray-900/25">
@@ -45,8 +68,30 @@ export default async function Navbar({ appName = "Anix7", appSubName = "" }) {
           </div>
           <div className="px-3 transition-all">
             <ul className="flex justify-end items-center gap-2">
+              {moreIcon.map((icon, i) => {
+                if ("IfLoggedIn" in icon && icon.IfLoggedIn) {
+                  return (
+                    <IfLoggedIn key={i}>
+                      <li>{icon.component}</li>
+                    </IfLoggedIn>
+                  );
+                }
+
+                if ("IfLoggedOut" in icon && icon.IfLoggedOut) {
+                  return (
+                    <IfLoggedOut key={i}>
+                      <li>{icon.component}</li>
+                    </IfLoggedOut>
+                  );
+                }
+
+                // default: no login condition
+                return <li key={i}>{icon.component}</li>;
+              })}
               <IfLoggedIn>
-                <Profile />
+                <li>
+                  <Profile />
+                </li>
               </IfLoggedIn>
               <IfLoggedOut>
                 <li>

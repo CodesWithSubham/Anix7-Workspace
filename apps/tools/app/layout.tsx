@@ -10,6 +10,7 @@ import Wave from "@shared/components/Wave";
 import SlideBar from "@/components/navigation/SlideBar";
 import DefaultHead from "@shared/head";
 import Providers from "@shared/providers";
+import ToolSearch from "@/components/tools/toolsSearch";
 
 // Load Inter
 const inter = Inter({
@@ -88,7 +89,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           {/* Top Right Circle Style */}
           <div className="absolute w-48 h-56 bg-neutral-500/5 dark:bg-black/15 -z-10 top-0 right-0 rounded-bl-full" />
-          <Navbar appName="Tools" appSubName="Beta" />
+          <Navbar
+            appName="Tools"
+            appSubName="Beta"
+            moreIcon={[
+              {
+                component: <ToolSearch />,
+              },
+            ]}
+          />
           <div className="flex">
             <SlideBar />
             <div className="grow pt-5 md:pt-7 relative transition-all duration-300 md:w-[calc(100%-224px)] border-l border-white/30">

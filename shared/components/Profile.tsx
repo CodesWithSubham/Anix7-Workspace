@@ -32,7 +32,7 @@ export default function Profile() {
   return (
     <>
       {user && (
-        <li>
+        <>
           <IconButton
             onClick={() => setProfilePop(!profilePop)}
             aria-label="Profile"
@@ -46,10 +46,7 @@ export default function Profile() {
               <ul className="flex flex-col gap-2 *:flex  *:items-center *:gap-2">
                 <li>
                   <Image
-                    src={
-                      user?.profilePic ??
-                      "https://i.ibb.co/1JGDTytY/default-Profile-Pic.webp"
-                    }
+                    src={user?.profilePic ?? "https://i.ibb.co/1JGDTytY/default-Profile-Pic.webp"}
                     width={30}
                     height={30}
                     className="rounded-full"
@@ -60,10 +57,7 @@ export default function Profile() {
                     <span className="font-bold">
                       {user?.firstName}
                       {user?.role && user.role !== "user"
-                        ? ` (${
-                            user.role.charAt(0).toUpperCase() +
-                            user.role.slice(1)
-                          })`
+                        ? ` (${user.role.charAt(0).toUpperCase() + user.role.slice(1)})`
                         : ""}
                     </span>
                     <span className="text-xs text-gray-500">{user?.email}</span>
@@ -72,10 +66,7 @@ export default function Profile() {
                 <li className="border-b"></li>
 
                 <li>
-                  <Link
-                    href="/setting"
-                    className="text-inherit hover:text-(--linkC) flex gap-2"
-                  >
+                  <Link href="/setting" className="text-inherit hover:text-(--linkC) flex gap-2">
                     <SettingSvg /> Setting
                   </Link>
                 </li>
@@ -104,7 +95,7 @@ export default function Profile() {
               ></label>
             </div>
           )}
-        </li>
+        </>
       )}
     </>
   );
